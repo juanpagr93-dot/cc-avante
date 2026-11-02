@@ -1,0 +1,61 @@
+C. C. AVANTE · Versión con Firebase y acceso con Google
+=========================================================
+Todo se puede hacer desde el teléfono. Si algún menú no aparece,
+en el navegador elige "Ver versión de escritorio" / "Sitio de escritorio".
+
+ARCHIVOS (súbelos todos juntos, sin carpetas)
+  index.html, firebase-config.js, manifest.webmanifest, sw.js,
+  icon-192.png, icon-512.png, maskable-512.png, apple-touch-icon.png, favicon-64.png
+  (LEEME.txt y firestore-reglas.txt son solo para ti; no hace falta subirlos)
+
+PARTE 1 · Publicar la app en GitHub Pages
+  1. Descomprime el zip en el teléfono.
+     iPhone: app Archivos > toca el zip.  Android: Files de Google > Extraer.
+  2. Entra a github.com y crea tu cuenta.
+  3. "+" > New repository > nombre: cc-avante > Public > Create repository.
+  4. Toca "uploading an existing file" > "choose your files" y selecciona
+     los 9 archivos de la lista. Abajo: "Commit changes".
+  5. Settings > Pages > Branch: main, carpeta /(root) > Save.
+  6. Tu dirección será:  https://TU-USUARIO.github.io/cc-avante/
+
+PARTE 2 · Crear tu Firebase
+  1. Entra a console.firebase.google.com con tu cuenta de Google.
+  2. "Crear un proyecto" > nombre: cc-avante > puedes desactivar Google Analytics > Crear.
+  3. En la página del proyecto toca el ícono Web  </>  > apodo: C. C. AVANTE
+     > Registrar app (no marques Firebase Hosting).
+     Te mostrará un bloque "const firebaseConfig = { ... };". Cópialo completo.
+  4. Menú > Compilación > Authentication > Comenzar > Método de acceso
+     > Google > Habilitar > elige tu correo de asistencia > Guardar.
+  5. Authentication > Configuración > Dominios autorizados > Agregar dominio:
+       TU-USUARIO.github.io
+  6. Menú > Compilación > Firestore Database > Crear base de datos
+     > ubicación cercana (por ejemplo nam5 o us-central1) > modo de producción > Crear.
+  7. En Firestore, pestaña "Reglas": borra todo, pega el contenido de
+     firestore-reglas.txt y toca "Publicar".
+
+PARTE 3 · Conectar la app con tu Firebase
+  1. En GitHub abre tu repositorio > firebase-config.js > lápiz (Edit).
+  2. Borra el bloque "const firebaseConfig = { ... };" y pega el tuyo.
+  3. "Commit changes". Espera 1 o 2 minutos.
+
+PARTE 4 · Instalar y entrar
+  1. Abre https://TU-USUARIO.github.io/cc-avante/
+  2. Toca "Entrar con Google" y elige tu cuenta.
+  3. Instálala:
+     iPhone: en Safari > Compartir > "Agregar a pantalla de inicio".
+     Android: en Chrome > menú (⋮) > "Instalar app".
+  4. Si la instalaste antes de entrar, ábrela y entra con Google desde ahí.
+
+PARA TU RELEVO O TU JEFA
+  Mándales el enlace. Cada quien entra con su propia cuenta de Google y
+  ve solo sus datos (no se mezclan con los tuyos).
+
+QUÉ GANAS
+  - Tus datos quedan en tu cuenta de Google: si cambias o pierdes el teléfono,
+    entras otra vez y ahí están.
+  - Funciona sin internet; lo que captures se sube solo cuando vuelva la señal.
+  - El plan gratuito de Firebase (Spark) alcanza de sobra para este uso.
+
+ACTUALIZAR LA APP
+  Sube el nuevo index.html al repositorio y en sw.js cambia
+  'cc-avante-fb-v1' por 'cc-avante-fb-v2'.

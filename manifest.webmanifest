@@ -1,0 +1,17 @@
+{
+  "name": "C. C. AVANTE",
+  "short_name": "C.C. AVANTE",
+  "description": "Turnos, recorridos, hornos y alertas de Control de Calidad Estampado",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A111E",
+  "theme_color": "#0E2452",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
