@@ -96,8 +96,9 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .mq.has-al::after{content:"!";position:absolute;top:2px;right:3px;font-family:var(--f-body);font-size:10px;font-weight:800;color:var(--dev)}
 .ev .body .al{font-size:13px;color:var(--accent);font-weight:600}
 .icon-btn{background:transparent;border:1px solid rgba(255,255,255,.22);color:var(--head-ink);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;flex:none}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr)}
-.tabs button{background:none;border:0;color:var(--head-muted);font-family:var(--f-display);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:9px 2px 11px;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs{display:flex;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:none;border:0;color:var(--head-muted);font-family:var(--f-display);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:9px 10px 11px;border-bottom:3px solid transparent;white-space:nowrap;flex:1 0 auto}
 .tabs button[aria-selected="true"]{color:var(--head-ink);border-bottom-color:var(--head-ink)}
 .tabs .badge{display:inline-block;min-width:18px;padding:0 5px;margin-left:3px;border-radius:999px;background:var(--gC-bg);color:var(--gC);font-family:var(--f-mono);font-size:11px;line-height:17px;vertical-align:2px}
 
@@ -382,6 +383,32 @@ h2{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .sheet-in .datehead h3{min-width:0}
 .sheet-in .datehead .btn{flex:none}
 .items li input{min-width:0}
+.vh{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.lav-imp{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;flex-wrap:wrap}
+.lav-imp > div{display:grid;gap:2px;min-width:0;flex:1 1 220px}
+.lav-imp .note{overflow-wrap:anywhere}
+.lav-msg{overflow-wrap:anywhere}
+.lav-msg{padding:0 4px}
+.lav-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+#lavMes{height:52px;border:2px solid var(--line);border-radius:var(--r);background:var(--surface);padding:0 10px;max-width:46vw}
+.kpi b.okc{color:var(--ok)}
+.lv-list{list-style:none;margin:0;padding:0}
+.lv{padding:12px 14px;border-bottom:1px solid var(--line);display:grid;gap:5px;box-shadow:inset 4px 0 0 var(--ok)}
+.lv:last-child{border-bottom:0}
+.lv.rej{box-shadow:inset 4px 0 0 var(--dev)}
+.lv.unk{box-shadow:inset 4px 0 0 var(--line)}
+.lv-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.lv-est{font-family:var(--f-mono);font-size:15px;overflow-wrap:anywhere}
+.lv-st{font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--ok-bg);color:var(--ok);white-space:nowrap}
+.lv.rej .lv-st{background:var(--dev-bg);color:var(--dev)}
+.lv.unk .lv-st{background:var(--surface-2);color:var(--muted)}
+.lv-meta{font-size:13px;color:var(--muted)}
+.lv-meta b{color:var(--ink);font-family:var(--f-mono)}
+.lv p{margin:0;font-size:14px}
+.lv-tags{display:flex;gap:6px;flex-wrap:wrap}
+.lv-tags span{font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--surface-2);color:var(--muted)}
+.lv-tags span.warn{background:var(--crit-bg);color:var(--crit)}
+.lv-tags span.okt{background:var(--ok-bg);color:var(--ok)}
 footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24px}
 
 @media (max-width:520px){
@@ -432,6 +459,7 @@ footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24p
       <button role="tab" data-tab="midia" id="t-midia">Mi día</button>
       <button role="tab" data-tab="pendientes" id="t-pendientes">Pendientes<span class="badge" id="pendBadge" hidden></span></button>
       <button role="tab" data-tab="recorridos" id="t-recorridos">Recorridos</button>
+      <button role="tab" data-tab="lavado" id="t-lavado">Lavado</button>
     </nav>
   </div>
 </header>
@@ -472,6 +500,11 @@ footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24p
 
   <section class="panel" id="p-recorridos" role="tabpanel" hidden>
     <div id="recBody"></div>
+  </section>
+
+  <section class="panel" id="p-lavado" role="tabpanel" hidden>
+    <div id="lavBody" class="panel"></div>
+    <input type="file" id="lavFile" class="vh" accept=".xlsx,.xlsm,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" tabindex="-1" aria-hidden="true">
   </section>
 </main>
 <footer class="wrap" id="status"></footer>
@@ -1199,6 +1232,112 @@ function renderRep(){
   return html;
 }
 
+/* ---------- Pruebas de lavado (importar Excel) ---------- */
+const LAV_BASES={gen:'General',aero:'AEROPOSTALE'};
+const LAV={gen:null,aero:null,owner:null};
+const lv={base:'gen',q:'',est:'todos',mes:'',lim:60,busy:false,msg:'',loading:{}};
+const pad2=n=>String(n).padStart(2,'0');
+const nrm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().trim();
+function lavParts(m,get1){let rows=[];for(let i=0;i<(m.partes||0);i++){const c=get1(i);if(c&&c.j){try{rows=rows.concat(JSON.parse(c.j))}catch(e){}}}return rows}
+function lavLocal(base){const m=lsGet('lav-'+base);if(!m)return null;return{meta:m,rows:lavParts(m,i=>lsGet('lav-'+base+'-'+i))}}
+async function lavLoad(base){
+  if(lv.loading[base])return;
+  if(S.mode!=='db'){LAV[base]=lavLocal(base)||{meta:null,rows:[]};renderLav();return}
+  lv.loading[base]=true;
+  try{
+    const ms=await S.db.doc(dpath('lav-'+base)).get();
+    if(!ms.exists)LAV[base]=lavLocal(base)||{meta:null,rows:[]};
+    else{
+      const m=ms.data();
+      const ps=await Promise.all(Array.from({length:m.partes||0},(_,i)=>S.db.doc(dpath('lav-'+base+'-'+i)).get()));
+      const rows=lavParts(m,i=>ps[i]&&ps[i].exists?ps[i].data():null);
+      LAV[base]={meta:m,rows};
+      lsSet('lav-'+base,m);ps.forEach((p,i)=>{if(p&&p.exists)lsSet('lav-'+base+'-'+i,p.data())});
+    }
+  }catch(e){LAV[base]=lavLocal(base)||{meta:null,rows:[]};lv.msg='No se pudo leer de la nube; se muestra lo guardado en este teléfono.'}
+  lv.loading[base]=false;renderLav();
+}
+function loadXLSX(){return window.XLSX?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=res;s.onerror=()=>rej(new Error('net'));document.head.appendChild(s)})}
+function lavDate(v){
+  if(v==null||v==='')return'';
+  if(typeof v==='number'&&v>20000&&v<80000){const d=new Date(Math.round((v-25569)*864e5));return d.getUTCFullYear()+'-'+pad2(d.getUTCMonth()+1)+'-'+pad2(d.getUTCDate())}
+  const m=String(v).trim().match(/^(\d{1,2})[\/\-.](\d{1,3})[\/\-.](\d{2,4})\D*$/);
+  if(m){let d=+m[1],mo=+m[2],y=+m[3];if(mo>12&&m[2].length===3)mo=+m[2].slice(0,2)<=12?+m[2].slice(0,2):+m[2].slice(-2);if(y<100)y+=2000;if(mo>=1&&mo<=12&&d>=1&&d<=31)return y+'-'+pad2(mo)+'-'+pad2(d)}
+  return '?'+String(v).trim();
+}
+async function lavImport(file){
+  const base=lv.base;
+  lv.busy=true;lv.msg='Leyendo '+file.name+'…';renderLav();
+  try{
+    await loadXLSX();
+    const buf=await file.arrayBuffer();
+    const names=XLSX.read(buf,{type:'array',bookSheets:true}).SheetNames;
+    const pick=names.find(n=>nrm(n).includes('BASE P')&&nrm(n).includes('LAVADO'))||names.find(n=>nrm(n).includes('LAVADO'))||names[0];
+    const wb=XLSX.read(buf,{type:'array',sheets:[pick]});
+    const aoa=XLSX.utils.sheet_to_json(wb.Sheets[pick],{header:1,raw:true,defval:null,blankrows:false});
+    const hi=aoa.findIndex(r=>r&&r.some(c=>nrm(c)==='ESTILO')&&r.some(c=>nrm(c)==='ESTATUS'||nrm(c)==='STATUS'));
+    if(hi<0)throw new Error('cols');
+    const H=aoa[hi].map(nrm),col=(...k)=>H.findIndex(h=>k.includes(h)),pre=k=>H.findIndex(h=>h.startsWith(k));
+    const ix={fecha:col('FECHA'),mes:col('MES'),estilo:col('ESTILO'),tela:col('TELA'),tecnica:pre('TECNICA'),calif:pre('CALIFICACION'),coment:pre('COMENTARIO'),estatus:col('ESTATUS','STATUS'),obs:pre('OBSERVACION'),incid:pre('INCIDENCIA'),resp:H.findIndex(h=>h.startsWith('RESPONSABLE')||h==='AUDITOR'),final:col('ESTATUS FINAL')};
+    const rows=[];let bad=0;
+    const sv=v=>v==null?'':String(v).trim();
+    for(let i=hi+1;i<aoa.length;i++){
+      const r=aoa[i];if(!r)continue;const g=k=>ix[k]>=0?r[ix[k]]:null;
+      const est=sv(g('estilo'));if(!est)continue;
+      const f=lavDate(g('fecha'));if(!f||f[0]==='?')bad++;
+      rows.push([f,nrm(g('mes')),est.toUpperCase(),sv(g('tela')).toUpperCase(),sv(g('tecnica')).toUpperCase(),sv(g('calif')),sv(g('coment')),nrm(g('estatus')),sv(g('obs')),sv(g('incid')).toUpperCase(),sv(g('resp')),sv(g('final')).toUpperCase()]);
+    }
+    if(!rows.length)throw new Error('vacio');
+    const CH=250,parts=Math.ceil(rows.length/CH),old=(LAV[base]&&LAV[base].meta&&LAV[base].meta.partes)||0;
+    for(let p=0;p<Math.max(parts,old);p++)put('lav-'+base+'-'+p,{j:JSON.stringify(rows.slice(p*CH,(p+1)*CH))});
+    const meta={base,archivo:file.name,hoja:pick,importado:new Date().toISOString(),total:rows.length,partes:parts};
+    put('lav-'+base,meta);
+    LAV[base]={meta,rows};lv.lim=60;
+    lv.msg=`Listo: ${rows.length} pruebas importadas de la hoja “${pick}”.`+(bad?` ${bad} tienen la fecha escrita de forma no reconocida; se ordenan por su mes.`:'');
+  }catch(e){
+    lv.msg=e.message==='cols'?'No encontré las columnas ESTILO y ESTATUS en ese archivo. ¿Es el Excel de pruebas de lavado?':e.message==='net'?'Necesitas internet para importar.':e.message==='vacio'?'Ese archivo no tiene pruebas registradas.':'No se pudo leer el archivo. Revisa que sea el Excel (.xlsx) de pruebas de lavado.';
+  }
+  lv.busy=false;renderLav();
+}
+const mesIdx=m=>MN.findIndex(x=>nrm(x)===nrm(m));
+function lavKey(r,y){if(r[0]&&r[0][0]!=='?')return r[0];const i=mesIdx(r[1]);return i>=0?y+'-'+pad2(i+1)+'-15':'0000'}
+function lavFecha(r){if(r[0]&&r[0][0]!=='?')return fShort(fromIso(r[0]));return r[1]?cap(r[1].toLowerCase()):(r[0]||'').slice(1)}
+function renderLav(){
+  const el=document.getElementById('lavBody');if(!el)return;
+  const owner=S.uid||'local';if(LAV.owner!==owner){LAV.gen=null;LAV.aero=null;LAV.owner=owner}
+  const b=lv.base,D=LAV[b];
+  Object.keys(LAV_BASES).forEach(k=>{if(!LAV[k]&&!lv.loading[k])setTimeout(()=>lavLoad(k),0)});
+  let h=`<div class="seg" role="group" aria-label="Base">${Object.entries(LAV_BASES).map(([k,v])=>`<button data-act="lavBase" data-v="${k}" aria-pressed="${b===k}">${v}${LAV[k]&&LAV[k].rows.length?' · '+LAV[k].rows.length:''}</button>`).join('')}</div>`;
+  const m=D&&D.meta;
+  h+=`<div class="card lav-imp"><div><b>${m?'Base '+LAV_BASES[b]:'Sin datos de '+LAV_BASES[b]}</b><span class="note">${m?(()=>{const d=new Date(m.importado);return 'Actualizada el '+fShort(dnum(d.getFullYear(),d.getMonth(),d.getDate()))+' a las '+hhmm(d.getHours()*60+d.getMinutes())})()+' · '+esc(m.archivo):'Importa el Excel de pruebas de lavado para consultarlo aquí.'}</span></div>
+    <button class="btn primary small" data-act="lavPick" ${lv.busy?'disabled':''}>${lv.busy?'Importando…':m?'Actualizar Excel':'Importar Excel'}</button></div>`;
+  if(lv.msg)h+=`<p class="note lav-msg">${esc(lv.msg)}</p>`;
+  if(!D){el.innerHTML=h+'<div class="card empty">Cargando pruebas…</div>';return}
+  if(!D.rows.length){el.innerHTML=h+`<div class="card empty">Toca <b>Importar Excel</b> y elige el archivo de ${b==='aero'?'AEROPOSTALE':'pruebas de lavado'} desde tu teléfono. Cada semana repites el paso con el archivo nuevo.</div>`;return}
+  const y=(m&&m.importado||'2026').slice(0,4);
+  const meses=[...new Set(D.rows.map(r=>r[1]).filter(x=>mesIdx(x)>=0))].sort((a,c)=>mesIdx(a)-mesIdx(c));
+  const q=nrm(lv.q).replace(/[\s\-\/]+/g,'');
+  const f1=D.rows.filter(r=>(!lv.mes||r[1]===lv.mes)&&(!q||nrm(r[2]).replace(/[\s\-\/]+/g,'').includes(q)||nrm(r[3]).includes(q)));
+  const acc=f1.filter(r=>r[7]==='ACEPTADO').length,rej=f1.filter(r=>r[7]==='RECHAZADO').length,rep=f1.filter(r=>r[11].includes('REPROCES')).length;
+  const vis=f1.filter(r=>lv.est==='todos'||(lv.est==='acc'?r[7]==='ACEPTADO':r[7]==='RECHAZADO')).sort((a,c)=>lavKey(c,y)<lavKey(a,y)?-1:lavKey(c,y)>lavKey(a,y)?1:0);
+  h+=`<div class="lav-tools"><label class="search" for="lavQ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lavQ" type="search" autocomplete="off" placeholder="Buscar estilo o tela…" value="${esc(lv.q)}" aria-label="Buscar estilo o tela"></label>
+    <select id="lavMes" aria-label="Mes"><option value="">Todos los meses</option>${meses.map(x=>`<option value="${esc(x)}"${x===lv.mes?' selected':''}>${cap(x.toLowerCase())}</option>`).join('')}</select></div>`;
+  h+=`<div class="kpis">
+    <div class="kpi"><span class="k">Pruebas</span><b>${f1.length}</b><span>${lv.mes?cap(lv.mes.toLowerCase()):'todas'}${q?' · búsqueda':''}</span></div>
+    <div class="kpi"><span class="k">Aceptadas</span><b class="okc">${acc}</b><span>${f1.length?Math.round(acc/f1.length*100):0}%</span></div>
+    <div class="kpi ${rej?'warn':''}"><span class="k">Rechazadas</span><b>${rej}</b><span>${f1.length?Math.round(rej/f1.length*100):0}% de rechazo</span></div>
+    <div class="kpi"><span class="k">Reproceso en horno</span><b>${rep}</b><span>estatus final</span></div></div>`;
+  h+=`<div class="seg" role="group" aria-label="Resultado"><button data-act="lavEst" data-v="todos" aria-pressed="${lv.est==='todos'}">Todas (${f1.length})</button><button data-act="lavEst" data-v="acc" aria-pressed="${lv.est==='acc'}">✓ Aceptado (${acc})</button><button data-act="lavEst" data-v="rej" aria-pressed="${lv.est==='rej'}">✕ Rechazado (${rej})</button></div>`;
+  h+='<div class="card"><ul class="lv-list">'+(vis.length?vis.slice(0,lv.lim).map(r=>{
+    const R=r[7]==='RECHAZADO',A=r[7]==='ACEPTADO';
+    return `<li class="lv${R?' rej':A?'':' unk'}"><div class="lv-top"><b class="lv-est">${esc(r[2])}</b><span class="lv-st">${R?'✕ Rechazado':A?'✓ Aceptado':esc(r[7]||'Sin estatus')}</span></div>
+      <div class="lv-meta">${esc(lavFecha(r))}${r[3]?' · '+esc(r[3]):''}${r[4]?' · '+esc(r[4]):''}${r[5]?' · Calif. <b>'+esc(r[5])+'</b>':''}</div>
+      ${r[8]?`<p>${esc(r[8])}</p>`:''}
+      <div class="lv-tags">${r[9]?`<span class="${r[9].includes('BAJA')?'warn':''}">${esc(r[9])}</span>`:''}${r[11]?`<span class="${r[11].includes('REPROCES')||r[11]==='RECHAZADO'?'warn':'okt'}">${esc(r[11])}</span>`:''}${r[10]?`<span>Auditor: ${esc(r[10])}</span>`:''}</div></li>`}).join(''):'<li class="empty">No hay pruebas que coincidan con la búsqueda.</li>')+'</ul></div>';
+  if(vis.length>lv.lim)h+=`<button class="btn wide" data-act="lavMore">Ver ${Math.min(60,vis.length-lv.lim)} más (${vis.length-lv.lim} restantes)</button>`;
+  el.innerHTML=h;
+}
+
 /* ---------- Ajustes ---------- */
 function renderCfg(){
   const c=C();
@@ -1223,13 +1362,15 @@ function keepFocus(fn){
   fn();
   if(id){const b=document.getElementById(id);if(b&&b!==a){b.focus();try{if(s!=null)b.setSelectionRange(s,e)}catch(_){}}}
 }
-function render(){keepFocus(()=>{renderHello();renderAlBanner();if(!alSheet.hidden)renderAlList();renderHero();renderResults();renderPend();renderDia();renderRec()});syncSubs()}
-const TABS=['turnos','midia','pendientes','recorridos'];
+function render(){keepFocus(()=>{renderHello();renderAlBanner();if(!alSheet.hidden)renderAlList();renderHero();renderResults();renderPend();renderDia();renderRec();renderLav()});syncSubs()}
+const TABS=['turnos','midia','pendientes','recorridos','lavado'];
 function setTab(t){
   if(!TABS.includes(t))t='turnos';
   st.tab=t;
   TABS.forEach(x=>{document.getElementById('p-'+x).hidden=x!==t;document.getElementById('t-'+x).setAttribute('aria-selected',x===t)});
   if(t==='midia')renderDia();
+  if(t==='lavado')renderLav();
+  const tb=document.getElementById('t-'+t);if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:'nearest',inline:'nearest'});
 }
 function goTab(t){if(location.hash!=='#'+t)location.hash=t;else setTab(t);window.scrollTo(0,0)}
 function updTask(id,fn,n=st.sel){const d=dayData(n),t=d.tareas.find(x=>x.id===id);if(!t)return;fn(t,d);saveDay(n,d)}
@@ -1305,6 +1446,10 @@ document.addEventListener('click',e=>{
   if(a==='alDelAsk'){st.alDel=b.dataset.id;renderAlList();return}
   if(a==='alDelNo'){st.alDel=null;renderAlList();return}
   if(a==='alDelYes'){const d=AL();d.items=d.items.filter(q=>q.id!==b.dataset.id);put('alertas',d);st.alDel=null;render();return}
+  if(a==='lavBase'){lv.base=b.dataset.v;lv.lim=60;lv.msg='';renderLav();return}
+  if(a==='lavEst'){lv.est=b.dataset.v;lv.lim=60;renderLav();return}
+  if(a==='lavMore'){lv.lim+=60;renderLav();return}
+  if(a==='lavPick'){const f=document.getElementById('lavFile');f.value='';f.click();return}
   if(a==='recView'){st.recView=b.dataset.v;if(st.recView==='rep')loadRep(true);renderRec();return}
   if(a==='repPrev'||a==='repNext'){st.repEnd+=a==='repPrev'?-7:7;if(st.repEnd>todayN())st.repEnd=todayN();renderRec();return}
   if(a==='repReload'){loadRep(true);renderRec();return}
@@ -1324,6 +1469,8 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
   const el=e.target;
+  if(el.id==='lavFile'){const f=el.files&&el.files[0];if(f)lavImport(f);return}
+  if(el.id==='lavMes'){lv.mes=el.value;lv.lim=60;renderLav();return}
   if(el.dataset.act==='tk'){updTask(el.dataset.id,t=>{t.hecho=el.checked;t.hechoA=el.checked?hhmm(nowMin()):undefined});if(el.checked)st.flash=el.dataset.id;renderPend();renderDia();return}
   if(el.dataset.act==='chk'){editRound(r=>{if(el.checked)r.c[el.dataset.id]=true;else delete r.c[el.dataset.id]});renderRec();return}
   if(el.dataset.act==='val'){editRound(r=>{if(el.checked)r.v[el.dataset.m]=true;else delete r.v[el.dataset.m]});renderRec();return}
@@ -1341,6 +1488,7 @@ document.addEventListener('change',e=>{
 let notaT;const hT={};
 document.addEventListener('input',e=>{
   if(e.target.id==='q'){st.q=e.target.value;renderResults()}
+  if(e.target.id==='lavQ'){lv.q=e.target.value;lv.lim=60;keepFocus(renderLav)}
   if(e.target.dataset&&e.target.dataset.hf){
     const el=e.target,h=el.dataset.h,f=el.dataset.hf,raw=el.value.trim(),key={n:st.rec,t:st.recT,i:st.round},c=C();
     const vt=document.getElementById('ht-'+h).value.trim(),vp=document.getElementById('hp-'+h).value.trim();
