@@ -1,17 +1,9 @@
-// ============================================================
-//  C. C. AVANTE · Configuración de Firebase
-//  1) Borra el bloque de abajo (desde "const" hasta "};").
-//  2) Pega SOLO el bloque que te da Firebase, el que empieza con
-//       const firebaseConfig = {
-//     y termina con
-//       };
-//  No pegues las líneas que dicen "import" ni "initializeApp".
-// ============================================================
+// C. C. AVANTE · Configuración de Firebase (proyecto cc-avante)
 const firebaseConfig = {
-  apiKey: "PEGA_AQUI",
-  authDomain: "PEGA_AQUI",
-  projectId: "PEGA_AQUI",
-  storageBucket: "PEGA_AQUI",
-  messagingSenderId: "PEGA_AQUI",
-  appId: "PEGA_AQUI"
+  apiKey: "AIzaSyBRWGRhvFekXxerqdBFmr3vdGydE0tSDMA",
+  authDomain: "cc-avante.firebaseapp.com",
+  projectId: "cc-avante",
+  storageBucket: "cc-avante.firebasestorage.app",
+  messagingSenderId: "976827137132",
+  appId: "1:976827137132:web:27878ae766e20403992c49"
 };

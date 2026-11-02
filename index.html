@@ -374,6 +374,14 @@ h2{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 .acct img{width:40px;height:40px;border-radius:50%}
 .acct > div{flex:1;min-width:0;display:grid}
 .acct span{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.field,.two > *{min-width:0}
+.field input,.field select,.field textarea{width:100%;min-width:0;max-width:100%}
+.sheet-in{overflow-x:hidden}
+.sheet-in > *{min-width:0}
+.sheet-in .datehead{flex-wrap:nowrap}
+.sheet-in .datehead h3{min-width:0}
+.sheet-in .datehead .btn{flex:none}
+.items li input{min-width:0}
 footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24px}
 
 @media (max-width:520px){
@@ -659,7 +667,7 @@ function stopCloud(){
 }
 function renderAcct(){
   const el=document.getElementById('acct');if(!el)return;
-  if(!FB.ok){el.innerHTML='<p class="note">La nube todavía no está configurada. Sigue el paso de Firebase del archivo LEEME.txt.</p>';return}
+  if(!FB.ok){el.innerHTML=fbConfig()?'<p class="note">No se pudo conectar con Firebase. Revisa tu internet, cierra la app y vuelve a abrirla.</p>':'<p class="note">La nube todavía no está configurada. Falta tu configuración en firebase-config.js.</p>';return}
   if(FB.user)el.innerHTML=`<div class="acct">${FB.user.photoURL?`<img src="${esc(FB.user.photoURL)}" alt="" referrerpolicy="no-referrer">`:''}<div><b>${esc(FB.user.displayName||'Cuenta de Google')}</b><span>${esc(FB.user.email||'')}</span></div><button class="btn small" type="button" data-act="logout">Cerrar sesión</button></div><p class="note" id="acctMsg">Tus datos se guardan en la nube y en este teléfono.</p>`;
   else el.innerHTML=`<button class="btn primary small" type="button" data-act="login">Entrar con Google</button><p class="note" id="acctMsg">Sin cuenta, los datos solo quedan en este teléfono.</p>`;
 }
