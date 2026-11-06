@@ -562,6 +562,29 @@ h2{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute
 }
 
 .aud-ln{color:var(--accent);font-weight:600}
+.aq-in{padding:14px;display:grid;gap:10px}
+.aq-in input{font-size:22px;font-family:var(--f-mono);height:54px}
+.aq-res{padding:14px;display:grid;gap:10px}
+.aq-big{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.aq-big > div{border-radius:10px;padding:12px 10px;background:var(--surface-2);display:grid;gap:2px;text-align:center}
+.aq-big .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.aq-big b{font-family:var(--f-display);font-size:48px;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
+.aq-big span:last-child{font-size:12px;color:var(--muted)}
+.aq-big .ok{background:var(--ok-bg)}.aq-big .ok b{color:var(--ok)}
+.aq-big .bad{background:var(--dev-bg)}.aq-big .bad b{color:var(--dev)}
+.aq-nota{margin:0;font-size:13px;color:var(--crit);font-weight:600}
+.aq-ver{border-radius:10px;padding:12px 14px;display:grid;gap:2px}
+.aq-ver b{font-size:20px;font-family:var(--f-display);letter-spacing:.02em}
+.aq-ver span{font-size:13px}
+.aq-ver.ok{background:var(--ok-bg);color:var(--ok)}
+.aq-ver.bad{background:var(--dev-bg);color:var(--dev)}
+.aq-rec{padding:12px 14px;display:grid;gap:4px}
+.aq-rec .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.aq-rec p{margin:0;font-size:15px}
+.aq-t caption{text-align:left;padding:10px 12px;font-weight:600;font-size:14px}
+.aq-t td.a{color:var(--ok);font-weight:700}.aq-t td.r{color:var(--dev);font-weight:700}
+.aq-t tr.cur td{background:var(--accent-bg);font-weight:700}
+@media (max-width:400px){.aq-big b{font-size:40px}}
 footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24px}
 
 @media (max-width:520px){
@@ -613,6 +636,7 @@ footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24p
       <button role="tab" data-tab="midia" id="t-midia">Mi día</button>
       <button role="tab" data-tab="pendientes" id="t-pendientes">Seguimiento<span class="badge" id="pendBadge" hidden></span></button>
       <button role="tab" data-tab="recorridos" id="t-recorridos">Recorridos</button>
+      <button role="tab" data-tab="aql" id="t-aql">AQL</button>
       <button role="tab" data-tab="lavado" id="t-lavado">Lavado</button>
     </nav>
   </div>
@@ -649,6 +673,10 @@ footer{font-size:13px;color:var(--muted);text-align:center;padding-block:8px 24p
 
   <section class="panel" id="p-recorridos" role="tabpanel" hidden>
     <div id="recBody"></div>
+  </section>
+
+  <section class="panel" id="p-aql" role="tabpanel" hidden>
+    <div id="aqlBody" class="panel"></div>
   </section>
 
   <section class="panel" id="p-lavado" role="tabpanel" hidden>
@@ -1674,6 +1702,59 @@ function renderLav(){
   el.innerHTML=h;
 }
 
+/* ---------- Calculadora AQL (ISO 2859-1 · tablas I y II-A, inspección normal) ---------- */
+const AQ_LET='ABCDEFGHJKLMNPQR',AQ_N=[2,3,5,8,13,20,32,50,80,125,200,315,500,800,1250,2000],AQ_AC=[0,1,2,3,5,7,10,14,21];
+const AQ_LOT=[[8,'AAAAAAB','2–8'],[15,'AAAAABC','9–15'],[25,'AABBBCD','16–25'],[50,'ABBCCDE','26–50'],[90,'BBCCCEF','51–90'],[150,'BBCDDFG','91–150'],[280,'BCDEEGH','151–280'],[500,'BCDEFHJ','281–500'],[1200,'CCEFGJK','501–1,200'],[3200,'CDEGHKL','1,201–3,200'],[10000,'CDFGJLM','3,201–10,000'],[35000,'CDFHKMN','10,001–35,000'],[150000,'DEGJLNP','35,001–150,000'],[500000,'DEGJMPQ','150,001–500,000'],[Infinity,'DEHKNQR','500,001 o más']];
+const AQ_LV=['S-1','S-2','S-3','S-4','I','II','III'];
+const AQ_AQL=['0.010','0.015','0.025','0.040','0.065','0.10','0.15','0.25','0.40','0.65','1.0','1.5','2.5','4.0','6.5'];
+const AQ_PLANTA=[[2,8,2,0,1],[9,15,2,0,1],[16,25,3,0,1],[26,50,5,0,1],[51,90,5,0,1],[91,150,8,0,1],[151,280,13,0,1],[281,500,20,1,2],[501,1200,32,2,3],[1201,3200,50,3,4],[3201,10000,80,5,6]];
+const aq={lote:'',def:'',modo:'planta',nivel:'I',aql:'2.5',estilo:'',msg:''};
+const fmtN=n=>Number(n).toLocaleString('es-MX');
+function aqCell(i,j){const d=i+j;if(d<14||d===16)return'down';if(d===15||d>24)return'up';if(d===14)return[0,1];const a=AQ_AC[d-16];return[a,a+1]}
+function aqNorma(lote,nivel,aql){
+  const row=AQ_LOT.find(r=>lote<=r[0]),lv=AQ_LV.indexOf(nivel),j=AQ_AQL.indexOf(aql);
+  const L0=row[1][lv];let i=AQ_LET.indexOf(L0),c=aqCell(i,j),g=0;
+  while(!Array.isArray(c)&&g++<20){i+=c==='down'?1:-1;i=Math.max(0,Math.min(15,i));c=aqCell(i,j)}
+  return{n:AQ_N[i],ac:c[0],re:c[1],letra:AQ_LET[i],letra0:L0,rango:row[2],flecha:AQ_LET[i]!==L0};
+}
+function aqPlan(lote){
+  if(aq.modo==='planta'){
+    const r=AQ_PLANTA.find(x=>lote>=x[0]&&lote<=x[1]);
+    if(r)return{n:r[2],ac:r[3],re:r[4],rango:fmtN(r[0])+'–'+fmtN(r[1]),fuente:'Tabla de la planta · nivel general I · AQL 2.5%',nota:r[0]===3201?'La tarjeta impresa trae 6 en las dos columnas. Por la norma (letra J, AQL 2.5) se acepta con 5 y se rechaza con 6.':''};
+    const p=aqNorma(lote,'I','2.5');return Object.assign(p,{fuente:'Norma ISO 2859-1 · nivel I · AQL 2.5%',nota:'Este lote es mayor a 10,000 piezas y no viene en la tarjeta de la planta; se usa la norma completa con nivel I y AQL 2.5.'});
+  }
+  const p=aqNorma(lote,aq.nivel,aq.aql);
+  return Object.assign(p,{fuente:`Norma ISO 2859-1 · nivel ${aq.nivel} · AQL ${aq.aql}% · letra ${p.letra}`,nota:p.flecha?`La letra del lote es ${p.letra0}, pero la tabla manda seguir la flecha hasta la letra ${p.letra}.`:''});
+}
+function renderAql(){
+  const el=document.getElementById('aqlBody');if(!el)return;
+  const lote=parseInt(String(aq.lote).replace(/[^\d]/g,''),10),ok=lote>=2,p=ok?aqPlan(lote):null,full=p&&p.n>=lote;
+  const def=aq.def===''?null:parseInt(aq.def,10);
+  let h=`<div class="seg" role="group" aria-label="Tabla a usar"><button data-act="aqModo" data-v="planta" aria-pressed="${aq.modo==='planta'}">Tabla de la planta</button><button data-act="aqModo" data-v="norma" aria-pressed="${aq.modo==='norma'}">Norma completa</button></div>`;
+  if(aq.modo==='norma')h+=`<div class="two"><label class="field"><span>Nivel de inspección</span><select id="aqNivel">${AQ_LV.map(x=>`<option${x===aq.nivel?' selected':''}>${x}</option>`).join('')}</select></label><label class="field"><span>AQL (%)</span><select id="aqAql">${AQ_AQL.map(x=>`<option${x===aq.aql?' selected':''}>${x}</option>`).join('')}</select></label></div>`;
+  h+=`<div class="card aq-in"><label class="field"><span>Tamaño del lote (piezas de la orden)</span><input id="aqL" type="text" inputmode="numeric" autocomplete="off" placeholder="Ej. 1,250" value="${esc(aq.lote)}"></label></div>`;
+  if(!ok)h+=`<div class="card empty">${aq.lote===''?'Escribe cuántas piezas trae la orden y te digo cuántas auditar y con cuántos defectos se rechaza.':'El lote debe ser de al menos 2 piezas.'}</div>`;
+  else{
+    h+=`<div class="card aq-res"><div class="aq-big"><div><span class="k">Audita</span><b>${fmtN(full?lote:p.n)}</b><span>pieza${(full?lote:p.n)===1?'':'s'}${full?' (100 %)':''}</span></div>
+      <div class="ok"><span class="k">Aceptas con</span><b>${p.ac}</b><span>defecto${p.ac===1?'':'s'} o menos</span></div>
+      <div class="bad"><span class="k">Rechazas con</span><b>${p.re}</b><span>defecto${p.re===1?'':'s'} o más</span></div></div>
+      <p class="note">${p.fuente} · lote de ${p.rango}${p.letra&&aq.modo==='planta'?' · letra '+p.letra:''}</p>
+      ${full?'<p class="aq-nota">La muestra es igual o mayor que el lote: se inspecciona el lote completo.</p>':''}${p.nota?`<p class="aq-nota">${esc(p.nota)}</p>`:''}</div>`;
+    h+=`<div class="card aq-in"><label class="field"><span>¿Cuántos defectos encontraste? (opcional)</span><input id="aqD" type="number" inputmode="numeric" min="0" placeholder="0" value="${esc(aq.def)}"></label>`;
+    if(def!=null&&!isNaN(def)){
+      const rej=def>=p.re;
+      h+=`<div class="aq-ver ${rej?'bad':'ok'}"><b>${rej?'✕ Lote rechazado':'✓ Lote aceptado'}</b><span>${def} defecto${def===1?'':'s'} en ${fmtN(full?lote:p.n)} pieza${(full?lote:p.n)===1?'':'s'} · ${rej?`llegó al número de rechazo (${p.re})`:`dentro del número de aceptación (${p.ac})`}</span></div>`;
+      if(rej)h+=`<label class="field"><span>Estilo (para el seguimiento)</span><input id="aqE" autocomplete="off" placeholder="Ej. 578AZ-00101" value="${esc(aq.estilo)}"></label><button class="btn primary wide" data-act="aqSeg">Dar seguimiento al rechazo</button>`;
+    }
+    h+=`${aq.msg?`<p class="note">${esc(aq.msg)}</p>`:''}</div>`;
+  }
+  const rp=aqNorma(20,'II','2.5');
+  h+=`<div class="card aq-rec"><span class="k">Auditoría de proceso (recorridos)</span><p>Muestrea <b>20 piezas</b> por recorrido · AQL 2.5 %: aceptas con <b>${aqCell(5,12)[0]}</b> defecto y rechazas con <b>${aqCell(5,12)[1]}</b>.</p></div>`;
+  const cur=ok&&aq.modo==='planta'?AQ_PLANTA.find(x=>lote>=x[0]&&lote<=x[1]):null;
+  h+=`<div class="card tablewrap"><table class="aq-t"><caption>Auditoría final · nivel general I · AQL 2.5 %</caption><thead><tr><th>Lote (orden)</th><th>Muestra</th><th>Acepta</th><th>Rechaza</th></tr></thead><tbody>${AQ_PLANTA.map(x=>`<tr${x===cur?' class="cur"':''}><td>${fmtN(x[0])}–${fmtN(x[1])}</td><td>${x[2]}</td><td class="a">${x[3]}</td><td class="r">${x[4]}</td></tr>`).join('')}</tbody></table></div>`;
+  el.innerHTML=h;
+}
+
 /* ---------- Ajustes ---------- */
 function renderCfg(){
   const c=C();
@@ -1699,13 +1780,14 @@ function keepFocus(fn){
   if(id){const b=document.getElementById(id);if(b&&b!==a){b.focus();try{if(s!=null)b.setSelectionRange(s,e)}catch(_){}}}
 }
 function render(){keepFocus(()=>{renderHello();renderAlBanner();if(!alSheet.hidden)renderAlList();renderHero();renderSem();renderAud();renderResults();renderSeg();renderDia();renderRec();renderLav()});syncSubs()}
-const TABS=['turnos','midia','pendientes','recorridos','lavado'];
+const TABS=['turnos','midia','pendientes','recorridos','aql','lavado'];
 function setTab(t){
   if(!TABS.includes(t))t='turnos';
   st.tab=t;
   TABS.forEach(x=>{document.getElementById('p-'+x).hidden=x!==t;document.getElementById('t-'+x).setAttribute('aria-selected',x===t)});
   if(t==='midia')renderDia();
   if(t==='pendientes')renderSeg();
+  if(t==='aql')renderAql();
   if(t==='lavado')renderLav();
   const tb=document.getElementById('t-'+t);if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:'nearest',inline:'nearest'});
 }
@@ -1723,6 +1805,10 @@ document.addEventListener('click',e=>{
   const b=e.target.closest('[data-tab],[data-act]');if(!b)return;
   if(b.dataset.tab){goTab(b.dataset.tab);return}
   const a=b.dataset.act;
+  if(a==='aqModo'){aq.modo=b.dataset.v;renderAql();return}
+  if(a==='aqSeg'){const lote=parseInt(String(aq.lote).replace(/[^\d]/g,''),10),pl=aqPlan(lote),n=Math.min(pl.n,lote),es=(aq.estilo||'').trim().toUpperCase();
+    const id=sgAdd({tipo:'rechazo',estilo:es,titulo:`Rechazo por AQL: ${aq.def} defectos en ${n} piezas (lote de ${fmtN(lote)})`,detalle:`${pl.fuente} · acepta con ${pl.ac}, rechaza con ${pl.re}. Revisar el lote al 100 % antes de liberar.`,maq:[],prox:iso(todayN()),alta:false,origen:'aql'});
+    aq.def='';aq.msg='';renderAql();renderSem();renderDia();goSegItem(id);return}
   if(a==='frase'){fraseOff+=+b.dataset.d;renderHello(+b.dataset.d>0?'r':'l');return}
   if(a==='audEdit'){au.edit=!au.edit;renderAud();return}
   if(a==='audDel'){saveAud(A=>{A[b.dataset.g]=A[b.dataset.g].filter(x=>x.id!==b.dataset.id)});renderAud();renderHero();renderRec();return}
@@ -1846,6 +1932,8 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{
   const el=e.target;
+  if(el.id==='aqNivel'){aq.nivel=el.value;renderAql();return}
+  if(el.id==='aqAql'){aq.aql=el.value;renderAql();return}
   if(el.dataset.audN){const v=el.value.trim();if(v)saveAud(A=>{const x=A[el.dataset.g].find(q=>q.id===el.dataset.audN);if(x)x.n=v});renderHero();renderRec();return}
   if(el.dataset.audL){saveAud(A=>{const x=A[el.dataset.g].find(q=>q.id===el.dataset.audL);if(x)x.l=el.value});renderAud();renderHero();renderRec();return}
   if(el.dataset.audG){const to=el.value,from=el.dataset.g;if(to!==from)saveAud(A=>{const i=A[from].findIndex(q=>q.id===el.dataset.audG);if(i>=0){const[x]=A[from].splice(i,1);A[to].push(x)}});renderAud();renderHero();renderRec();return}
@@ -1869,6 +1957,9 @@ document.addEventListener('change',e=>{
 let notaT;const hT={};
 document.addEventListener('input',e=>{
   if(e.target.id==='q'){st.q=e.target.value;renderResults()}
+  if(e.target.id==='aqL'){aq.lote=e.target.value;aq.msg='';keepFocus(renderAql)}
+  if(e.target.id==='aqD'){aq.def=e.target.value;keepFocus(renderAql)}
+  if(e.target.id==='aqE'){aq.estilo=e.target.value}
   if(e.target.id==='sgQ'){sg.q=e.target.value;keepFocus(renderSeg)}
   if(e.target.id==='lavQ'){lv.q=e.target.value;lv.lim=60;keepFocus(renderLav)}
   if(e.target.dataset&&e.target.dataset.hf){

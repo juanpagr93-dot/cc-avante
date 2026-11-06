@@ -1,5 +1,5 @@
 // C. C. AVANTE · funciona sin internet. Cambia la versión cuando subas una actualización.
-const CACHE = 'cc-avante-fb-v6';
+const CACHE = 'cc-avante-fb-v7';
 const SHELL = ['./', './index.html', './firebase-config.js', './manifest.webmanifest', './logo-avante.svg', './icon-v3-192.png', './icon-v3-512.png', './icon-v3-1024.png', './maskable-v3-512.png', './maskable-v3-1024.png', './apple-touch-icon-v3.png', './favicon-v3-64.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
