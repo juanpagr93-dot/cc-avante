@@ -8,7 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="C.C. AVANTE">
-<meta name="description" content="Turnos, hornos, checklists y alertas de Control de Calidad Estampado">
+<meta name="description" content="Turnos, hornos, rechazos y alertas de Control de Calidad Estampado">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon-v3-64.png">
 <link rel="apple-touch-icon" href="apple-touch-icon-v3.png">
@@ -1256,6 +1256,27 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 .bk-step .btns{display:flex;flex-wrap:wrap;gap:6px}
 .bk-msg{margin:0;font-size:13px;color:var(--gold-2)}
 .bk-warn{color:var(--dev)!important}
+.piso-warn{margin:6px 0 0;padding:10px 12px;border-radius:10px;border:1px solid rgba(239,138,128,.55);background:var(--dev-bg);color:#FFD9D4;font-size:13px;line-height:1.4}
+
+/* ===== v10 · personal del área, roles y alertas compartidas ===== */
+.al-mini{display:grid;gap:2px;text-align:left;width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(239,138,128,.5);background:var(--dev-bg);color:#fff}
+.al-mini b{font-size:14.5px}
+.al-mini span{font-size:12.5px;color:#FFD9D4}
+.per-g{display:grid;gap:6px;padding:10px 0;border-top:1px solid var(--glass-line)}
+.per-g:first-of-type{border-top:0}
+.per-h{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.per-h b{color:#fff;font-size:14px}
+.per-h .on{color:var(--ok);font-weight:600}
+.per-l{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.per-l li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 10px;border-radius:9px;background:var(--surface-2)}
+.per-l li b{display:block;font-size:14.5px;color:#fff}
+.per-l li span{font-size:12px;color:var(--gold-2)}
+.per-l li.ed{grid-template-columns:1fr}
+.per-ed{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) auto;gap:6px}
+.per-ed input,.per-ed select,.per-add input,.per-add select{height:40px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);padding:0 8px;min-width:0;width:100%}
+.per-ed input{grid-column:1/-1}
+.per-add{display:grid;gap:6px;padding-top:10px;border-top:1px solid var(--glass-line)}
+.per-add .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 </style>
 
 </head>
@@ -1312,13 +1333,12 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
   </section>
 
   <section class="panel" id="p-marbetes" role="tabpanel" hidden>
-    <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Marbetes</h2></div>
+    <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Bajo porcentaje</h2></div>
     <div id="mbBody" class="panel"></div>
   </section>
 
   <section class="panel" id="p-calendario" role="tabpanel" hidden>
-    <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Turnos y auditoras</h2></div>
-    <div id="audBody"></div>
+    <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Turnos</h2></div>
     <h2>Buscador de turnos</h2>
     
     <label class="search" for="q">
@@ -1330,6 +1350,7 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
       <div class="cal-h"><div>Fecha</div><div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Día</div><div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>Noche</div><div>Descansa</div></div>
       <ul id="results"></ul>
     </div>
+    <div id="audBody"></div>
   </section>
 
   <section class="panel" id="p-aql" role="tabpanel" hidden>
@@ -1521,13 +1542,13 @@ function watch(k){
       if(JSON.stringify(d)===JSON.stringify(S.cache[k]))return;
       S.cache[k]=d;lsSet(k,d);render();
     }else if(!snap.metadata.fromCache){
-      const loc=lsGet(k);if(loc)put(k,loc);else if(k==='g_maquinas'&&canCap())put(k,PL());
+      const loc=lsGet(k);if(loc)put(k,loc);else if(k==='g_maquinas'&&canCap())put(k,PL());else if(k==='g_personal'&&SHD.admin)put(k,{items:PER()});
     }
   },()=>{});
 }
 function syncSubs(){
   if(S.mode!=='db')return;
-  const need=new Set(['config',KM(),...(SHD.team?['g_h'+iso(currentShift().n),'g_h'+iso(st.rec),'g_h'+iso(st.sel)]:[]),'alertas','seguimientos','marbetes','d'+iso(currentShift().n),'d'+iso(todayN()),'d'+iso(st.sel),'d'+iso(st.rec)]);
+  const need=new Set(['config',KM(),KP(),...(SHD.team?['g_h'+iso(currentShift().n),'g_h'+iso(st.rec),'g_h'+iso(st.sel)]:[]),'alertas','seguimientos','marbetes','d'+iso(currentShift().n),'d'+iso(todayN()),'d'+iso(st.sel),'d'+iso(st.rec)]);
   Object.keys(S.subs).forEach(k=>{if(!need.has(k)){S.subs[k]();delete S.subs[k]}});
   need.forEach(watch);
 }
@@ -1752,10 +1773,10 @@ function alCard(a,mode){
     <b>${esc(a.titulo)}</b>${a.detalle&&mode!=='mini'?`<p>${esc(a.detalle)}</p>`:''}${meta?`<span class="al-meta">${esc(meta)}</span>`:''}${acts}</div>`;
 }
 function renderAlBanner(){
-  const act=alActive(),el=document.getElementById('alBanner'),bd=document.getElementById('alBadge');
-  avBadges();
-  el.innerHTML=act.length?`<div class="al-head"><h2>Alertas de calidad</h2><button class="ghost" data-act="openAlMine">Ver todas (${act.length})</button></div><div class="al-stack">${act.slice(0,3).map(a=>alCard(a,'mini')).join('')}</div>`:
-    `<button class="al-empty" data-act="openAlMine"><span>Sin alertas de calidad activas</span><b>+ Agregar alerta</b></button>`;
+  const el=document.getElementById('alBanner');avBadges();if(!el)return;
+  const L=SHD.avisos.filter(a=>a.p==='alta');
+  el.innerHTML=L.length?`<div class="al-head"><h2>Alertas de calidad</h2><button class="ghost" data-act="openAl">Ver todas (${L.length})</button></div><div class="al-stack">${L.slice(0,3).map(a=>`<button class="al-mini" data-act="openAl"><b>${esc(a.t||'Alerta')}</b>${a.x?`<span>${esc(a.x.length>120?a.x.slice(0,120)+'…':a.x)}</span>`:''}</button>`).join('')}</div>`:
+    `<button class="al-empty" data-act="openAl"><span>Sin alertas de calidad activas</span>${SHD.admin?'<b>+ Publicar alerta</b>':''}</button>`;
 }
 function renderAlForm(){
   document.getElementById('alTipo').innerHTML=`<button type="button" data-act="alTipo" data-v="param" aria-pressed="${alForm.tipo==='param'}">⚙ Cambio de parámetro</button><button type="button" data-act="alTipo" data-v="aten" aria-pressed="${alForm.tipo==='aten'}">⚠ Atención requerida</button>`;
@@ -1827,28 +1848,35 @@ function shiftWin(n,t){const c=C(),[y,mo,d]=ymd(n),s=new Date(y,mo,d,0,toMin(t==
 
 /* ---------- Auditoras por grupo (fijas hasta que las muevas) ---------- */
 const LINEAS={L1:'Línea 1',L2:'Línea 2',AP:'Apoyo'};
-const AUD=()=>{const a=C().auditoras||{};return{A:(a.A||[]).slice(),B:(a.B||[]).slice(),C:(a.C||[]).slice()}};
+const PUESTOS=['Auditor(a)','Capturista','Muestrista','Jefa de calidad','Supervisor'];
+const KP=()=>SHD.team?'g_personal':'personal';
+const PER=()=>{const v=get(KP());if(v&&v.items)return v.items.map(x=>Object.assign({},x));const a=C().auditoras||{};return['A','B','C'].flatMap(g=>(a[g]||[]).map(x=>({id:x.id,n:x.n,p:'Auditor(a)',g,l:x.l||''})))};
+function savePER(fn){const L=PER();fn(L);put(KP(),{items:L})}
+const perEdit=()=>!SHD.on||SHD.admin;
+const AUD=()=>{const o={A:[],B:[],C:[]};PER().forEach(x=>{if(x.p==='Auditor(a)'&&o[x.g])o[x.g].push({id:x.id,n:x.n,l:x.l})});return o};
 function saveAud(fn){const a=AUD();fn(a);saveCfg({auditoras:a})}
 function audTxt(g){return (AUD()[g]||[]).map(x=>esc(x.n)+(x.l==='AP'?' <small>apoyo</small>':` <small>${x.l==='L2'?'L2':'L1'}</small>`)).join(' · ')}
 function audLine(g,l){return (AUD()[g]||[]).filter(x=>x.l===l).map(x=>x.n).join(', ')}
 const au={edit:false};
 function renderAud(){
   const el=document.getElementById('audBody');if(!el)return;
-  const A=AUD(),T=todayN(),cs=currentShift(),onG=day(cs.n)[cs.t];
-  const empty=!A.A.length&&!A.B.length&&!A.C.length;
-  let h=`<div class="card aud"><div class="datehead"><h3>Auditoras por grupo</h3><button class="ghost" data-act="audEdit">${au.edit?'Listo':'Editar'}</button></div>`;
-  if(empty&&!au.edit){el.innerHTML=h+`<p class="note">Agrega a las auditoras de cada grupo. Se quedan fijas y salen en cada turno hasta que las muevas.</p><button class="btn small primary" data-act="audEdit" style="justify-self:start">Agregar auditoras</button></div>`;return}
-  h+='<div class="aud-grid">';
-  ['A','B','C'].forEach(g=>{
-    const on=onG.includes(g),sun=ymd(T)[3]===0;
-    h+=`<div class="aud-g${on?' on':''}"><div class="aud-h">${pill(g)}<span>${on?'En planta ahora':sun?'Domingo':'Hoy: '+SH[shiftOf(g,T)]}</span></div>`;
-    if(au.edit){
-      h+=`<ul class="aud-l">${A[g].map(x=>`<li><input id="aun-${x.id}" value="${esc(x.n)}" data-aud-n="${x.id}" data-g="${g}" aria-label="Nombre"><select data-aud-l="${x.id}" data-g="${g}" aria-label="Línea">${Object.entries(LINEAS).map(([k,v])=>`<option value="${k}"${x.l===k?' selected':''}>${v}</option>`).join('')}</select><select data-aud-g="${x.id}" data-g="${g}" aria-label="Mover a otro grupo">${['A','B','C'].map(o=>`<option value="${o}"${o===g?' selected':''}>${o===g?'Grupo '+o:'Mover a '+o}</option>`).join('')}</select><button class="ghost" data-act="audDel" data-id="${x.id}" data-g="${g}" aria-label="Quitar a ${esc(x.n)}">✕</button></li>`).join('')}</ul>
-      <form class="aud-add" data-g="${g}"><input name="n" id="aua-${g}" placeholder="Nombre" autocomplete="off" required aria-label="Nombre de la auditora del grupo ${g}"><select name="l" aria-label="Línea">${Object.entries(LINEAS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select><button class="btn small" type="submit">Agregar</button></form>`;
-    }else h+=A[g].length?`<ul class="aud-v">${A[g].map(x=>`<li><b>${esc(x.n)}</b><span>${LINEAS[x.l]||''}</span></li>`).join('')}</ul>`:'<p class="note">Sin auditoras</p>';
-    h+='</div>';
+  const L=PER(),T=todayN(),cs=currentShift(),onG=day(cs.n)[cs.t],ed=perEdit()&&au.edit;
+  const LN={L1:'Línea 1',L2:'Línea 2',AP:'Apoyo','':''};
+  const opt=(arr,v)=>arr.map(([k,t])=>`<option value="${esc(k)}"${k===v?' selected':''}>${esc(t)}</option>`).join('');
+  const PO=PUESTOS.map(p=>[p,p]),GO=[['A','Grupo A'],['B','Grupo B'],['C','Grupo C'],['','Sin grupo']],LO=[['','Sin línea'],['L1','Línea 1'],['L2','Línea 2'],['AP','Apoyo']];
+  let h=`<div class="card aud"><div class="datehead"><h3>Personal del área</h3>${perEdit()?`<button class="ghost" data-act="audEdit">${au.edit?'Listo':'Editar'}</button>`:''}</div>
+    <p class="note">${perEdit()?'Nombre, puesto y grupo de cada persona. Se quedan fijos hasta que los cambie.':'Solo los administradores pueden modificar esta lista.'}</p>`;
+  ['A','B','C',''].forEach(g=>{
+    const G=L.filter(x=>(x.g||'')===g);if(!G.length&&!(g&&ed))return;
+    const on=g&&onG.includes(g);
+    h+=`<div class="per-g"><div class="per-h">${g?pill(g):'<b>Sin grupo fijo</b>'}${g?`<span class="${on?'on':''}">${on?'En planta ahora':ymd(T)[3]===0?'Domingo':'Hoy: '+SH[shiftOf(g,T)]}</span>`:''}</div><ul class="per-l">`;
+    h+=G.map(x=>ed?`<li class="ed"><div class="per-ed"><input value="${esc(x.n)}" data-per="${x.id}" data-f="n" aria-label="Nombre"><select data-per="${x.id}" data-f="p" aria-label="Puesto">${opt(PO,x.p)}</select><select data-per="${x.id}" data-f="g" aria-label="Grupo">${opt(GO,x.g||'')}</select><select data-per="${x.id}" data-f="l" aria-label="Línea">${opt(LO,x.l||'')}</select><button class="ghost warn" data-act="perDel" data-id="${x.id}" aria-label="Quitar ${esc(x.n)}">✕</button></div></li>`
+      :`<li><div><b>${esc(x.n)}</b><span>${esc(x.p)}${x.l?' · '+LN[x.l]:''}</span></div></li>`).join('')||'<li><span class="note">Sin personas en este grupo.</span></li>';
+    h+='</ul></div>';
   });
-  el.innerHTML=h+'</div></div>';
+  if(!L.length&&!ed)h+='<p class="note">Todavía no hay personal registrado.</p>';
+  if(ed)h+=`<form class="per-add" id="perForm"><input id="perN" placeholder="Nombre" autocomplete="off" required aria-label="Nombre"><div class="row"><select id="perP" aria-label="Puesto">${opt(PO,'Auditor(a)')}</select><select id="perG" aria-label="Grupo">${opt(GO,'A')}</select><select id="perL" aria-label="Línea">${opt(LO,'')}</select></div><button class="btn primary" type="submit">Agregar persona</button></form>`;
+  el.innerHTML=h+'</div>';
 }
 
 /* ---------- Estado de planta: cambios, dyno gray, muestras y paros ---------- */
@@ -1947,7 +1975,7 @@ function semData(){
   const rows=[
     (()=>{const H=hSum(n,t),lt=H.L[0]?minsSince(H.L[0].ts):null;return [H.bad?'bad':(!H.L.length&&el>60)||(lt!=null&&lt>c.cada*60+20)?'warn':'ok','Hornos',H.bad?`${H.bad} horno${H.bad>1?'s':''} fuera de parámetro`:H.L.length?`${H.cnt}/${c.hornos} con lectura · última hace ${durTxt(lt)}`:'Sin lecturas en el turno','hornos']})(),
     [!pa.length?'ok':longest>=60?'bad':'warn','Paros',pa.length?`${pa.length} parada${pa.length>1?'s':''} · la más larga ${durTxt(longest)}`:'Todas trabajando','par'],
-    [ini&&ini.firma?'ok':el>60?'warn':'ok','Checklist de inicio',ini&&ini.firma?'Firmado '+ini.firma:'Sin firmar','ini']
+    (()=>{const r=SHD.team?rjOf(n,t).length:0;return [r?'warn':'ok','Rechazos',r?`${r} en el turno`:'Sin rechazos','rech']})()
   ];
   const worst=rows.some(r=>r[0]==='bad')?'bad':rows.some(r=>r[0]==='warn')?'warn':'ok';
   return{n,t,rows,worst,g:day(n)[t]};
@@ -1959,7 +1987,7 @@ function renderSem(){
   const chips=[[sm.length,'estilo'+(sm.length===1?'':'s')+' complicado'+(sm.length===1?'':'s')],[P.cambio.length,'en cambio'],[P.dyno.length,'con dyno gray'],[P.muestras.length,'muestra'+(P.muestras.length===1?'':'s')+' sin entregar'],[parosAct().length,'parada'+(parosAct().length===1?'':'s')]];
   el.innerHTML=`<div class="card sem"><div class="sem-h"><div><h3>Semáforo del turno</h3><span class="note">${SH[s.t]==='día'?'Turno de día':'Turno de noche'} · Grupo ${s.g.join(', ')||'—'}</span></div><span class="sem-p s-${s.worst}"><i></i>${lbl[s.worst]}</span></div>
     <ul class="sem-l">${s.rows.map(([k,l,v,go])=>`<li><button data-act="semGo" data-go="${go}"><i class="dot s-${k}" aria-hidden="true"></i><b>${l}</b><span>${v}</span><em aria-hidden="true">›</em></button></li>`).join('')}</ul>
-    <div class="sem-pl"><span class="k">Planta ahora</span><div>${chips.map(([v,l])=>`<span class="${v?'has':''}">${v} ${l}</span>`).join('')}</div><button class="btn small" data-act="semGo" data-go="ini">Ver checklist</button></div></div>`;
+    <div class="sem-pl"><span class="k">Planta ahora</span><div>${chips.map(([v,l])=>`<span class="${v?'has':''}">${v} ${l}</span>`).join('')}</div><button class="btn small" data-tab="turnos">Ver En piso ahora</button></div></div>`;
 }
 
 /* ---------- Seguimiento: estilos, rechazos y situaciones críticas ---------- */
@@ -2058,7 +2086,7 @@ function buildPlan(){
   const cs=currentShift(),live=cs.n===n&&cs.t===t,nowOff=live?(nowMin()-start+1440)%1440:-1;
   const ini=chkPeek(n,t,'ini'),fin=chkPeek(n,t,'fin'),crit=segs.filter(x=>x.tipo==='critica'||x.alta).length;
   const ev=[];
-  ev.push({off:0,k:'ini',title:'Entrada · checklist de inicio',d:'Estilos complicados, máquinas en cambio, muestras sin entregar, dyno gray y paros. Luego hoja de parámetros, hornos y velocidad de banda.',crit:sm.length?'Estilos complicados montados: '+stTxt(sm):'',al:alActive().length?'Alertas vigentes: '+alActive().map(a=>a.titulo).join(' · '):'',sgt:segs.length?`Seguimientos activos: ${segs.length}${crit?` (${crit} crítico${crit>1?'s':''} o prioridad alta)`:''}`:'',chk:'ini',done:!!(ini&&ini.firma),firma:ini&&ini.firma});
+  ev.push({off:0,k:'ini',title:'Entrada · revisión de planta',d:'Revise En piso ahora: estilos, clientes, máquinas en cambio, paros, dyno y muestras. Luego hornos y velocidad de banda.',crit:sm.length?'Estilos complicados montados: '+stTxt(sm):'',al:(()=>{const L=SHD.avisos.filter(a=>a.p==='alta');return L.length?'Alertas de calidad: '+L.map(a=>a.t).join(' · '):''})(),sgt:segs.length?`Seguimientos activos: ${segs.length}${crit?` (${crit} crítico${crit>1?'s':''} o prioridad alta)`:''}`:'',chk:'ini',done:false});
   const rondas=[],HL=hlList(n,t),w0=shiftWin(n,t)[0];
   for(let i=0;i<c.rondas;i++){const off=i*step;if(off>=len)break;rondas.push(off);
     const r=d.rec[t+i];
@@ -2069,7 +2097,7 @@ function buildPlan(){
   rondas.forEach(r0=>{for(let j=40;j<step-10;j+=30){const off=r0+j;if(off>=len-40)continue;if(nowOff>=0&&off<nowOff)continue;slots.push(off)}});
   segs.forEach((x,i)=>{if(i<slots.length)ev.push({off:slots[i],k:(x.tipo==='critica'||x.alta)?'urg':'task',seg:x})});
   const nextG=t==='D'?day(n).N:day(n+1).D;
-  ev.push({off:len-30,k:'fin',title:'Cierre · checklist y entrega de turno',d:`Actualiza el estado de planta, firma el cierre y copia la entrega${nextG.length?' para el grupo '+nextG.join(', '):''}.`,chk:'fin',done:!!(fin&&fin.firma),firma:fin&&fin.firma});
+  ev.push({off:len-30,k:'fin',title:'Cierre · entrega de turno',d:`Actualice En piso ahora y comparta el cierre en PDF o WhatsApp${nextG.length?' con el grupo '+nextG.join(', '):''}.`,chk:'fin',done:false});
   ev.sort((a,b)=>a.off-b.off);
   return{t,ev,loose:segs.slice(slots.length),start,nowOff,live};
 }
@@ -2084,7 +2112,7 @@ function evHTML(e,p){
   return `<li class="ev k-${e.k}${e.done?' is-done':''}${past&&!e.chk?' past':''}"><div class="t">${time}</div><div class="rail"></div><div class="body">
     <b>${e.title}</b><span class="d">${e.d}</span>${e.crit?`<span class="crit">${esc(e.crit)}</span>`:''}${e.al?`<span class="al">${esc(e.al)}</span>`:''}${e.sgt?`<span class="al">${esc(e.sgt)}</span>`:''}
     ${e.k==='rec'?`<button class="btn small go" data-act="goHornos" data-t="${p.t}">${e.done?'✓ Completa · ver':'Capturar hornos'+(e.cnt?` (${e.cnt}/${C().hornos})`:'')}</button>`:''}
-    ${e.chk?`<button class="btn small go${e.done?'':' primary'}" data-act="diaView" data-v="${e.chk}">${e.done?'✓ Firmado '+e.firma+' · ver':e.chk==='ini'?'Abrir checklist de inicio':'Abrir checklist de cierre'}</button>`:''}</div></li>`;
+    ${e.chk?`<button class="btn small go primary" ${e.chk==='ini'?'data-tab="turnos"':'data-act="goCierre"'}>${e.chk==='ini'?'Ver En piso ahora':'Cierre de turno: PDF y WhatsApp'}</button>`:''}</div></li>`;
 }
 function autoDiaView(t){
   const n=st.sel,cs=currentShift();if(t==='X'||cs.n!==n||cs.t!==t)return'plan';
@@ -2095,18 +2123,16 @@ function autoDiaView(t){
 }
 function renderDia(){
   const c=C(),n=st.sel,p=buildPlan(),sm=styledMachines(),segs=[];
-  if(p.t==='X')st.diaView='plan';else if(!st.diaView)st.diaView=autoDiaView(p.t);
+  st.diaView='plan';
   const v=st.diaView;
   let html=datebar('sel',n);
   html+=`<div class="seg" role="group" aria-label="Turno"><button data-act="planT" data-v="D" aria-pressed="${p.t==='D'}">☀ Día</button><button data-act="planT" data-v="N" aria-pressed="${p.t==='N'}">☾ Noche</button><button data-act="planT" data-v="X" aria-pressed="${p.t==='X'}">Descanso</button></div>`;
-  if(p.t!=='X'){const ini=chkPeek(n,p.t,'ini'),fin=chkPeek(n,p.t,'fin');
-    html+=`<div class="seg vseg" role="group" aria-label="Vista"><button data-act="diaView" data-v="ini" aria-pressed="${v==='ini'}">Inicio${ini&&ini.firma?' ✓':''}</button><button data-act="diaView" data-v="plan" aria-pressed="${v==='plan'}">Plan del turno</button><button data-act="diaView" data-v="fin" aria-pressed="${v==='fin'}">Cierre${fin&&fin.firma?' ✓':''}</button></div>`}
   const eb=document.getElementById('estBody');
   if(v==='ini'||v==='fin'){document.getElementById('diaBody').innerHTML=html+chkHTML(v,p.t);eb.innerHTML='';renderEstilos();return}
   let lead;
   if(p.t==='X')lead=c.miGrupo&&!st.planT?`Tu grupo ${c.miGrupo} descansa este día.`:'Día de descanso.';
   else if(segs.length)lead=`Acomodé ${segs.length} seguimiento${segs.length>1?'s':''} entre las revisiones de hornos del turno de ${SH[p.t]}${p.live?', a partir de ahora':''}. Lo crítico va primero.`;
-  else lead=`Armé tu turno de ${SH[p.t]} con el checklist de inicio, las revisiones de hornos${sm.length?`, la validación de ${sm.length} máquina${sm.length>1?'s':''} con estilo complicado`:''} y la entrega de turno.`;
+  else lead=`Armé tu turno de ${SH[p.t]} con la revisión de planta, las revisiones de hornos${sm.length?`, la validación de ${sm.length} máquina${sm.length>1?'s':''} con estilo complicado`:''} y la entrega de turno.`;
   html+=`<div class="card intro"><h3>¿Organizo tu día?</h3><p>${lead}</p></div>`;
   if(p.t!=='X'){const recDone=p.ev.filter(e=>e.k==='rec'&&e.done).length,recTot=p.ev.filter(e=>e.k==='rec').length;
     html+=`<div class="sum-bar"><span>${recDone}/${recTot} revisiones de hornos</span><span>${sm.length} máq. con estilo complicado</span><span>${parosAct().length} parada${parosAct().length===1?'':'s'}</span></div>`}
@@ -2300,21 +2326,22 @@ const lv={base:'gen',q:'',est:'todos',mes:'',lim:60,busy:false,msg:'',loading:{}
 const pad2=n=>String(n).padStart(2,'0');
 const nrm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().trim();
 function lavParts(m,get1){let rows=[];for(let i=0;i<(m.partes||0);i++){const c=get1(i);if(c&&c.j){try{rows=rows.concat(JSON.parse(c.j))}catch(e){}}}return rows}
-function lavLocal(base){const m=lsGet('lav-'+base);if(!m)return null;return{meta:m,rows:lavParts(m,i=>lsGet('lav-'+base+'-'+i))}}
+const LK=k=>(SHD.admin&&SHD.team?'g_':'')+k;
+function lavLocal(base){const k=LK('lav-'+base),m=lsGet(k);if(!m)return null;return{meta:m,rows:lavParts(m,i=>lsGet(k+'-'+i))}}
+async function lavRead(k){
+  const ms=await S.db.doc(dpath(k)).get();if(!ms.exists)return null;
+  const m=ms.data(),ps=await Promise.all(Array.from({length:m.partes||0},(_,i)=>S.db.doc(dpath(k+'-'+i)).get()));
+  lsSet(k,m);ps.forEach((p,i)=>{if(p&&p.exists)lsSet(k+'-'+i,p.data())});
+  return{meta:m,rows:lavParts(m,i=>ps[i]&&ps[i].exists?ps[i].data():null)};
+}
 async function lavLoad(base){
   if(lv.loading[base])return;
   if(S.mode!=='db'){LAV[base]=lavLocal(base)||{meta:null,rows:[]};renderLav();return}
   lv.loading[base]=true;
   try{
-    const ms=await S.db.doc(dpath('lav-'+base)).get();
-    if(!ms.exists)LAV[base]=lavLocal(base)||{meta:null,rows:[]};
-    else{
-      const m=ms.data();
-      const ps=await Promise.all(Array.from({length:m.partes||0},(_,i)=>S.db.doc(dpath('lav-'+base+'-'+i)).get()));
-      const rows=lavParts(m,i=>ps[i]&&ps[i].exists?ps[i].data():null);
-      LAV[base]={meta:m,rows};
-      lsSet('lav-'+base,m);ps.forEach((p,i)=>{if(p&&p.exists)lsSet('lav-'+base+'-'+i,p.data())});
-    }
+    const k=LK('lav-'+base);let r=await lavRead(k);
+    if(!r&&k.startsWith('g_')){r=await lavRead('lav-'+base);if(r)lv.msg='Esta base está guardada solo en su cuenta. Vuelva a importar el Excel para compartirla con los demás administradores.'}
+    LAV[base]=r||lavLocal(base)||{meta:null,rows:[]};
   }catch(e){LAV[base]=lavLocal(base)||{meta:null,rows:[]};lv.msg='No se pudo leer de la nube; se muestra lo guardado en este teléfono.'}
   lv.loading[base]=false;renderLav();
 }
@@ -2350,9 +2377,9 @@ async function lavImport(file){
     }
     if(!rows.length)throw new Error('vacio');
     const CH=250,parts=Math.ceil(rows.length/CH),old=(LAV[base]&&LAV[base].meta&&LAV[base].meta.partes)||0;
-    for(let p=0;p<Math.max(parts,old);p++)put('lav-'+base+'-'+p,{j:JSON.stringify(rows.slice(p*CH,(p+1)*CH))});
+    for(let p=0;p<Math.max(parts,old);p++)put(LK('lav-'+base)+'-'+p,{j:JSON.stringify(rows.slice(p*CH,(p+1)*CH))});
     const meta={base,archivo:file.name,hoja:pick,importado:new Date().toISOString(),total:rows.length,partes:parts};
-    put('lav-'+base,meta);
+    put(LK('lav-'+base),meta);
     LAV[base]={meta,rows};lv.lim=60;
     lv.msg=`Listo: ${rows.length} pruebas importadas de la hoja “${pick}”.`+(bad?` ${bad} tienen la fecha escrita de forma no reconocida; se ordenan por su mes.`:'');
   }catch(e){
@@ -2365,7 +2392,8 @@ function lavKey(r,y){if(r[0]&&r[0][0]!=='?')return r[0];const i=mesIdx(r[1]);ret
 function lavFecha(r){if(r[0]&&r[0][0]!=='?')return fShort(fromIso(r[0]));return r[1]?cap(r[1].toLowerCase()):(r[0]||'').slice(1)}
 function renderLav(){
   const el=document.getElementById('lavBody');if(!el)return;
-  const owner=S.uid||'local';if(LAV.owner!==owner){LAV.gen=null;LAV.aero=null;LAV.owner=owner}
+  if(!SHD.admin){el.innerHTML='<div class="card av-empty">La base de pruebas de lavado solo la pueden ver los administradores.</div>';return}
+  const owner=(S.uid||'local')+LK('');if(LAV.owner!==owner){LAV.gen=null;LAV.aero=null;LAV.owner=owner}
   const b=lv.base,D=LAV[b];
   Object.keys(LAV_BASES).forEach(k=>{if(!LAV[k]&&!lv.loading[k])setTimeout(()=>lavLoad(k),0)});
   let h=`<div class="seg" role="group" aria-label="Base">${Object.entries(LAV_BASES).map(([k,v])=>`<button data-act="lavBase" data-v="${k}" aria-pressed="${b===k}">${v}${LAV[k]&&LAV[k].rows.length?' · '+LAV[k].rows.length:''}</button>`).join('')}</div>`;
@@ -2463,7 +2491,7 @@ const MUE_TAB=[
  ['AEROPOSTALE',[['Caballero','MD','3 bultos'],['Dama','CH','3 bultos']]]
 ];
 const MUE_RESP_DEF={A:'Salomé',B:'Alejandra',C:'Sandy'};
-const mueResp=()=>Object.assign({},MUE_RESP_DEF,C().muestrasResp||{});
+const mueResp=()=>{const o=Object.assign({},MUE_RESP_DEF,C().muestrasResp||{}),m={};PER().forEach(x=>{if(x.p==='Muestrista'&&x.g)(m[x.g]=m[x.g]||[]).push(x.n)});Object.keys(m).forEach(g=>o[g]=m[g].join(', '));return o};
 const mu={q:'',marca:'',edit:false};
 const mueAlias=q=>q.replace(/\bC\s*Y\s*A\b/g,'C&A').replace(/\bCYA\b/g,'C&A').replace(/\bAERO\b/g,'AEROPOSTALE').replace(/\bBEBE\b/g,'BEBES').replace(/\bNINA\b/g,'NINO');
 function renderMue(){
@@ -2593,7 +2621,7 @@ function pisoHTML(){
     const tg=(x.rech?'<i class="t-rech">Rechazada</i>':'')+(x.paro?'<i class="t-par">Parada</i>':'')+(x.cambio?'<i class="t-cam">Cambio</i>':'')+(x.comp?'<i class="t-comp">Compartida</i>':'')+(x.dyno?'<i class="t-dyn">Dyno</i>':'')+(x.mue.length?`<i>Muestra${x.mue.length>1?' ×'+x.mue.length:''}</i>`:'');
     const cl=[x.cli,x.tec.join(' + ')].filter(Boolean).join(' · ');
     return `<button class="mq2${vac?' vacia':''}${x.cambio?' cam':''}${x.paro?' par':''}${x.rech?' rech':''}" data-act="mqOpen" data-m="${m}" aria-label="Máquina ${m}"><span class="n">MÁQ ${m}</span>${x.est.length?`<b>${x.est.map(esc).join(' + ')}</b>`:'<b class="noest">Sin estilo</b>'}${cl?`<span class="cl">${esc(cl)}</span>`:''}${x.desc?`<span class="ds">${esc(x.desc)}</span>`:''}${tg?`<span class="tg">${tg}</span>`:''}</button>`};
-  return `<section class="card piso" id="piso"><div class="piso-h"><h2>En piso ahora</h2><p>${SHD.team?`<span class="live${SHD.live?'':' off'}">${SHD.live?'En vivo con el equipo':'Sin conexión · se actualizará al volver'}</span> · `:''}Toque una máquina para ver o marcar lo que tiene.</p></div>
+  return `<section class="card piso" id="piso"><div class="piso-h"><h2>En piso ahora</h2><p>${SHD.team?`<span class="live${SHD.live?'':' off'}">${SHD.live?'En vivo con el equipo':'Sin conexión · se actualizará al volver'}</span> · `:''}Toque una máquina para ver o marcar lo que tiene.</p>${!SHD.team?`<p class="piso-warn">${!SHD.on?'Sin sesión: lo que marque aquí solo se guarda en este teléfono. Entre con Google para ver el mapa del equipo.':'Su correo '+esc(myEmail())+' no está en el equipo: lo que marque aquí solo lo ve usted. Pida al administrador que lo agregue en Equipo y respaldo; el mapa compartido se activará solo, sin reiniciar la app.'}</p>`:''}</div>
     <div class="piso-sum"><span class="${trab?'has':''}">${trab} trabajando</span><span class="t-cam ${ca?'has':''}">${ca} en cambio</span><span class="t-par ${par?'has':''}">${par} parada${par===1?'':'s'}</span><span class="t-par ${re?'has':''}">${re} rechazada${re===1?'':'s'}</span><span class="${dy?'has':''}">${dy} con dyno</span><span class="${mu?'has':''}">${mu} muestra${mu===1?'':'s'}</span></div>
     <div class="piso-l"><span>Línea 1 · máquinas 1–9</span><div class="pgrid">${[1,2,3,4,5,6,7,8,9].map(cell).join('')}</div></div>
     <div class="piso-l"><span>Línea 2 · máquinas 10–18</span><div class="pgrid">${[10,11,12,13,14,15,16,17,18].map(cell).join('')}</div></div></section>`;
@@ -2695,6 +2723,7 @@ async function shStart(u){
   if(isFB()){try{const e=((u&&u.email)||'').trim().toLowerCase(),h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(e));SHD.admin=ADMIN_H.includes([...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,'0')).join(''))}catch(e){SHD.admin=false}}
   else SHD.admin=true;
   await shRole(u);
+  if(isFB()&&SHD.rol!=='admin'){const e=((u&&u.email)||'').trim().toLowerCase();try{SHD.unsub.push(S.db.doc(GP()+'/equipo/'+e).onSnapshot(sn=>{const r=sn.exists?((sn.data()||{}).rol||'consulta'):null;if(r!==SHD.rol)shStart(u)},()=>{}))}catch(err){}}
   if(!SHD.team){shRender();render();return}
   shTeamStart();
   const sub=(k,sort)=>{try{SHD.unsub.push(S.db.collection(GP()+'/'+k).onSnapshot(qs=>{SHD[k]=qs.docs.map(d=>Object.assign({id:d.id},d.data())).sort(sort);SHD.ready=true;shRender(k)},()=>{}))}catch(e){}};
@@ -2708,6 +2737,7 @@ function shRender(k){
   avBadges();
   if(st.tab==='turnos')renderHome();
   if(st.tab==='avisos'){renderAvList();renderAvForm(true);if(k==='avisos')avMarkRead()}
+  if(k==='avisos'){renderAlBanner();if(st.tab==='midia')renderDia()}
   if(st.tab==='carpetas'){const ae=document.activeElement;if(!(ae&&(ae.id==='tlQ'||ae.id==='cpN')))renderCarp()}
   if(st.tab==='rechazos'&&(k==='rechazos'||!k))renderRj(true);
   if(st.tab==='cierre'&&k==='rechazos')renderCierre();
@@ -2763,7 +2793,7 @@ function renderAvForm(keep){
   box.innerHTML=`<form class="card av-form" id="avForm"><h3>Publicar aviso</h3>
     <label class="field"><span>Título</span><input type="text" id="avT" maxlength="140" required placeholder="Ej. Cambio de parámetro de curado en HD"></label>
     <label class="field"><span>Mensaje</span><textarea id="avX" rows="3" placeholder="Detalle del aviso (opcional si adjunta un PDF)"></textarea></label>
-    <div class="av-opts"><label class="tgl"><input type="checkbox" id="avFij" checked> Fijar arriba</label><label class="tgl"><input type="checkbox" id="avImp"> Importante</label></div>
+    <div class="av-opts"><label class="tgl"><input type="checkbox" id="avFij" checked> Fijar arriba</label><label class="tgl"><input type="checkbox" id="avImp"> Alerta de calidad</label></div>
     <div class="field"><span>PDF (opcional)</span><div class="av-pick"><label class="btn small" for="avF">Elegir PDF</label><input type="file" id="avF" accept="application/pdf,.pdf" class="vh"><span class="note" id="avFn">Ningún archivo</span></div></div>
     <div class="prog" id="avProg" hidden><i></i></div>
     <p class="note" id="avMsg" role="status"></p>
@@ -2776,12 +2806,11 @@ function renderAvList(){
   else if(!SHD.team)h=`<div class="card av-empty">Su correo no está en el equipo. Pida al administrador que lo agregue en Administración › Equipo.</div>`;
   else if(!SHD.avisos.length)h=`<div class="card av-empty">${SHD.ready?'Sin avisos por ahora. Aquí aparecerán los avisos y PDF que fije el administrador.':'Cargando avisos…'}</div>`;
   else h=`<div class="av-list">${SHD.avisos.map(a=>`<article class="card av${a.fij?' fij':''}${a.p==='alta'?' imp':''}">
-      <div class="av-h">${a.fij?'<span class="av-tag pin">Fijado</span>':''}${a.p==='alta'?'<span class="av-tag imp">Importante</span>':''}${r.has(a.id)?'':'<span class="av-tag unr">Sin leer</span>'}<span>${whenTxt(a.ts)} · ${esc(a.autor||'Administrador')}</span></div>
+      <div class="av-h">${a.fij?'<span class="av-tag pin">Fijado</span>':''}${a.p==='alta'?'<span class="av-tag imp">Alerta de calidad</span>':''}${r.has(a.id)?'':'<span class="av-tag unr">Sin leer</span>'}<span>${whenTxt(a.ts)} · ${esc(a.autor||'Administrador')}</span></div>
       <h3>${esc(a.t||'Aviso')}</h3>${a.x?`<p>${esc(a.x)}</p>`:''}
       ${a.file?`<button class="av-file" data-act="avFile" data-id="${esc(a.file.id)}"><span class="fi">PDF</span><span><b>${esc(a.file.n)}</b><small>${fmtSz(a.file.sz||0)}</small></span><span class="go">Abrir ›</span></button>`:''}
       ${SHD.admin?`<div class="av-adm"><button class="ghost" data-act="avPin" data-id="${a.id}">${a.fij?'Quitar de fijados':'Fijar arriba'}</button><button class="ghost warn" data-act="avDel" data-id="${a.id}">${av.del===a.id?'¿Borrar? Toque otra vez':'Borrar'}</button></div>`:''}
     </article>`).join('')}</div>`;
-  h+=`<button class="ghost av-mine" data-act="openAlMine">Mis alertas de calidad personales ›</button>`;
   el.innerHTML=h;
 }
 function renderAv(){renderAvForm();renderAvList()}
@@ -2981,7 +3010,7 @@ function openMue(go,t){
 
 /* ---------- Equipo, roles y datos compartidos en vivo ---------- */
 const KM=()=>SHD.team?'g_maquinas':'maquinas';
-const canCap=()=>!SHD.on||SHD.rol==='admin'||SHD.rol==='auditor';
+const canCap=()=>!SHD.on||SHD.admin||SHD.rol==='auditor'||SHD.rol==='supervisor';
 const myEmail=()=>(typeof FB!=='undefined'&&FB.user&&FB.user.email||'').trim().toLowerCase();
 const RO_ACTS=new Set(['mqTg','mqEstAdd','mqEstDel','mqClear','mqMueOk','mqCli','mqTec','hSaveAll','hDel','rjNew','rjSave','rjDel','tgCam','tgDyn','rmEst','clearYes']);
 function roMsg(){const n=document.getElementById('roToast');if(n){n.hidden=false;clearTimeout(roMsg.t);roMsg.t=setTimeout(()=>n.hidden=true,2600)}}
@@ -3017,6 +3046,7 @@ async function shRole(u){
     catch(err){if(err&&err.code==='permission-denied')SHD.rol=null;else{try{SHD.rol=localStorage.getItem('cca-rol')||null}catch(x){}}}
   }else SHD.rol='admin';
   SHD.team=!!SHD.rol;
+  if(SHD.rol==='jefe')SHD.admin=true;
   document.body.classList.toggle('ro',SHD.rol==='consulta');
 }
 function shTeamStart(){
@@ -3191,8 +3221,8 @@ function cierreText(D){
   L.push('');L.push(`*HORNOS*: ${D.H.L.length} lecturas · ${D.bad.length?D.bad.length+' fuera de parámetro: '+D.bad.map(x=>`H${x.h} ${x.t!=null?x.t+'°':''}${x.p!=null?' '+x.p+' s':''} (${hhmmOf(x.ts)})`).join(', '):'todas en parámetro'}`);
   if(D.paros.length)L.push('*PAROS*: '+D.paros.map(p=>`Máq ${p.maq} ${p.motivo}${p.fin?' '+durTxt(Math.round((new Date(p.fin)-new Date(p.ini))/60000)):' (sigue parada)'}`).join(', '));
   if(D.mue.length)L.push('*MUESTRAS PENDIENTES*: '+D.mue.map(x=>x.estilo+(x.maq?' (máq '+x.maq+')':'')).join(', '));
-  if(D.mbs.n)L.push(`*MARBETES*: ${D.mbs.n} · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok}/${D.mbs.n} cumplen`);
-  L.push('');L.push(`Checklist de cierre: ${D.fin&&D.fin.firma?'firmado':'pendiente'}`);
+  if(D.mbs.n)L.push(`*BAJO PORCENTAJE (MARBETES)*: ${D.mbs.n} · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok}/${D.mbs.n} cumplen`);
+  L.push('');
   L.push(`Elaboró: ${D.autor}`);
   return L.join('\n');
 }
@@ -3203,7 +3233,7 @@ function cierrePDF(D){
   p.text(M,32,'Cierre de turno',20,true,[255,255,255]);
   p.text(M,56,`${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}`,10,false,[220,228,240]);
   p.y=92;
-  const info=[['Auditoras',D.aud.join(', ')||'—'],['Recibe',D.nextG.length?'Grupo '+D.nextG.join(', '):'—'],['Responsable de muestras',D.mresp||'—'],['Elaboró',D.autor],['Checklist de cierre',D.fin&&D.fin.firma?'Firmado':'Pendiente']];
+  const info=[['Auditoras',D.aud.join(', ')||'—'],['Recibe',D.nextG.length?'Grupo '+D.nextG.join(', '):'—'],['Responsable de muestras',D.mresp||'—'],['Elaboró',D.autor]];
   info.forEach(([k,v])=>{const ls=p.wrap(v,9.5,false,W-130);p.need(ls.length*12+2);p.text(M,p.y,k,9,true,MUT);ls.forEach((l,i)=>p.text(M+130,p.y+i*12,l,9.5,false,INK));p.y+=ls.length*12+2});
   const head=(t)=>{p.need(40);p.y+=10;p.text(M,p.y,t,12,true,NAVY);p.y+=16;p.line(M,p.y,M+W,p.y,GOLD);p.y+=6};
   const cols=[{t:'Máq',w:32},{t:'Estado',w:120},{t:'Estilo',w:105},{t:'Cliente · Técnica',w:120},{t:'Descripción',w:W-377}];
@@ -3237,7 +3267,7 @@ function cierrePDF(D){
   const extra=[];
   if(D.paros.length)extra.push(['Paros',D.paros.map(x=>`Máq ${x.maq} ${x.motivo}${x.fin?' '+durTxt(Math.round((new Date(x.fin)-new Date(x.ini))/60000)):' (sigue parada)'}`).join(', ')]);
   extra.push(['Muestras pendientes',D.mue.length?D.mue.map(x=>x.estilo+(x.maq?' (máq '+x.maq+')':'')).join(', '):'Ninguna']);
-  if(D.mbs.n)extra.push(['Marbetes',`${D.mbs.n} marbetes · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok} de ${D.mbs.n} cumplen el mínimo`]);
+  if(D.mbs.n)extra.push(['Bajo porcentaje',`${D.mbs.n} marbetes · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok} de ${D.mbs.n} cumplen el mínimo`]);
   head('Otros datos del turno');
   extra.forEach(([k,v])=>{const ls=p.wrap(v,9.5,false,W-130);p.need(ls.length*12+4);p.text(M,p.y,k,9,true,MUT);ls.forEach((l,i)=>p.text(M+130,p.y+i*12,l,9.5,false,INK));p.y+=ls.length*12+4});
   return p.out(`C. C. AVANTE · Cierre de turno ${iso(D.n)} ${SH[D.t]} · Generado ${new Date().toLocaleString('es-MX')}`);
@@ -3245,7 +3275,7 @@ function cierrePDF(D){
 function ciHTML(D){
   const row=m=>`<tr><td>${m.m}</td><td class="${m.bad?'bad':''}">${esc(m.e.join(', '))}</td><td>${esc(m.est||'—')}</td><td>${esc(ciCli(m)||'—')}${m.desc?`<br><span class="note">${esc(m.desc)}</span>`:''}</td></tr>`;
   const tab=ln=>`<table class="ci-tab"><thead><tr><th>Máq</th><th>Estado</th><th>Estilo</th><th>Cliente · Técnica</th></tr></thead><tbody>${D.maq.filter(m=>(m.m<=9?1:2)===ln).map(row).join('')}</tbody></table>`;
-  return `<div class="card ci-prev"><div><h3>Cierre de turno</h3><p class="meta">${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}${D.nextG.length?' · Recibe grupo '+D.nextG.join(', '):''}<br>${D.aud.length?'Auditoras: '+esc(D.aud.join(', '))+'<br>':''}Checklist de cierre: ${D.fin&&D.fin.firma?'firmado':'<b class="badc">pendiente</b>'}</p></div>
+  return `<div class="card ci-prev"><div><h3>Cierre de turno</h3><p class="meta">${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}${D.nextG.length?' · Recibe grupo '+D.nextG.join(', '):''}${D.aud.length?'<br>Auditoras: '+esc(D.aud.join(', ')):''}</p></div>
     <h4>Línea 1</h4>${tab(1)}<h4>Línea 2</h4>${tab(2)}
     <h4>Rechazos (${D.R.length})</h4>${D.R.length?D.R.map(x=>`<div class="ci-rj">${x.th?`<img src="${x.th}" alt="">`:'<span class="ph0"></span>'}<div><b>${esc(x.folio)}</b> · Máq ${x.maq} · ${esc([x.est,x.cli].filter(Boolean).join(' · '))}<br><span class="badc">${esc(x.def)}</span>${x.pz?' · '+x.pz+' pzs':''}${x.nota?`<br><span class="note">${esc(x.nota)}</span>`:''}</div></div>`).join(''):'<p class="note">Sin rechazos en el turno.</p>'}
     <h4>Hornos</h4><p class="meta">${D.H.L.length} lecturas · ${D.bad.length?`<b class="badc">${D.bad.length} fuera de parámetro</b>`:'todas en parámetro'}</p>
@@ -3271,15 +3301,15 @@ function ciWhats(){const[n,t]=ciShift(),txt=cierreText(cierreData(n,t));window.o
 
 /* ---------- Administración: equipo y respaldo ---------- */
 const bk={from:null,to:null,data:null,xlsx:false,zips:{},ok:false,msg:'',busy:false,del:null,conf:false};
-const ROLES={auditor:'Auditor(a) · captura',consulta:'Consulta · solo ver'};
+const ROLES={consulta:'Solo ver',auditor:'Auditor(a)',supervisor:'Supervisor',jefe:'Jefe de calidad · administrador'};
 function renderAdmin(){
   const el=document.getElementById('admBody');if(!el)return;
   if(!SHD.admin){el.innerHTML='<div class="card av-empty">Esta sección es solo para el administrador.</div>';return}
   if(!bk.from){const t=todayN();bk.to=iso(t);bk.from=iso(t-120)}
   const E=SHD.equipo||[];
-  let h=`<section class="card adm"><h3>Equipo</h3><p class="sub">Solo las personas de esta lista ven el mapa, los rechazos, los avisos y las carpetas. Cada quien entra con su cuenta de Google.</p>
+  let h=`<section class="card adm"><h3>Equipo</h3><p class="sub">Solo las personas de esta lista ven el mapa, los rechazos, los avisos y las carpetas. <b>Solo ver</b>: consulta. <b>Auditor(a)</b> y <b>Supervisor</b>: capturan mapa, hornos y rechazos. <b>Jefe de calidad</b>: administrador (avisos, alertas, carpetas, personal, base de pruebas y respaldos).</p>
     <div class="eq-list">${E.length?E.map(x=>`<div class="eq"><div><b>${esc(x.n||x.id)}</b><small>${esc(x.id)}</small></div><select data-eq="${esc(x.id)}" aria-label="Rol de ${esc(x.n||x.id)}">${Object.entries(ROLES).map(([k,v])=>`<option value="${k}"${x.rol===k?' selected':''}>${v}</option>`).join('')}</select><button class="ghost warn" data-act="eqDel" data-id="${esc(x.id)}">${bk.del===x.id?'¿Quitar?':'✕'}</button></div>`).join(''):'<p class="note">Todavía no hay nadie en el equipo.</p>'}</div>
-    <form class="eq-add" id="eqForm"><input type="email" id="eqMail" required placeholder="correo@gmail.com" autocomplete="off" aria-label="Correo de Google"><div class="row"><input type="text" id="eqName" placeholder="Nombre" autocomplete="off" aria-label="Nombre"><select id="eqRol" aria-label="Rol">${Object.entries(ROLES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div><button class="btn primary" type="submit">Agregar al equipo</button></form></section>`;
+    <form class="eq-add" id="eqForm"><input type="email" id="eqMail" required placeholder="correo@gmail.com" autocomplete="off" aria-label="Correo de Google"><div class="row"><input type="text" id="eqName" placeholder="Nombre" autocomplete="off" aria-label="Nombre"><select id="eqRol" aria-label="Rol">${Object.entries(ROLES).map(([k,v])=>`<option value="${k}"${k==='auditor'?' selected':''}>${v}</option>`).join('')}</select></div><button class="btn primary" type="submit">Agregar al equipo</button></form></section>`;
   const d=bk.data,months=d?Object.keys(d.byMonth).sort():[];
   h+=`<section class="card adm"><h3>Respaldo y exportación</h3><p class="sub">Descargue el Excel y las fotos del periodo, guárdelos en Drive o en una USB y después libere el espacio de las fotos. Los datos siguen en la app.</p>
     <div class="bk-per"><label>Desde<input type="date" id="bkFrom" value="${bk.from}"></label><label>Hasta<input type="date" id="bkTo" value="${bk.to}"></label></div>
@@ -3342,7 +3372,7 @@ async function bkXlsx(){
       {name:'Rechazos',rows:[['Folio','Fecha','Hora','Turno','Grupo','Máquina','Línea','Cliente','Técnica','Estilo','Defecto','Piezas','Notas','Foto','Registró']].concat(d.R.map(x=>[x.folio||x.id,dmy(x.n),hhmmOf(x.ts),SH[x.t]||x.t,(day(fromIso(x.n))[x.t]||[]).join(', '),x.maq,x.linea||(x.maq<=9?1:2),x.cli||'',(x.tec||[]).join(' + '),x.est||'',x.def||'',+x.pz||0,x.nota||'',x.foto||x.arch?(x.arch||fotoName(x)):'',x.autor||''])),widths:[14,11,7,8,7,9,7,16,18,18,24,8,48,30,18],wrap:[12]},
       {name:'Hornos',rows:[['Fecha','Turno','Hora','Horno','Temperatura °','Permanencia s','Estado']].concat(d.H.map(x=>[dmy(x.n),SH[x.s]||x.s,hhmmOf(x.ts),x.h,x.t!=null?x.t:'',x.p!=null?x.p:'',hStat(x,c).cls==='bad'?'Fuera':'OK'])),widths:[11,8,7,7,13,13,9]},
       {name:'Paros',rows:[['Máquina','Motivo','Inicio','Fin','Minutos','Nota']].concat(d.P.map(x=>[x.maq,x.motivo,dmy(x.ini)+' '+hhmmOf(x.ini),x.fin?dmy(x.fin)+' '+hhmmOf(x.fin):'Sigue parada',x.fin?Math.round((new Date(x.fin)-new Date(x.ini))/60000):'',x.nota||''])),widths:[9,22,17,17,9,30]},
-      {name:'Marbetes',rows:[['Fecha','Hora','No. marbete','Estilo','Piezas','Preferidas','Primeras','% primeras','Cumple']].concat(d.MBk.map(x=>[dmy(x.ts),hhmmOf(x.ts),x.num||'',x.estilo||'',x.total,x.dan,x.pri,x.pct!=null?+(+x.pct).toFixed(1):'',x.ok?'Sí':'No'])),widths:[11,7,12,16,8,10,9,10,8]}
+      {name:'Bajo porcentaje',rows:[['Fecha','Hora','No. marbete','Estilo','Piezas','Preferidas','Primeras','% primeras','Cumple']].concat(d.MBk.map(x=>[dmy(x.ts),hhmmOf(x.ts),x.num||'',x.estilo||'',x.total,x.dan,x.pri,x.pct!=null?+(+x.pct).toFixed(1):'',x.ok?'Sí':'No'])),widths:[11,7,12,16,8,10,9,10,8]}
     ];
     dlBlob(await xlsxBlob(sheets),`CC-AVANTE_respaldo_${bk.from}_a_${bk.to}.xlsx`);bk.xlsx=true;bk.msg='✓ Excel descargado.';
   }catch(e){bk.msg=e&&e.message==='lib'?'No se pudo cargar el generador. Conéctese a internet.':'No se pudo generar el Excel.'}
@@ -3396,18 +3426,18 @@ function tileInfo(){
   const T=todayN(),R=mueResp(),gOn=day(cs.n)[cs.t],ms=mbStats(mbToday()),min=mbMin(),mbOk=ms.n?ms.p>=Math.ceil(ms.t*min/100-1e-9):true;
   const lavN=(LAV.gen&&LAV.gen.rows.length)||0,al=alActive().length;
   return{
-    midia:{t:'Mi turno',i:'turno',s:ini&&ini.firma?'Inicio firmado '+ini.firma+' · ver plan':'Checklist de inicio pendiente',w:!(ini&&ini.firma)},
+    midia:{t:'Mi turno',i:'turno',s:'Plan del turno y estilos complicados'},
     hornos:(()=>{const c=C(),H=hSum(cs.n,cs.t);return{t:'Hornos',i:'horno',s:H.bad?`${H.bad} fuera de parámetro`:H.L.length?`${H.cnt}/${c.hornos} con lectura`:`${c.tMin}–${c.tMax}° · mín. ${c.pMin} s`,w:H.bad>0,act:'hNow'}})(),
     pendientes:{t:'Seguimiento',i:'seg',s:sa.length?`${sa.length} activo${sa.length>1?'s':''}${crit?` · ${crit} crítico${crit>1?'s':''}`:''}`:'Todo al día',w:crit>0},
     aql:{t:'AQL',i:'aql',s:'Muestra y rechazo'},
-    marbetes:{t:'Marbetes',i:'mb',s:ms.n?`Hoy ${pct1(ms.pct)} % primeras · ${ms.n} marbete${ms.n>1?'s':''}`:'Primeras y preferidas',w:!mbOk},
+    marbetes:{t:'Bajo porcentaje',i:'mb',s:ms.n?`Hoy ${pct1(ms.pct)} % primeras · ${ms.n} marbete${ms.n>1?'s':''}`:'Primeras y preferidas',w:!mbOk},
     muestras:{t:'Muestras',i:'mue',s:gOn.length&&R[gOn[0]]?'Hoy saca: '+R[gOn[0]]:'Tabla por marca y talla'},
     lavado:{t:'Pruebas de lavado',i:'lav',s:lavN?`${fmtN(lavN)} pruebas`:'Busca por estilo'},
     rechazos:(()=>{const c2=currentShift(),n2=SHD.team?rjOf(c2.n,c2.t).length:0;return{t:'Rechazos',i:'rech',s:!SHD.team?'Foto y notas por rechazo':n2?`${n2} en el turno`:'Sin rechazos en el turno',w:n2>0}})(),
     cierre:{t:'Cierre de turno',i:'share',s:'PDF y WhatsApp'},
     admin:{t:'Equipo y respaldo',i:'admin',s:'Solo administrador'},
     carpetas:{t:'Carpetas',i:'folder',s:'Muestrario de telas'+(SHD.carpetas.length?` · ${SHD.carpetas.length} más`:'')},
-    calendario:{t:'Turnos y auditoras',i:'cal',s:`Mañana: ${day(T+1).D.join(', ')||'—'} día · ${day(T+1).N.join(', ')||'—'} noche`},
+    calendario:{t:'Turnos',i:'cal',s:`Mañana: ${day(T+1).D.join(', ')||'—'} día · ${day(T+1).N.join(', ')||'—'} noche`},
     rep:{t:'Reporte semanal',i:'rep',s:'Últimos 7 días',act:'goRep'},
     al:{t:'Alertas de calidad',i:'al',s:al?`${al} activa${al>1?'s':''}`:'Sin alertas activas',act:'openAl',w:al>0},
     cfg:{t:'Ajustes',i:'cfg',s:'Grupo y horarios',act:'openCfgT'}
@@ -3420,7 +3450,7 @@ function renderHome(){
   const el=document.getElementById('homeTiles');if(!el)return;
   const I=tileInfo();
   const mt=(k,x,cls)=>`<button class="mt${cls?' '+cls:''}${x.w?' warn':''}" ${x.act?`data-act="${x.act}"`:`data-tab="${k}"`}><span class="ti">${ico(x.i)}</span><span class="tt">${x.t}</span><span class="ts">${esc(x.s)}</span></button>`;
-  el.innerHTML=`${avBar()}${pisoHTML()}<div class="mtiles">${mt('midia',I.midia,'main')}${['hornos','rechazos','cierre','aql','marbetes','muestras','lavado','calendario','carpetas'].concat(SHD.admin?['admin']:[]).map(k=>mt(k,I[k])).join('')}</div>`;
+  el.innerHTML=`${avBar()}${pisoHTML()}<div class="mtiles">${mt('midia',I.midia,'main')}${['hornos','rechazos','cierre','aql','marbetes','muestras','calendario','carpetas'].concat(SHD.admin?['lavado','admin']:[]).map(k=>mt(k,I[k])).join('')}</div>`;
 }
 function renderMas(){
   const el=document.getElementById('masBody');if(!el)return;
@@ -3444,7 +3474,7 @@ function renderItems(){
 function renderStatus(){
   const msg=(S.mode==='db'?'Conectado con Google: tus datos están en la nube y en este teléfono.':'Tus datos se guardan en este dispositivo.')+(S.note?' '+S.note:'');
   document.getElementById('status').textContent='C. C. AVANTE · '+msg+' Calendario oficial: 22 dic 2025 – 3 ene 2027.';
-  const cs=document.getElementById('cfgStatus');if(cs)cs.textContent='El checklist y los horarios se pueden ajustar cuando quieras. '+msg;
+  const cs=document.getElementById('cfgStatus');if(cs)cs.textContent='Los horarios se pueden ajustar cuando quieras. '+msg;
 }
 
 /* ---------- Render general ---------- */
@@ -3542,12 +3572,15 @@ document.addEventListener('click',e=>{
     const id=sgAdd({tipo:'rechazo',estilo:es,titulo:`Rechazo por AQL: ${aq.def} defectos en ${n} piezas (lote de ${fmtN(lote)})`,detalle:`${pl.fuente} · acepta con ${pl.ac}, rechaza con ${pl.re}. Revisar el lote al 100 % antes de liberar.`,maq:[],prox:iso(todayN()),alta:false,origen:'aql'});
     aq.def='';aq.msg='';renderAql();renderSem();renderDia();goSegItem(id);return}
   if(a==='frase'){fraseOff+=+b.dataset.d;renderHello(+b.dataset.d>0?'r':'l');return}
-  if(a==='audEdit'){au.edit=!au.edit;renderAud();return}
+  if(a==='audEdit'){if(!perEdit())return;au.edit=!au.edit;renderAud();return}
+  if(a==='perDel'){if(!perEdit())return;savePER(L=>{const i=L.findIndex(x=>x.id===b.dataset.id);if(i>=0)L.splice(i,1)});renderAud();renderHero();return}
   if(a==='audDel'){saveAud(A=>{A[b.dataset.g]=A[b.dataset.g].filter(x=>x.id!==b.dataset.id)});renderAud();renderHero();renderRec();return}
   if(a==='semGo'){const cs=currentShift(),go=b.dataset.go;
     if(go==='rec'||go==='hornos'){st.rec=cs.n;st.recT=cs.t;renderRec();syncSubs();goTab('hornos');return}
     if(go==='seg'){goTab('pendientes');return}
-    st.sel=cs.n;st.planT=cs.t;const ini=chkPeek(cs.n,cs.t,'ini');st.diaView=ini&&ini.firma?'fin':'ini';renderDia();syncSubs();goTab('midia');return}
+    if(go==='rech'){goTab('rechazos');return}
+    if(go==='par'){goTab('turnos');return}
+    st.sel=cs.n;st.planT=cs.t;st.diaView='plan';renderDia();syncSubs();goTab('midia');return}
   if(a==='diaView'){st.diaView=b.dataset.v;renderDia();window.scrollTo(0,0);return}
   if(a==='chkRev'){const k=b.dataset.k;chkEdit(b.dataset.ph,ck=>{ck.rev[k]=!ck.rev[k]});renderDia();renderSem();return}
   if(a==='chkFirma'){chkEdit(b.dataset.ph,ck=>{ck.firma=hhmm(nowMin());ck.snap=plantSnap()});renderDia();renderSem();return}
@@ -3736,6 +3769,7 @@ document.addEventListener('change',e=>{
   if(el.id==='mueUp'){const f=el.files[0];el.value='';if(!f)return;cp.msg='Subiendo muestrario…';renderCarp();const old=SHD.archivos.filter(a=>a.carpeta==='telas-mue');upFile(f,'telas-mue',p=>{const g=document.getElementById('cpProg');if(g){g.hidden=false;g.firstChild.style.width=Math.round(p*100)+'%'}}).then(()=>{old.forEach(o=>delFile(o.id));cp.msg='✓ Copia protegida lista.';renderCarp()}).catch(e=>{cp.msg=e&&e.code==='permission-denied'?'Sin permiso para subir. Revise las reglas.':'No se pudo subir el muestrario.';renderCarp()});return}
   if(el.dataset&&el.dataset.eq){S.db.doc(GP()+'/equipo/'+el.dataset.eq).set({rol:el.value,n:(SHD.equipo.find(x=>x.id===el.dataset.eq)||{}).n||'',ts:isoNow()}).catch(()=>{});return}
   if(el.id==='bkConf'){bk.conf=el.checked;renderAdmin();return}
+  if(el.dataset&&el.dataset.per){if(!perEdit())return;const id=el.dataset.per,f=el.dataset.f,v=f==='n'?el.value.trim():el.value;if(f==='n'&&!v)return;savePER(L=>{const x=L.find(q=>q.id===id);if(x)x[f]=v});if(f!=='n')renderAud();renderHero();return}
   if(el.id==='mqMot'){const m=mqCur;savePL(P=>{const p=P.paros.find(q=>q.maq===m&&!q.fin);if(p)p.motivo=el.value});mqAfter();return}
   if(el.id==='cHornos'){const v=Math.max(1,Math.min(20,parseInt(el.value)||8));el.value=v;saveCfg({hornos:v});render()}
   if(el.id==='cPmin'&&el.value){saveCfg({pMin:+el.value});render()}
@@ -3796,6 +3830,7 @@ document.addEventListener('submit',e=>{
   if(['mqEstForm','mqCliForm','mqTecForm'].includes(fm.id)&&SHD.rol==='consulta'){e.preventDefault();roMsg();return}
   if(fm.id==='mqCliForm'||fm.id==='mqTecForm'){e.preventDefault();const inp=document.getElementById(fm.id==='mqCliForm'?'mqCliN':'mqTecN'),v=inp.value.trim().toUpperCase();if(!v)return;const m=mqCur,cl=fm.id==='mqCliForm';savePL(P=>{const L=cl?P.clientes:P.tecnicas;if(!L.includes(v))L.push(v);if(cl)P.cli[m]=v;else{const T=P.tec[m]||[];if(!T.includes(v))T.push(v);P.tec[m]=T}});mqAfter();return}
   if(fm.id==='eqForm'){e.preventDefault();const mail=document.getElementById('eqMail').value.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail))return;S.db.doc(GP()+'/equipo/'+mail).set({rol:document.getElementById('eqRol').value,n:document.getElementById('eqName').value.trim(),ts:isoNow()}).then(()=>{bk.msg=''}).catch(()=>{});fm.reset();return}
+  if(fm.id==='perForm'){e.preventDefault();if(!perEdit())return;const n=document.getElementById('perN').value.trim();if(!n)return;const x={id:uid(),n,p:document.getElementById('perP').value,g:document.getElementById('perG').value,l:document.getElementById('perL').value};savePER(L=>L.push(x));renderAud();renderHero();const f=document.getElementById('perN');if(f)f.focus();return}
   if(fm.id==='avForm'){e.preventDefault();avSubmit();return}
   if(fm.id==='cpNew'){e.preventDefault();const n=document.getElementById('cpN').value.trim();if(!n)return;const id=uid();S.db.doc(GP()+'/carpetas/'+id).set({n,ts:isoNow(),autor:shAutor()}).then(()=>{cp.msg='';cp.open=id;renderCarp()}).catch(e=>{cp.msg=e&&e.code==='permission-denied'?'Sin permiso para crear carpetas. Revise las reglas de Firestore.':'No se pudo crear la carpeta.';renderCarp()});return}
   if(fm.id==='mqEstForm'){e.preventDefault();mqAddEst(document.getElementById('mqEst').value);const f=document.getElementById('mqEst');if(f)f.focus();return}
