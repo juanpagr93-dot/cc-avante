@@ -7,13 +7,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="C.C. AVANTE">
+<meta name="apple-mobile-web-app-title" content="Calidad AVANTE">
 <meta name="description" content="Turnos, hornos, rechazos y alertas de Control de Calidad Estampado">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="favicon-v3-64.png">
 <link rel="apple-touch-icon" href="apple-touch-icon-v3.png">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>C. C. AVANTE</title>
+<title>Control de Calidad AVANTE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,600;1,700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -1277,15 +1277,92 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 .per-ed input{grid-column:1/-1}
 .per-add{display:grid;gap:6px;padding-top:10px;border-top:1px solid var(--glass-line)}
 .per-add .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+/* ===== v11 · DTR Soriana ===== */
+.dtr-s{padding:14px;display:grid;gap:12px;border-color:rgba(217,180,90,.4);background:linear-gradient(165deg,rgba(217,180,90,.1),rgba(255,255,255,.02) 50%),var(--bg)}
+.dtr-s h3{margin:0;font-family:var(--f-display);font-size:24px;color:#fff}
+.dtr-s p{margin:0;font-size:13px;color:var(--muted)}
+.dtr-s input[type=search]{width:100%;height:52px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);padding:0 14px;font-size:18px;font-family:var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.dtr-s input[type=search]:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(217,180,90,.18)}
+.dtr-chips{display:flex;flex-wrap:wrap;gap:5px}
+.dtr-chips button{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:5px 8px;font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:#DCE3EF}
+.dtr-chips button.ext{border-color:rgba(217,180,90,.55);color:var(--gold)}
+.dtr-res{display:grid;gap:12px}
+.dtr{padding:14px;display:grid;gap:12px}
+.dtr-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.dtr-hd b{display:block;font-family:var(--f-mono);font-size:26px;color:#fff;letter-spacing:.04em}
+.dtr-hd span{font-size:13px;color:var(--gold-2);font-weight:600}
+.dtr-loc{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.dtr-loc.in{background:var(--ok);color:#0A1A36}
+.dtr-loc.ex{background:var(--gold);color:#0A1A36}
+.dtr-loc.mx{background:#E8EDF5;color:#0A1A36}
+.dtr-loc.nd{border:1px solid var(--line);color:var(--muted)}
+.dtr-bc{background:#fff;border-radius:10px;padding:10px 12px 6px;display:grid;justify-items:center}
+.dtr-bc svg{width:100%;max-width:300px;height:auto}
+.dtr-bc .warn{font-size:12px;color:#B3261E;font-weight:700;margin-top:4px}
+.dtr-kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 10px;font-size:13.5px;margin:0}
+.dtr-kv dt{color:var(--muted)}
+.dtr-kv dd{margin:0;color:#fff;overflow-wrap:anywhere}
+.dtr-note{padding:10px 12px;border-radius:10px;border:1px solid rgba(239,138,128,.55);background:var(--dev-bg);color:#FFD9D4;font-size:13.5px}
+.dtr-note b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dev);margin-bottom:2px}
+.dtr-note.ok{border-color:rgba(123,200,164,.5);background:var(--ok-bg);color:#D8F2E5}
+.dtr-note.ok b{color:var(--ok)}
+.dtr-sum{display:grid;gap:6px}
+.dtr-sum div{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:9px;background:var(--surface-2);font-size:13.5px}
+.dtr-sum div b{color:#fff}
+.dtr-sum div span{color:var(--muted);white-space:nowrap}
+.dtr-sum div.ex{box-shadow:inset 3px 0 0 var(--gold)}
+.dtr-sum div.in{box-shadow:inset 3px 0 0 var(--ok)}
+.dtr-tab{width:100%;border-collapse:collapse;font-size:12.5px}
+.dtr-tab th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:4px;border-bottom:1px solid var(--line)}
+.dtr-tab td{padding:6px 4px;border-bottom:1px solid var(--glass-line);color:#DCE3EF;vertical-align:top}
+.dtr-tab td.n{font-family:var(--f-mono);text-align:right;white-space:nowrap}
+.dtr-tab .pri{color:var(--gold);font-weight:700}
+.dtr-wrap{overflow-x:auto;margin:0 -4px}
+.dtr-set{display:grid;gap:8px;padding-top:10px;border-top:1px solid var(--glass-line)}
+.dtr-set .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.dtr-set .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.dtr-set input{height:42px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);padding:0 12px;min-width:0;width:100%;color:var(--ink)}
+.dtr-set .by{font-size:12px;color:var(--muted)}
+.dtr-emp{font-size:13px;color:var(--muted)}
+.dtr-emp b{color:#fff}
+.dtr-adm{padding:12px 14px;display:grid;gap:8px}
+
+/* ===== v12 · rechazos rápidos, en vivo, nombre ===== */
+.piso-h h2::before{animation:pz 1.6s ease-out infinite}
+@keyframes pz{0%{box-shadow:0 0 0 0 rgba(123,200,164,.75)}70%{box-shadow:0 0 0 11px rgba(123,200,164,0)}100%{box-shadow:0 0 0 0 rgba(123,200,164,0)}}
+.livebadge{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-body);font-size:11px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:6px;background:#E5484D;color:#fff;animation:lvb 1.3s ease-in-out infinite}
+.livebadge::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.livebadge.off{background:transparent;border:1px solid var(--line);color:var(--muted);animation:none}
+.livebadge.off::before{background:var(--muted)}
+@keyframes lvb{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.piso-h h2::before,.livebadge{animation:none}}
+.rj-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rj-g button{height:48px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);font-family:var(--f-display);font-size:22px;font-weight:700;color:#fff}
+.rj-g button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#0A1A36}
+.rjf input#rjEst{text-transform:uppercase;font-family:var(--f-mono);letter-spacing:.03em}
+.rjf input#rjMb{font-family:var(--f-mono);font-size:18px;letter-spacing:.06em}
+.rj-def{display:flex;flex-wrap:wrap;gap:6px}
+.rj-def button{min-height:42px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);font-size:14.5px;font-weight:700;color:#DCE3EF}
+.rj-def button[aria-pressed="true"]{background:var(--dev);border-color:var(--dev);color:#2A0B08}
+.rj-com{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.rj-com button{min-height:36px;padding:0 12px;border-radius:999px;border:1px dashed rgba(217,180,90,.55);background:transparent;font-size:13px;font-weight:600;color:var(--gold-2)}
+.hhero .hello .hi{overflow-wrap:anywhere}
+
+/* ===== v13 · punto verde en vivo y autor de la frase ===== */
+.piso-h h2.off::before{background:var(--muted);box-shadow:none;animation:none}
+.livedot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);animation:pz 1.6s ease-out infinite}
+@media (prefers-reduced-motion:reduce){.livedot{animation:none}}
+.hhero .hello cite.fa{display:block;margin:8px 0 0 17px;font-style:normal;font-size:13.5px;font-weight:600;color:var(--gold-2);text-shadow:0 1px 6px rgba(0,0,0,.6)}
 </style>
 
 </head>
 <body class="is-home">
-<div class="splash" id="splash" aria-hidden="true"><div class="splash-in"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="" width="200" height="200"><b>C. C. AVANTE</b><span>Control de Calidad · Estampado</span></div></div>
+<div class="splash" id="splash" aria-hidden="true"><div class="splash-in"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="" width="200" height="200"><span>Control de Calidad</span><b>AVANTE</b></div></div>
 <header class="top">
   <div class="wrap">
     <div class="brand">
-      <div class="brand-id" data-tab="turnos" role="link" aria-label="Ir al inicio"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="Avante" width="46" height="46"><span class="bdiv" aria-hidden="true"></span><div><small>Control de Calidad</small><h1>C. C. AVANTE</h1></div></div>
+      <div class="brand-id" data-tab="turnos" role="link" aria-label="Ir al inicio"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="Avante" width="46" height="46"><span class="bdiv" aria-hidden="true"></span><div><small>Control de Calidad</small><h1>AVANTE</h1></div></div>
       <div class="hbtns"><button class="icon-btn" id="openAl" data-act="openAl" aria-label="Notificaciones importantes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="ab" id="alBadge" hidden></span></button>
       <button class="icon-btn" id="openCfg" aria-label="Ajustes">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -1298,7 +1375,7 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 <main class="wrap">
   <section class="panel" id="p-turnos" role="tabpanel">
     <div class="datehead" hidden><p id="todayLbl"></p><span id="clockLbl"></span></div>
-    <div class="hhero"><div class="hh-top"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="Avante" width="56" height="56"><span class="bdiv" aria-hidden="true"></span><div class="hh-id"><small>Control de calidad</small><b>C. C. AVANTE</b></div><div class="hbtns"><button class="icon-btn" data-act="openAl" aria-label="Notificaciones importantes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="ab" id="alBadge2" hidden></span></button><button class="icon-btn" data-act="openCfgT" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></div><div class="hello" id="hello"></div><svg class="hh-wave" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="hwg" x1="0" x2="1"><stop offset="0" stop-color="#8C6A22"/><stop offset=".5" stop-color="#F3D88E"/><stop offset="1" stop-color="#B8913A"/></linearGradient></defs><path d="M0 34 C110 12 250 6 400 20 L400 46 L0 46 Z" fill="#081428"/><path d="M0 34 C110 12 250 6 400 20" fill="none" stroke="url(#hwg)" stroke-width="3" vector-effect="non-scaling-stroke"/><path d="M0 40 C130 22 260 18 400 28" fill="none" stroke="#D9B45A" stroke-opacity=".35" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></div>
+    <div class="hhero"><div class="hh-top"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="Avante" width="56" height="56"><span class="bdiv" aria-hidden="true"></span><div class="hh-id"><small>Control de calidad</small><b>AVANTE</b></div><div class="hbtns"><button class="icon-btn" data-act="openAl" aria-label="Notificaciones importantes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span class="ab" id="alBadge2" hidden></span></button><button class="icon-btn" data-act="openCfgT" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></div><div class="hello" id="hello"></div><svg class="hh-wave" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="hwg" x1="0" x2="1"><stop offset="0" stop-color="#8C6A22"/><stop offset=".5" stop-color="#F3D88E"/><stop offset="1" stop-color="#B8913A"/></linearGradient></defs><path d="M0 34 C110 12 250 6 400 20 L400 46 L0 46 Z" fill="#081428"/><path d="M0 34 C110 12 250 6 400 20" fill="none" stroke="url(#hwg)" stroke-width="3" vector-effect="non-scaling-stroke"/><path d="M0 40 C130 22 260 18 400 28" fill="none" stroke="#D9B45A" stroke-opacity=".35" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></div>
     <div class="card hero planta" id="hero"></div>
     <div id="homeTiles" class="panel"></div>
 
@@ -1378,6 +1455,11 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
     <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Carpetas</h2></div>
     <div id="cpBody"></div>
   </section>
+  <section class="panel" id="p-dtr" role="tabpanel" hidden>
+    <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">DTR Soriana</h2></div>
+    <div id="dtrBody"></div>
+  </section>
+
   <section class="panel" id="p-rechazos" role="tabpanel" hidden>
     <div class="tool-h"><button class="back" data-act="back">‹ Inicio</button><h2 class="pg-t">Rechazos</h2></div>
     <div id="rjBody"></div>
@@ -1401,7 +1483,7 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 <div class="gate" id="gate" hidden>
   <div class="gate-in">
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGZpbGw9IiMwMDU5QTMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTc0LjMwIDI3LjMwIEw0Ni42NyA3Mi42MCBMMzcuMjAgNzIuNjAgTDMzLjkwIDY3LjkwIEwyMi40MCA2Ny45MCBMMTguMDAgNzIuNjAgTDEwLjQwIDcyLjYwIEwyMy44MCA0NS45MCBMMzQuMDAgNDUuOTAgTDQ0LjM3IDYyLjYwIEw2NS45MCAyNy4zMCBaIE0yNy45MCA1My40MCBMMzEuNjAgNjEuNjAgTDI0LjEwIDYxLjYwIFogTTQxLjIwIDQ1LjkwIEw1MC42MCA0NS45MCBMNDQuODcgNTUuMzAgWiBNODEuMDAgMjcuMzAgTDg5LjUwIDI3LjMwIEw2MS44NyA3Mi42MCBMNTMuMzcgNzIuNjAgWiIvPjwvc3ZnPg==" alt="Avante" width="140" height="140">
-    <h2>C. C. AVANTE</h2>
+    <h2>Control de Calidad AVANTE</h2>
     <p>Control de Calidad · Estampado</p>
     <p class="gtxt">Entra con tu cuenta de Google para guardar tus turnos, hornos y seguimientos en la nube. Así no pierdes nada si cambias de teléfono.</p>
     <button class="gbtn" id="gLogin" type="button"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Entrar con Google</button>
@@ -1548,7 +1630,7 @@ function watch(k){
 }
 function syncSubs(){
   if(S.mode!=='db')return;
-  const need=new Set(['config',KM(),KP(),...(SHD.team?['g_h'+iso(currentShift().n),'g_h'+iso(st.rec),'g_h'+iso(st.sel)]:[]),'alertas','seguimientos','marbetes','d'+iso(currentShift().n),'d'+iso(todayN()),'d'+iso(st.sel),'d'+iso(st.rec)]);
+  const need=new Set(['config',KM(),KP(),KD(),KDL(),...(SHD.team?['g_h'+iso(currentShift().n),'g_h'+iso(st.rec),'g_h'+iso(st.sel)]:[]),'alertas','seguimientos','marbetes','d'+iso(currentShift().n),'d'+iso(todayN()),'d'+iso(st.sel),'d'+iso(st.rec)]);
   Object.keys(S.subs).forEach(k=>{if(!need.has(k)){S.subs[k]();delete S.subs[k]}});
   need.forEach(watch);
 }
@@ -1573,11 +1655,12 @@ function authErr(e){
   return 'No se pudo entrar ('+(c||'error')+').';
 }
 function gateMsg(t){const m=document.getElementById('gMsg');if(m)m.textContent=t;const a=document.getElementById('acctMsg');if(a)a.textContent=t}
+function nomGuardar(r){try{const p=r&&r.additionalUserInfo&&r.additionalUserInfo.profile,g=p&&(p.given_name||p.first_name);if(g){localStorage.setItem('cca-nombre',g);const el=document.getElementById('hello');if(el)el.dataset.key='';renderHello()}}catch(e){}}
 async function login(){
   if(!FB.ok)return;
   const p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:'select_account'});
   gateMsg('Abriendo Google…');
-  try{await FB.auth.signInWithPopup(p);gateMsg('')}
+  try{const r=await FB.auth.signInWithPopup(p);gateMsg('');nomGuardar(r)}
   catch(e){
     if(['auth/popup-blocked','auth/operation-not-supported-in-this-environment','auth/cancelled-popup-request'].includes(e.code)){
       try{await FB.auth.signInWithRedirect(p)}catch(e2){gateMsg(authErr(e2))}
@@ -1587,6 +1670,7 @@ async function login(){
 async function logout(){
   if(!navigator.onLine){gateMsg('Conéctate a internet antes de cerrar sesión para no perder cambios.');return}
   try{await FB.db.waitForPendingWrites()}catch(e){}
+  try{localStorage.removeItem('cca-nombre')}catch(e){}
   try{await FB.auth.signOut()}catch(e){}
   try{Object.keys(localStorage).filter(k=>k.startsWith('tce:')).forEach(k=>localStorage.removeItem(k));localStorage.removeItem('ccav-skip')}catch(e){}
   location.reload();
@@ -1615,7 +1699,7 @@ function renderAcct(){
     FB.db=firebase.firestore();
     try{FB.db.enablePersistence({synchronizeTabs:true}).catch(()=>{})}catch(e){}
     FB.auth=firebase.auth();FB.ok=true;
-    FB.auth.getRedirectResult().catch(e=>{gate.hidden=false;gateMsg(authErr(e))});
+    FB.auth.getRedirectResult().then(nomGuardar).catch(e=>{gate.hidden=false;gateMsg(authErr(e))});
     FB.auth.onAuthStateChanged(u=>{
       FB.user=u;
       if(u)startCloud(u);else{stopCloud();if(!skipGate())gate.hidden=false}
@@ -1713,42 +1797,36 @@ function renderResults(){
 
 /* ---------- Saludo y frase de calidad (cambia cada 2 horas) ---------- */
 const FRASES=[
-  ['Malla limpia, bien tensada y sin poros tapados: así empieza un buen estampado.','q'],
-  ['Registro alineado en la primera pieza, registro alineado en todo el lote.','q'],
-  ['Un recorrido a tiempo detecta el problema antes de que se vuelva lote.','q'],
-  ['Ninguna auditora sola saca el turno: entre todos se cuida la calidad.','m'],
-  ['El AQL no se negocia: se inspecciona la muestra completa y se decide con el plan.','q'],
-  ['Tinta correcta para la tela correcta: verifica la orden antes de cargar la malla.','q'],
-  ['El tono se compara contra el estándar aprobado, nunca contra la prenda anterior.','q'],
-  ['Marbete correcto, prenda correcta: valida estilo, talla y orden antes de liberar.','q'],
-  ['Avisar a tiempo al compañero de la otra línea también es control de calidad.','m'],
-  ['Revisa la tensión de la malla antes de arrancar: una malla floja no perdona el registro.','q'],
-  ['Si el registro se mueve un milímetro, el cliente lo nota a un metro.','q'],
-  ['Cada dos horas, sin falta: el recorrido puntual es la mejor inspección.','q'],
-  ['Si el AQL rechaza, se rechaza: el lote se revisa al cien por ciento antes de liberar.','q'],
-  ['Producción y calidad juegan en el mismo equipo: la meta es la misma prenda bien hecha.','m'],
-  ['Plastisol, base agua o HD: cada tinta tiene su proceso, no se mezclan al tanteo.','q'],
-  ['Un tono fuera de estándar se detiene en la máquina, no en el almacén.','q'],
-  ['Un marbete equivocado convierte una prenda perfecta en un reclamo.','q'],
-  ['Una malla mal revelada se nota en la primera prenda: detenla a tiempo.','q'],
-  ['Un buen relevo se entrega completo: lo que sabes tú, que lo sepa el siguiente turno.','m'],
-  ['Cada cambio de estilo pide revisar el registro color por color.','q'],
-  ['Un recorrido atrasado es una hora de producción sin revisar.','q'],
-  ['Un rechazo por AQL bien documentado evita que el cliente lo encuentre.','q'],
-  ['Tinta bien mezclada y a la viscosidad indicada: color estable toda la corrida.','q'],
-  ['Cuando el equipo se comunica, los errores se corrigen antes de crecer.','m'],
-  ['Compara el tono con buena luz y contra la muestra física, no de memoria.','q'],
-  ['Sin marbete validado no hay lote liberado.','q']
+  ['Cada turno representa una nueva oportunidad para demostrar de qué eres capaz.','','m'],
+  ['Haz tu trabajo con orgullo, incluso cuando nadie esté mirando.','','m'],
+  ['Los errores son oportunidades de aprendizaje cuando existe voluntad de corregirlos.','','q'],
+  ['Reconocer el esfuerzo de los demás también es una forma de construir calidad.','','m'],
+  ['No importa cuál sea tu posición dentro de una organización; siempre puedes marcar una diferencia.','','m'],
+  ['Control de Calidad AVANTE: cada detalle cuenta.','','q'],
+  ['Un recorrido a tiempo significa una prenda en buen estado.','','q'],
+  ['Entrega el turno como te gustaría recibirlo: lo que sabes tú, que lo sepa el otro turno.','','m'],
+  ['El respeto es una herramienta indispensable en calidad; un trato justo representa nuestros valores.','','m'],
+  ['No existe la distinción entre A, B y C: todos somos calidad y apuntamos al mismo destino, una prenda bien hecha.','','m'],
+  ['Valida tu información completa: un marbete bien revisado entrega resultados adecuados.','','q'],
+  ['La trazabilidad ahorra tiempo y esfuerzos. Liberado o rechazado, pero siempre bien identificado.','','q']
 ];
+const FR0=(()=>{const L=FRASES.length;let last=-1;try{last=+(localStorage.getItem('cca-fr')||-1)}catch(e){}let i=Math.floor(Math.random()*L);if(i===last)i=(i+1)%L;try{localStorage.setItem('cca-fr',String(i))}catch(e){}return i})();
+function miNombre(){
+  try{const g=localStorage.getItem('cca-nombre');if(g)return g}catch(e){}
+  const dn=(typeof FB!=='undefined'&&FB.user&&FB.user.displayName||'').trim();if(!dn)return'';
+  const w=dn.split(/\s+/),C2=['JUAN','JOSE','JOSÉ','MARIA','MARÍA','MA.','LUIS','JESUS','JESÚS','ANA','MIGUEL','CARLOS','LUZ','ROSA','JORGE','VICTOR','VÍCTOR','JOSÉ','LUIS','FRANCISCO','PEDRO'];
+  const n=w.length>=3&&C2.includes(w[0].toUpperCase())?w.slice(0,2):w.slice(0,1);
+  return n.map(x=>x.charAt(0).toUpperCase()+x.slice(1).toLowerCase()).join(' ');
+}
 let fraseOff=0;
 function saludo(h){return h>=5&&h<12?'Buenos días':h>=12&&h<19?'Buenas tardes':'Buenas noches'}
 function renderHello(dir){
-  const t=new Date(),h=t.getHours(),blk=todayN()*12+Math.floor(h/2),L=FRASES.length;
-  const idx=(((blk*7+fraseOff)%L)+L)%L,[f,k]=FRASES[idx];
-  const el=document.getElementById('hello'),key=idx+'|'+saludo(h)+'|'+todayN();
+  const t=new Date(),h=t.getHours(),L=FRASES.length,nm=miNombre();
+  const idx=(((FR0+fraseOff)%L)+L)%L,[f,au,k]=FRASES[idx];
+  const el=document.getElementById('hello'),key=idx+'|'+saludo(h)+'|'+todayN()+'|'+nm;
   if(el.dataset.key===key)return;
   el.dataset.key=key;
-  el.innerHTML=`<div class="hi">${saludo(h)}</div><span class="hd">${fLong(todayN())}</span><div class="fr${dir?' from-'+dir:''}"><blockquote>${esc(f)}</blockquote><div class="who"><span class="ftag ${k}">${k==='q'?'Calidad en estampado':'Trabajo en equipo'}</span><span class="fnav"><button class="fbtn" data-act="frase" data-d="-1" aria-label="Frase anterior">‹</button><button class="fbtn" data-act="frase" data-d="1" aria-label="Frase siguiente">›</button></span></div></div>`;
+  el.innerHTML=`<div class="hi">${saludo(h)}${nm?', '+esc(nm):''}</div><span class="hd">${fLong(todayN())}</span><div class="fr${dir?' from-'+dir:''}"><blockquote>${esc(f)}</blockquote>${au?`<cite class="fa">— ${esc(au)}</cite>`:''}<div class="who"><span class="ftag ${k}">${k==='q'?'Calidad en estampado':'Trabajo en equipo'}</span><span class="fnav"><button class="fbtn" data-act="frase" data-d="-1" aria-label="Frase anterior">‹</button><button class="fbtn" data-act="frase" data-d="1" aria-label="Frase siguiente">›</button></span></div></div>`;
 }
 (()=>{const el=document.getElementById('hello');let x0=null,y0=null;
   el.addEventListener('touchstart',e=>{const p=e.touches[0];x0=p.clientX;y0=p.clientY},{passive:true});
@@ -1934,7 +2012,7 @@ function entregaText(n,t){
     Object.entries(r.h||{}).forEach(([h,v])=>{if(hStat(v,c).cls==='bad')hout.push(`H${h} ${v.t!=null?v.t+'°':''}${v.p!=null?' '+v.p+' s':''} (${hhmm(start+k*step)})`)})}
   const nextG=t==='D'?day(n).N:day(n+1).D,[w0,w1]=shiftWin(n,t);
   const L=[];
-  L.push('ENTREGA DE TURNO · C. C. AVANTE');
+  L.push('ENTREGA DE TURNO · CONTROL DE CALIDAD AVANTE');
   L.push(`${fLong(n)} · Turno de ${SH[t]} · Grupo ${g.join(', ')||'—'}`);
   g.forEach(x=>{const a=AUD()[x];if(a.length)L.push('Auditoras: '+a.map(y=>y.n+' ('+LINEAS[y.l]+')').join(', '))});
   if(g[0]&&mueResp()[g[0]])L.push('Responsable de muestras: '+mueResp()[g[0]]);
@@ -2270,7 +2348,7 @@ function computeRep(days,c,a,b){
 function repText(R,c,a,b){
   const top=Object.entries(R.devM).sort((x,y)=>y[1]-x[1]).map(([m,v])=>`Máq. ${m} (${v})`).join(', ');
   const sty=Object.entries(R.devS).sort((x,y)=>y[1]-x[1]).map(([s,v])=>`${s} ${v}`).join(', ');
-  let t=`Reporte C. C. AVANTE · Control de Calidad Estampado\nSemana ${fShort(a)} – ${fShort(b)}\n\n`;
+  let t=`Reporte Control de Calidad AVANTE · Estampado\nSemana ${fShort(a)} – ${fShort(b)}\n\n`;
   t+=`Recorridos: ${R.closed} de ${R.reg} cerrados${R.reg?' ('+Math.round(R.closed/R.reg*100)+'%)':''}\n`;
   t+=`Desviaciones en máquinas: ${R.dev}${top?' · '+top:''}\n`;
   if(sty)t+=`Desviaciones por estilo: ${sty}\n`;
@@ -2621,7 +2699,7 @@ function pisoHTML(){
     const tg=(x.rech?'<i class="t-rech">Rechazada</i>':'')+(x.paro?'<i class="t-par">Parada</i>':'')+(x.cambio?'<i class="t-cam">Cambio</i>':'')+(x.comp?'<i class="t-comp">Compartida</i>':'')+(x.dyno?'<i class="t-dyn">Dyno</i>':'')+(x.mue.length?`<i>Muestra${x.mue.length>1?' ×'+x.mue.length:''}</i>`:'');
     const cl=[x.cli,x.tec.join(' + ')].filter(Boolean).join(' · ');
     return `<button class="mq2${vac?' vacia':''}${x.cambio?' cam':''}${x.paro?' par':''}${x.rech?' rech':''}" data-act="mqOpen" data-m="${m}" aria-label="Máquina ${m}"><span class="n">MÁQ ${m}</span>${x.est.length?`<b>${x.est.map(esc).join(' + ')}</b>`:'<b class="noest">Sin estilo</b>'}${cl?`<span class="cl">${esc(cl)}</span>`:''}${x.desc?`<span class="ds">${esc(x.desc)}</span>`:''}${tg?`<span class="tg">${tg}</span>`:''}</button>`};
-  return `<section class="card piso" id="piso"><div class="piso-h"><h2>En piso ahora</h2><p>${SHD.team?`<span class="live${SHD.live?'':' off'}">${SHD.live?'En vivo con el equipo':'Sin conexión · se actualizará al volver'}</span> · `:''}Toque una máquina para ver o marcar lo que tiene.</p>${!SHD.team?`<p class="piso-warn">${!SHD.on?'Sin sesión: lo que marque aquí solo se guarda en este teléfono. Entre con Google para ver el mapa del equipo.':'Su correo '+esc(myEmail())+' no está en el equipo: lo que marque aquí solo lo ve usted. Pida al administrador que lo agregue en Equipo y respaldo; el mapa compartido se activará solo, sin reiniciar la app.'}</p>`:''}</div>
+  return `<section class="card piso" id="piso"><div class="piso-h"><h2 class="${SHD.team&&SHD.live?'':'off'}">En piso ahora</h2><p>${SHD.team&&!SHD.live?'<span class="live off">Sin conexión · se actualizará al volver</span> · ':''}Toque una máquina para ver o marcar lo que tiene.</p>${!SHD.team?`<p class="piso-warn">${!SHD.on?'Sin sesión: lo que marque aquí solo se guarda en este teléfono. Entre con Google para ver el mapa del equipo.':'Su correo '+esc(myEmail())+' no está en el equipo: lo que marque aquí solo lo ve usted. Pida al administrador que lo agregue en Equipo y respaldo; el mapa compartido se activará solo, sin reiniciar la app.'}</p>`:''}</div>
     <div class="piso-sum"><span class="${trab?'has':''}">${trab} trabajando</span><span class="t-cam ${ca?'has':''}">${ca} en cambio</span><span class="t-par ${par?'has':''}">${par} parada${par===1?'':'s'}</span><span class="t-par ${re?'has':''}">${re} rechazada${re===1?'':'s'}</span><span class="${dy?'has':''}">${dy} con dyno</span><span class="${mu?'has':''}">${mu} muestra${mu===1?'':'s'}</span></div>
     <div class="piso-l"><span>Línea 1 · máquinas 1–9</span><div class="pgrid">${[1,2,3,4,5,6,7,8,9].map(cell).join('')}</div></div>
     <div class="piso-l"><span>Línea 2 · máquinas 10–18</span><div class="pgrid">${[10,11,12,13,14,15,16,17,18].map(cell).join('')}</div></div></section>`;
@@ -2730,7 +2808,7 @@ async function shStart(u){
   sub('avisos',(a,b)=>(b.fij?1:0)-(a.fij?1:0)||(a.ts<b.ts?1:-1));
   sub('carpetas',(a,b)=>norm(a.n)<norm(b.n)?-1:1);
   sub('archivos',(a,b)=>a.ts<b.ts?1:-1);
-  shRender();render();
+  shRender();render();{const el=document.getElementById('hello');if(el)el.dataset.key=''}renderHello();
 }
 function shStop(){SHD.unsub.forEach(f=>{try{f()}catch(e){}});SHD.unsub=[];SHD.on=false;SHD.admin=false;SHD.rol=null;SHD.team=false;SHD.avisos=[];SHD.carpetas=[];SHD.archivos=[];SHD.rechazos=[];SHD.equipo=[];document.body.classList.remove('ro')}
 function shRender(k){
@@ -3012,7 +3090,7 @@ function openMue(go,t){
 const KM=()=>SHD.team?'g_maquinas':'maquinas';
 const canCap=()=>!SHD.on||SHD.admin||SHD.rol==='auditor'||SHD.rol==='supervisor';
 const myEmail=()=>(typeof FB!=='undefined'&&FB.user&&FB.user.email||'').trim().toLowerCase();
-const RO_ACTS=new Set(['mqTg','mqEstAdd','mqEstDel','mqClear','mqMueOk','mqCli','mqTec','hSaveAll','hDel','rjNew','rjSave','rjDel','tgCam','tgDyn','rmEst','clearYes']);
+const RO_ACTS=new Set(['dtrEd','dtrU','dtrUX','mqTg','mqEstAdd','mqEstDel','mqClear','mqMueOk','mqCli','mqTec','hSaveAll','hDel','rjNew','rjSave','rjDel','tgCam','tgDyn','rmEst','clearYes']);
 function roMsg(){const n=document.getElementById('roToast');if(n){n.hidden=false;clearTimeout(roMsg.t);roMsg.t=setTimeout(()=>n.hidden=true,2600)}}
 function deepDiff(a,b){
   const o={},D=firebase.firestore.FieldValue.delete();
@@ -3064,11 +3142,13 @@ async function qOnce(path,field,from){
 }
 
 /* ---------- Rechazos ---------- */
-const DEF_RJ=['Registro movido','Tono fuera de estándar','Mancha de tinta','Cuarteado','Malla tapada','Estampado incompleto','Curado insuficiente','Pieza dañada'];
+const DEF_RJ=['Registro','Batidas','Poro','Quemada','Doblada','Grumosa','Mancha','Tono','Cuarteado','Incompleto'];
+const COM_RJ=['Exceso de preferidas','Hicieron caso omiso','Se avisó al supervisor','Se detuvo la máquina','Se ajustó y se liberó','Se separó para reproceso','Reincidencia'];
 const rj={n:null,t:null,form:false,d:null,msg:'',err:'',del:null,busy:false};
-const rjBlank=()=>({maq:null,cli:'',tec:[],est:'',def:'',defO:'',pz:'',nota:'',foto:null,th:null,kb:0});
+const rjBlank=()=>{const[n,t]=rjShift();return{maq:null,g:(day(n)[t]||[])[0]||'',est:'',mb:'',defs:[],defO:'',nota:'',foto:null,th:null,kb:0}};
 function rjShift(){if(rj.n==null){const cs=currentShift();rj.n=cs.n;rj.t=cs.t}return[rj.n,rj.t]}
 const rjOf=(n,t)=>SHD.rechazos.filter(x=>x.n===iso(n)&&x.t===t);
+const rjDesc=x=>[x.g?'Grupo '+x.g:'',x.est,x.mb?'Marbete '+x.mb:'',x.cli,(x.tec||[]).join(' + ')].filter(Boolean).join(' · ');
 async function imgCompress(file){
   const url=URL.createObjectURL(file);
   try{
@@ -3081,26 +3161,24 @@ async function imgCompress(file){
   }finally{URL.revokeObjectURL(url)}
 }
 function rjFormHTML(){
-  const d=rj.d,P=PL(),chip=(act,v,on,lab)=>`<button type="button" data-act="${act}" data-v="${esc(v)}" aria-pressed="${on}">${esc(lab||v)}</button>`;
-  const defs=DEF_RJ.concat(d.def&&!DEF_RJ.includes(d.def)?[d.def]:[]);
+  const d=rj.d,extra=d.defs.filter(x=>!DEF_RJ.includes(x));
   return `<div class="card rjf" id="rjForm"><h3>Registrar rechazo</h3>
     <div><span class="k">Máquina</span><div class="rj-maq">${Array.from({length:18},(_,i)=>i+1).map(m=>`<button type="button" data-act="rjMaq" data-v="${m}" aria-pressed="${d.maq===m}">${m}</button>`).join('')}</div></div>
-    <div><span class="k">Cliente</span><div class="mq-ch">${P.clientes.map(c=>chip('rjCli',c,d.cli===c)).join('')}</div></div>
-    <div><span class="k">Técnica</span><div class="mq-ch">${P.tecnicas.map(c=>chip('rjTec',c,d.tec.includes(c))).join('')}</div></div>
-    <div class="rj-two"><label><span class="k">Estilo</span><input type="text" id="rjEst" list="mqEstList2" autocomplete="off" value="${esc(d.est)}" placeholder="Ej. GARCÍA 4512"></label><label><span class="k">Piezas</span><input type="number" id="rjPz" inputmode="numeric" min="0" value="${esc(d.pz)}" placeholder="0"></label></div>
-    <datalist id="mqEstList2">${C().estilos.map(s=>`<option value="${esc(s)}">`).join('')}</datalist>
-    <div><span class="k">Defecto</span><div class="mq-ch">${defs.map(c=>chip('rjDef',c,d.def===c)).join('')}</div><div class="mq-add"><input type="text" id="rjDefO" autocomplete="off" placeholder="Otro defecto" value="${esc(d.defO)}"><button type="button" class="btn" data-act="rjDefAdd">Usar</button></div></div>
-    <label><span class="k">Notas</span><textarea id="rjNota" placeholder="Qué se encontró, qué se hizo y a quién se avisó">${esc(d.nota)}</textarea></label>
-    <div><span class="k">Fotografía (una)</span><div class="rj-ph"><div class="pv">${d.th?`<img src="${d.th}" alt="Foto del rechazo">`:'Sin foto'}</div><div class="acts"><label class="btn small" for="rjFoto">${d.th?'Cambiar foto':'Tomar foto'}</label><input type="file" id="rjFoto" accept="image/*" capture="environment" class="vh">${d.th?`<button type="button" class="ghost" data-act="rjFotoX">Quitar foto</button><span class="note">${d.kb} KB</span>`:'<span class="note">Se comprime para ahorrar espacio.</span>'}</div></div></div>
+    <div><span class="k">Turno</span><div class="rj-g">${['A','B','C'].map(g=>`<button type="button" data-act="rjG" data-v="${g}" aria-pressed="${d.g===g}">${g}</button>`).join('')}</div></div>
+    <div class="rj-two"><label><span class="k">Estilo</span><input type="text" id="rjEst" list="mqEstList2" autocomplete="off" autocapitalize="characters" value="${esc(d.est)}" placeholder="550QH/D5115"></label><label><span class="k">Marbete</span><input type="text" id="rjMb" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${esc(d.mb)}" placeholder="3775324"></label></div>
+    <datalist id="mqEstList2">${[...new Set(C().estilos.concat(Object.values(PL().m||{}).flat()))].map(s=>`<option value="${esc(s)}">`).join('')}</datalist>
+    <div><span class="k">Defecto (puede elegir varios)</span><div class="rj-def">${DEF_RJ.concat(extra).map(c=>`<button type="button" data-act="rjDef" data-v="${esc(c)}" aria-pressed="${d.defs.includes(c)}">${esc(c)}</button>`).join('')}</div><div class="mq-add"><input type="text" id="rjDefO" autocomplete="off" placeholder="Otro defecto (escríbalo)" value="${esc(d.defO)}"><button type="button" class="btn" data-act="rjDefAdd">Agregar</button></div></div>
+    <div><span class="k">Comentarios</span><div class="rj-com">${COM_RJ.map(c=>`<button type="button" data-act="rjCom" data-v="${esc(c)}">+ ${esc(c)}</button>`).join('')}</div><textarea id="rjNota" placeholder="Qué se encontró, qué se hizo y a quién se avisó">${esc(d.nota)}</textarea></div>
+    <div><span class="k">Fotografía</span><div class="rj-ph"><div class="pv">${d.th?`<img src="${d.th}" alt="Foto del rechazo">`:'Sin foto'}</div><div class="acts"><label class="btn small" for="rjFoto">${d.th?'Cambiar foto':'Tomar foto'}</label><input type="file" id="rjFoto" accept="image/*" capture="environment" class="vh">${d.th?`<button type="button" class="ghost" data-act="rjFotoX">Quitar foto</button><span class="note">${d.kb} KB</span>`:'<span class="note">Se comprime para ahorrar espacio.</span>'}</div></div></div>
     ${rj.err?`<p class="rj-err" role="alert">${esc(rj.err)}</p>`:''}
     <div class="av-new"><button type="button" class="ghost" data-act="rjCancel">Cancelar</button><button type="button" class="btn primary" data-act="rjSave">Guardar rechazo</button></div></div>`;
 }
-function rjCard(x,adm){
+function rjCard(x){
   const can=SHD.admin||(canCap()&&x.email===myEmail());
   return `<article class="card rj"><button class="th" data-act="rjPh" data-id="${x.id}" aria-label="Ver foto">${x.th?`<img src="${x.th}" alt="">`:x.arch?'Foto en respaldo':'Sin foto'}</button>
-    <div class="rj-b"><div class="rj-h"><b>${esc(x.folio||'Rechazo')}</b><span>${hhmmOf(x.ts)} · Máq. ${x.maq}</span></div>
-    <span class="l1">${esc([x.est,x.cli,(x.tec||[]).join(' + ')].filter(Boolean).join(' · ')||'—')}</span>
-    <span class="l2">${esc(x.def||'—')}${x.pz?` · <b>${fmtN(x.pz)} pzs</b>`:''}</span>
+    <div class="rj-b"><div class="rj-h"><b>${esc(x.folio||'Rechazo')}</b><span>${hhmmOf(x.ts)} · Máq. ${x.maq}${x.g?' · Grupo '+x.g:''}</span></div>
+    <span class="l1">${esc([x.est,x.mb?'Marbete '+x.mb:'',x.cli,(x.tec||[]).join(' + ')].filter(Boolean).join(' · ')||'—')}</span>
+    <span class="l2"><b>${esc(x.def||'—')}</b>${x.pz?` · ${fmtN(x.pz)} pzs`:''}</span>
     ${x.nota?`<p>${esc(x.nota)}</p>`:''}
     <div class="ft"><span>${esc(x.autor||'')}</span>${can?`<button class="ghost warn" data-act="rjDel" data-id="${x.id}">${rj.del===x.id?'¿Borrar? Toque otra vez':'Borrar'}</button>`:''}</div></div></article>`;
 }
@@ -3109,7 +3187,7 @@ function renderRj(keepForm){
   if(!SHD.on){el.innerHTML='<div class="card av-empty">Entre con su cuenta de Google para registrar y ver los rechazos del equipo.</div>';return}
   if(!SHD.team){el.innerHTML=`<div class="card av-empty">Su correo no está en el equipo. Pida al administrador que lo agregue en Administración › Equipo.</div>`;return}
   const[n,t]=rjShift(),cs=currentShift(),live=cs.n===n&&cs.t===t,L=rjOf(n,t),g=day(n)[t];
-  const pz=L.reduce((a,x)=>a+(+x.pz||0),0),mq=new Set(L.map(x=>x.maq)).size;
+  const mbs=new Set(L.map(x=>x.mb).filter(Boolean)).size,mq=new Set(L.map(x=>x.maq)).size;
   const fb=document.getElementById('rjFormBox');
   if(!(keepForm&&fb&&fb.dataset.on===String(rj.form))){
     let h=`<div class="datebar"><button class="nav" data-act="rjPrev" aria-label="Turno anterior">‹</button><div class="lbl">${t==='D'?'☀ Turno de día':'☾ Turno de noche'}<small>${fLong(n)}${g.length?' · Grupo '+g.join(', '):''}</small></div><button class="nav" data-act="rjNext" aria-label="Turno siguiente"${live?' disabled':''}>›</button>${live?'':'<button class="btn small" data-act="rjNow">Ahora</button>'}</div>
@@ -3119,17 +3197,18 @@ function renderRj(keepForm){
     el.innerHTML=h;
   }
   const lst=document.getElementById('rjList');
-  lst.innerHTML=`<div class="rjbar"><h2>Rechazos del turno</h2><span class="live${SHD.live?'':' off'}">${SHD.live?'En vivo':'Sin conexión'}</span></div>
-    <div class="rj-sum"><span class="${L.length?'bad':''}">${L.length} rechazo${L.length===1?'':'s'}</span><span>${mq} máquina${mq===1?'':'s'}</span><span>${fmtN(pz)} piezas</span></div>
+  lst.innerHTML=`<div class="rjbar"><h2>Rechazos del turno</h2>${SHD.live?'<span class="livedot" role="img" aria-label="Conectado con el equipo"></span>':'<span class="live off">Sin conexión</span>'}</div>
+    <div class="rj-sum"><span class="${L.length?'bad':''}">${L.length} rechazo${L.length===1?'':'s'}</span><span>${mq} máquina${mq===1?'':'s'}</span><span>${mbs} marbete${mbs===1?'':'s'}</span></div>
     ${L.length?`<div class="rj-list">${L.map(x=>rjCard(x)).join('')}</div>`:'<p class="note">Sin rechazos registrados en este turno.</p>'}`;
 }
 function rjSave(){
   const d=rj.d;rj.err='';
-  if(!d.maq){rj.err='Elija la máquina.';}else if(!d.def){rj.err='Elija o escriba el defecto.';}
-  if(rj.err){renderRj();return}
+  const o=(d.defO||'').trim();if(o&&!d.defs.includes(o)){d.defs.push(o.charAt(0).toUpperCase()+o.slice(1));d.defO=''}
+  if(!d.maq)rj.err='Elija la máquina.';else if(!d.defs.length)rj.err='Elija o escriba al menos un defecto.';
+  if(rj.err){document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
   const[n,t]=rjShift(),id=uid(),fid=d.foto?uid():null,cnt=rjOf(n,t).length;
   const folio=`R${iso(n).slice(2).replace(/-/g,'')}${t}-${String(cnt+1).padStart(2,'0')}`;
-  const doc={n:iso(n),t,ts:isoNow(),folio,maq:d.maq,linea:d.maq<=9?1:2,cli:d.cli,tec:d.tec.slice(),est:d.est.trim().toUpperCase(),def:d.def,pz:+d.pz||0,nota:d.nota.trim(),foto:fid?{id:fid,kb:d.kb}:null,th:d.th||null,autor:shAutor(),email:myEmail()};
+  const doc={n:iso(n),t,ts:isoNow(),folio,maq:d.maq,linea:d.maq<=9?1:2,g:d.g,est:d.est.trim().toUpperCase(),mb:d.mb,def:d.defs.join(', '),defs:d.defs.slice(),nota:d.nota.trim(),foto:fid?{id:fid,kb:d.kb}:null,th:d.th||null,autor:shAutor(),email:myEmail()};
   const err=e=>{rj.msg=e&&e.code==='permission-denied'?'Sin permiso para guardar rechazos. Revise su rol en Administración.':'No se pudo subir el rechazo; se enviará al recuperar la conexión.';renderRj()};
   if(fid)S.db.doc(GP()+'/fotos/'+fid).set({b:toPart(d.foto),rj:id}).catch(err);
   S.db.doc(GP()+'/rechazos/'+id).set(doc).catch(err);
@@ -3143,7 +3222,7 @@ async function rjPhoto(id){
   const x=SHD.rechazos.find(r=>r.id===id);if(!x)return;
   const v=document.getElementById('phv'),img=document.getElementById('phvImg');
   document.getElementById('phvT').textContent=x.folio||'Rechazo';
-  document.getElementById('phvInf').textContent=[`Máq. ${x.maq}`,x.est,x.cli,(x.tec||[]).join(' + '),x.def,x.pz?x.pz+' piezas':'',x.nota].filter(Boolean).join(' · ');
+  document.getElementById('phvInf').textContent=[`Máq. ${x.maq}`,rjDesc(x),x.def,x.nota].filter(Boolean).join(' · ');
   img.src=x.th||'';img.alt='Foto del rechazo '+(x.folio||'');v.hidden=false;
   if(x.foto&&x.foto.id){try{const s=await S.db.doc(GP()+'/fotos/'+x.foto.id).get();const u=fromPart((s.data&&s.data()||{}).b);if(u.length){img.src=URL.createObjectURL(new Blob([u],{type:'image/jpeg'}))}}catch(e){}}
   else if(x.arch)document.getElementById('phvInf').textContent+=' · Foto guardada en el respaldo: '+x.arch;
@@ -3209,15 +3288,15 @@ function cierreData(n,t){
 const ciCli=m=>[m.cli,m.tec].filter(Boolean).join(' · ');
 function cierreText(D){
   const L=[],pz=D.R.reduce((a,x)=>a+(+x.pz||0),0);
-  L.push('*CIERRE DE TURNO · C. C. AVANTE*');
+  L.push('*CIERRE DE TURNO · CONTROL DE CALIDAD AVANTE*');
   L.push(`${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}`);
   if(D.aud.length)L.push('Auditoras: '+D.aud.join(', '));
   if(D.nextG.length)L.push('Recibe: Grupo '+D.nextG.join(', '));
   [[1,'LÍNEA 1'],[2,'LÍNEA 2']].forEach(([ln,tt])=>{L.push('');L.push(`*${tt}*`);
     D.maq.filter(m=>(m.m<=9?1:2)===ln).forEach(m=>{const det=[m.est,ciCli(m)].filter(Boolean).join(' — ');L.push(`• Máq ${m.m}: ${m.e.join(', ')}${det?' — '+det:''}${m.desc?' ('+m.desc+')':''}`)})});
-  L.push('');L.push(`*RECHAZOS (${D.R.length})*${D.R.length?' · '+fmtN(pz)+' piezas':''}`);
+  L.push('');L.push(`*RECHAZOS (${D.R.length})*${pz?' · '+fmtN(pz)+' piezas':''}`);
   if(!D.R.length)L.push('Sin rechazos en el turno.');
-  D.R.forEach(x=>L.push(`• ${x.folio} · ${hhmmOf(x.ts)} · Máq ${x.maq} · ${[x.est,x.cli,(x.tec||[]).join(' + ')].filter(Boolean).join(' · ')} · ${x.def}${x.pz?' · '+x.pz+' pzs':''}${x.nota?' — '+x.nota:''}`));
+  D.R.forEach(x=>L.push(`• ${x.folio} · ${hhmmOf(x.ts)} · Máq ${x.maq} · ${rjDesc(x)} · ${x.def}${x.pz?' · '+x.pz+' pzs':''}${x.nota?' — '+x.nota:''}`));
   L.push('');L.push(`*HORNOS*: ${D.H.L.length} lecturas · ${D.bad.length?D.bad.length+' fuera de parámetro: '+D.bad.map(x=>`H${x.h} ${x.t!=null?x.t+'°':''}${x.p!=null?' '+x.p+' s':''} (${hhmmOf(x.ts)})`).join(', '):'todas en parámetro'}`);
   if(D.paros.length)L.push('*PAROS*: '+D.paros.map(p=>`Máq ${p.maq} ${p.motivo}${p.fin?' '+durTxt(Math.round((new Date(p.fin)-new Date(p.ini))/60000)):' (sigue parada)'}`).join(', '));
   if(D.mue.length)L.push('*MUESTRAS PENDIENTES*: '+D.mue.map(x=>x.estilo+(x.maq?' (máq '+x.maq+')':'')).join(', '));
@@ -3229,7 +3308,7 @@ function cierreText(D){
 function cierrePDF(D){
   const p=new MiniPDF(),M=p.M,W=p.W-2*M,NAVY=[10,26,54],GOLD=[201,162,71],INK=[20,30,50],MUT=[95,105,125],RED=[178,38,30];
   p.rect(0,0,p.W,74,NAVY);p.rect(0,74,p.W,3,GOLD);
-  p.text(M,18,'C. C. AVANTE · Control de Calidad Estampado',9,true,[217,180,90]);
+  p.text(M,18,'Control de Calidad AVANTE · Estampado',9,true,[217,180,90]);
   p.text(M,32,'Cierre de turno',20,true,[255,255,255]);
   p.text(M,56,`${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}`,10,false,[220,228,240]);
   p.y=92;
@@ -3250,10 +3329,10 @@ function cierrePDF(D){
     });
   });
   const pz=D.R.reduce((a,x)=>a+(+x.pz||0),0);
-  head(`Rechazos del turno (${D.R.length})${D.R.length?' · '+fmtN(pz)+' piezas':''}`);
+  head(`Rechazos del turno (${D.R.length})${pz?' · '+fmtN(pz)+' piezas':''}`);
   if(!D.R.length){p.text(M,p.y,'Sin rechazos registrados en el turno.',9.5,false,MUT);p.y+=14}
   D.R.forEach(x=>{
-    const tx=W-80,l1=`${x.folio} · ${hhmmOf(x.ts)} · Máquina ${x.maq}`,l2=[x.est,x.cli,(x.tec||[]).join(' + ')].filter(Boolean).join(' · '),l3=`${x.def||''}${x.pz?' · '+x.pz+' piezas':''}`;
+    const tx=W-80,l1=`${x.folio} · ${hhmmOf(x.ts)} · Máquina ${x.maq}`,l2=rjDesc(x),l3=`${x.def||''}${x.pz?' · '+x.pz+' piezas':''}`;
     const nl=x.nota?p.wrap(x.nota,8.5,false,tx):[],h=Math.max(70,40+nl.length*10.5+8);
     p.need(h);
     if(x.th)p.image(x.th,M,p.y+2,66,66);else{p.rect(M,p.y+2,66,66,[236,239,244]);p.text(M+12,p.y+30,x.arch?'En respaldo':'Sin foto',7,false,MUT)}
@@ -3270,14 +3349,14 @@ function cierrePDF(D){
   if(D.mbs.n)extra.push(['Bajo porcentaje',`${D.mbs.n} marbetes · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok} de ${D.mbs.n} cumplen el mínimo`]);
   head('Otros datos del turno');
   extra.forEach(([k,v])=>{const ls=p.wrap(v,9.5,false,W-130);p.need(ls.length*12+4);p.text(M,p.y,k,9,true,MUT);ls.forEach((l,i)=>p.text(M+130,p.y+i*12,l,9.5,false,INK));p.y+=ls.length*12+4});
-  return p.out(`C. C. AVANTE · Cierre de turno ${iso(D.n)} ${SH[D.t]} · Generado ${new Date().toLocaleString('es-MX')}`);
+  return p.out(`Control de Calidad AVANTE · Cierre de turno ${iso(D.n)} ${SH[D.t]} · Generado ${new Date().toLocaleString('es-MX')}`);
 }
 function ciHTML(D){
   const row=m=>`<tr><td>${m.m}</td><td class="${m.bad?'bad':''}">${esc(m.e.join(', '))}</td><td>${esc(m.est||'—')}</td><td>${esc(ciCli(m)||'—')}${m.desc?`<br><span class="note">${esc(m.desc)}</span>`:''}</td></tr>`;
   const tab=ln=>`<table class="ci-tab"><thead><tr><th>Máq</th><th>Estado</th><th>Estilo</th><th>Cliente · Técnica</th></tr></thead><tbody>${D.maq.filter(m=>(m.m<=9?1:2)===ln).map(row).join('')}</tbody></table>`;
   return `<div class="card ci-prev"><div><h3>Cierre de turno</h3><p class="meta">${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}${D.nextG.length?' · Recibe grupo '+D.nextG.join(', '):''}${D.aud.length?'<br>Auditoras: '+esc(D.aud.join(', ')):''}</p></div>
     <h4>Línea 1</h4>${tab(1)}<h4>Línea 2</h4>${tab(2)}
-    <h4>Rechazos (${D.R.length})</h4>${D.R.length?D.R.map(x=>`<div class="ci-rj">${x.th?`<img src="${x.th}" alt="">`:'<span class="ph0"></span>'}<div><b>${esc(x.folio)}</b> · Máq ${x.maq} · ${esc([x.est,x.cli].filter(Boolean).join(' · '))}<br><span class="badc">${esc(x.def)}</span>${x.pz?' · '+x.pz+' pzs':''}${x.nota?`<br><span class="note">${esc(x.nota)}</span>`:''}</div></div>`).join(''):'<p class="note">Sin rechazos en el turno.</p>'}
+    <h4>Rechazos (${D.R.length})</h4>${D.R.length?D.R.map(x=>`<div class="ci-rj">${x.th?`<img src="${x.th}" alt="">`:'<span class="ph0"></span>'}<div><b>${esc(x.folio)}</b> · Máq ${x.maq} · ${esc(rjDesc(x))}<br><span class="badc">${esc(x.def)}</span>${x.pz?' · '+x.pz+' pzs':''}${x.nota?`<br><span class="note">${esc(x.nota)}</span>`:''}</div></div>`).join(''):'<p class="note">Sin rechazos en el turno.</p>'}
     <h4>Hornos</h4><p class="meta">${D.H.L.length} lecturas · ${D.bad.length?`<b class="badc">${D.bad.length} fuera de parámetro</b>`:'todas en parámetro'}</p>
     ${D.paros.length?`<h4>Paros</h4><p class="meta">${esc(D.paros.map(x=>`Máq ${x.maq} ${x.motivo}`).join(', '))}</p>`:''}</div>`;
 }
@@ -3364,12 +3443,12 @@ async function bkXlsx(){
   try{
     const c=C(),cnt=(L,f)=>{const o={};L.forEach(x=>{const k=f(x);o[k]=(o[k]||0)+1});return Object.entries(o).sort((a,b)=>b[1]-a[1])};
     const hb=d.H.filter(x=>hStat(x,c).cls==='bad').length,mbs=mbStats(d.MBk);
-    const res=[['C. C. AVANTE · Respaldo del periodo'],[`${dmy(bk.from)} al ${dmy(bk.to)} · generado ${new Date().toLocaleString('es-MX')}`],['Indicador','Valor'],
-      ['Rechazos registrados',d.R.length],['Piezas rechazadas',d.R.reduce((a,x)=>a+(+x.pz||0),0)],['Fotos (en ZIP por mes)',d.fotos],['Lecturas de hornos',d.H.length],['Lecturas fuera de parámetro',hb],['% hornos fuera',d.H.length?+(hb/d.H.length*100).toFixed(1):0],['Paros',d.P.length],['Marbetes registrados',mbs.n],['% de primeras',mbs.pct!=null?+mbs.pct.toFixed(1):''],[''],['Rechazos por defecto','']]
-      .concat(cnt(d.R,x=>x.def||'—')).concat([[''],['Rechazos por máquina','']]).concat(cnt(d.R,x=>'Máquina '+x.maq)).concat([[''],['Rechazos por cliente','']]).concat(cnt(d.R,x=>x.cli||'Sin cliente'));
+    const res=[['Control de Calidad AVANTE · Respaldo del periodo'],[`${dmy(bk.from)} al ${dmy(bk.to)} · generado ${new Date().toLocaleString('es-MX')}`],['Indicador','Valor'],
+      ['Rechazos registrados',d.R.length],['Marbetes rechazados',new Set(d.R.map(x=>x.mb).filter(Boolean)).size],['Fotos (en ZIP por mes)',d.fotos],['Lecturas de hornos',d.H.length],['Lecturas fuera de parámetro',hb],['% hornos fuera',d.H.length?+(hb/d.H.length*100).toFixed(1):0],['Paros',d.P.length],['Marbetes registrados',mbs.n],['% de primeras',mbs.pct!=null?+mbs.pct.toFixed(1):''],[''],['Rechazos por defecto','']]
+      .concat(cnt(d.R,x=>x.def||'—')).concat([[''],['Rechazos por máquina','']]).concat(cnt(d.R,x=>'Máquina '+x.maq)).concat([[''],['Rechazos por estilo','']]).concat(cnt(d.R,x=>x.est||'Sin estilo'));
     const sheets=[
       {name:'Resumen',title:true,rows:res,widths:[34,18]},
-      {name:'Rechazos',rows:[['Folio','Fecha','Hora','Turno','Grupo','Máquina','Línea','Cliente','Técnica','Estilo','Defecto','Piezas','Notas','Foto','Registró']].concat(d.R.map(x=>[x.folio||x.id,dmy(x.n),hhmmOf(x.ts),SH[x.t]||x.t,(day(fromIso(x.n))[x.t]||[]).join(', '),x.maq,x.linea||(x.maq<=9?1:2),x.cli||'',(x.tec||[]).join(' + '),x.est||'',x.def||'',+x.pz||0,x.nota||'',x.foto||x.arch?(x.arch||fotoName(x)):'',x.autor||''])),widths:[14,11,7,8,7,9,7,16,18,18,24,8,48,30,18],wrap:[12]},
+      {name:'Rechazos',rows:[['Folio','Fecha','Hora','Turno','Grupo','Máquina','Línea','Estilo','Marbete','Defecto','Comentarios','Foto','Registró']].concat(d.R.map(x=>[x.folio||x.id,dmy(x.n),hhmmOf(x.ts),SH[x.t]||x.t,x.g||(day(fromIso(x.n))[x.t]||[]).join(', '),x.maq,x.linea||(x.maq<=9?1:2),x.est||'',x.mb||'',x.def||'',x.nota||'',x.foto||x.arch?(x.arch||fotoName(x)):'',x.autor||''])),widths:[14,11,7,8,7,9,7,18,12,26,48,30,18],wrap:[10]},
       {name:'Hornos',rows:[['Fecha','Turno','Hora','Horno','Temperatura °','Permanencia s','Estado']].concat(d.H.map(x=>[dmy(x.n),SH[x.s]||x.s,hhmmOf(x.ts),x.h,x.t!=null?x.t:'',x.p!=null?x.p:'',hStat(x,c).cls==='bad'?'Fuera':'OK'])),widths:[11,8,7,7,13,13,9]},
       {name:'Paros',rows:[['Máquina','Motivo','Inicio','Fin','Minutos','Nota']].concat(d.P.map(x=>[x.maq,x.motivo,dmy(x.ini)+' '+hhmmOf(x.ini),x.fin?dmy(x.fin)+' '+hhmmOf(x.fin):'Sigue parada',x.fin?Math.round((new Date(x.fin)-new Date(x.ini))/60000):'',x.nota||''])),widths:[9,22,17,17,9,30]},
       {name:'Bajo porcentaje',rows:[['Fecha','Hora','No. marbete','Estilo','Piezas','Preferidas','Primeras','% primeras','Cumple']].concat(d.MBk.map(x=>[dmy(x.ts),hhmmOf(x.ts),x.num||'',x.estilo||'',x.total,x.dan,x.pri,x.pct!=null?+(+x.pct).toFixed(1):'',x.ok?'Sí':'No'])),widths:[11,7,12,16,8,10,9,10,8]}
@@ -3399,6 +3478,119 @@ async function bkFree(){
   bk.busy=false;renderAdmin();
 }
 
+
+/* ---------- DTR Soriana: catálogo y órdenes por estilo ---------- */
+const KD=()=>SHD.team?'g_dtr':'dtr',KDL=()=>SHD.team?'g_dtrloc':'dtrloc';
+const DTR=()=>get(KD())||null,DTRL=()=>get(KDL())||{};
+const dtr={q:'',msg:'',busy:false,edit:null};
+const dmod=s=>nrm(s).replace(/\s+/g,'').split('--')[0];
+function dtrLocOf(com){const c=nrm(com),ced=c.includes('CEDIS');let pl,ext;
+  if(c.includes('ZINAPECUARO')){pl='Zinapécuaro';ext=true}else if(c.includes('TIMILPAN')){pl='Timilpan';ext=true}else if(c.includes('CAMPECHE')){pl='Campeche';ext=true}
+  else if(c.includes('ESTAMPADO')){pl='Planta estampado';ext=false}else{pl=com?cap(String(com).toLowerCase()):'Sin dato';ext=null}
+  return{ext,pl,ced,txt:(ced?'CEDIS empaque · ':'')+pl}}
+function dtrStatus(mod,ords){
+  const o=DTRL()[mod];
+  if(o&&o.u)return{cls:o.u==='planta'?'in':'ex',txt:o.u==='planta'?'En planta':'Planta externa'+(o.p?': '+o.p:''),man:o};
+  if(!ords.length)return{cls:'nd',txt:'Sin órdenes registradas'};
+  const L=ords.map(x=>dtrLocOf(x.com)),ex=L.filter(x=>x.ext===true),inn=L.filter(x=>x.ext===false);
+  if(ex.length&&!inn.length){const ps=[...new Set(ex.map(x=>x.pl))];return{cls:'ex',txt:'Planta externa: '+ps.join(', ')}}
+  if(inn.length&&!ex.length)return{cls:'in',txt:'En planta'};
+  if(inn.length&&ex.length)return{cls:'mx',txt:'En planta y en planta externa'};
+  return{cls:'nd',txt:'Ubicación sin dato'};
+}
+/* Código de barras EAN-13 dibujado en la app (sin internet) */
+const EAN_L=['0001101','0011001','0010011','0111101','0100011','0110001','0101111','0111011','0110111','0001011'],EAN_P=['LLLLLL','LLGLGG','LLGGLG','LLGGGL','LGLLGG','LGGLLG','LGGGLL','LGLGLG','LGLGGL','LGGLGL'];
+function ean13(code){
+  code=String(code||'').replace(/\D/g,'');if(code.length!==13)return{svg:'',ok:false};
+  const d=code.split('').map(Number),sum=d.slice(0,12).reduce((a,v,i)=>a+v*(i%2?3:1),0),ok=(10-sum%10)%10===d[12];
+  const R=x=>x.split('').map(b=>b==='1'?'0':'1').join('');let bits='101';
+  for(let i=1;i<=6;i++){const L=EAN_L[d[i]];bits+=EAN_P[d[0]][i-1]==='L'?L:R(L).split('').reverse().join('')}
+  bits+='01010';for(let i=7;i<=12;i++)bits+=R(EAN_L[d[i]]);bits+='101';
+  const X=9,guard=new Set([0,1,2,45,46,47,48,49,92,93,94]);let r='';
+  for(let i=0;i<bits.length;i++)if(bits[i]==='1')r+=`<rect x="${X+i}" y="0" width="1" height="${guard.has(i)?56:50}"/>`;
+  const t=(s,x)=>`<text x="${x}" y="64" font-size="9" font-family="monospace" text-anchor="middle">${s}</text>`;
+  return{ok,svg:`<svg viewBox="0 0 113 66" role="img" aria-label="Código de barras ${code}" xmlns="http://www.w3.org/2000/svg"><g fill="#000">${r}</g>${t(d[0],4)}${t(code.slice(1,7),X+24)}${t(code.slice(7),X+70)}</svg>`};
+}
+function dtrFind(q){
+  const D=DTR();if(!D)return[];const k=nrm(q).replace(/\s+/g,'');if(!k)return[];
+  const km=k.split('--')[0];
+  return D.cat.filter(c=>{const m=nrm(c.mod);return m.includes(km)||String(c.cb).includes(k)||(k.length>=3&&nrm(c.desc).replace(/\s+/g,'').includes(k))});
+}
+function dtrCard(c){
+  const D=DTR(),ords=D.ord.filter(o=>dmod(o.e)===nrm(c.mod)),stt=dtrStatus(nrm(c.mod),ords),bc=ean13(c.cb),man=stt.man;
+  const byLoc={};ords.forEach(o=>{const l=dtrLocOf(o.com),k=l.txt;(byLoc[k]=byLoc[k]||{l,n:0,pz:0}).n++;byLoc[k].pz+=(+o.pz||0)});
+  const est=[...new Set(ords.map(o=>o.e))],pz=ords.reduce((a,o)=>a+(+o.pz||0),0),pri=ords.some(o=>o.pri);
+  const bad=c.nota&&/incorrect|corregir|pendiente|reproceso/i.test(c.nota);
+  const ed=canCap(),u=(dtr.edit===c.mod)?(man||{}):null;
+  return `<article class="card dtr"><div class="dtr-hd"><div><b>${esc(c.mod)}</b><span>${esc(c.marca||'')} · ${esc(c.cat||'')}</span></div><span class="dtr-loc ${stt.cls}">${esc(stt.txt)}</span></div>
+    ${c.cb?`<div class="dtr-bc">${bc.svg||`<b style="color:#000;font-family:monospace">${esc(c.cb)}</b>`}${bc.svg&&!bc.ok?'<span class="warn">El dígito verificador no coincide: revise el código</span>':''}</div>`:''}
+    <dl class="dtr-kv"><dt>Código Soriana</dt><dd>${esc(c.cb||'—')}</dd><dt>Descripción</dt><dd>${esc(c.desc||'—')}</dd><dt>Etiqueta</dt><dd>${esc(c.fmt||'—')}</dd><dt>Proveedor</dt><dd>${esc(c.prov||'—')}</dd>${est.length?`<dt>Estilos</dt><dd>${est.map(esc).join(', ')}</dd>`:''}</dl>
+    ${c.nota?`<div class="dtr-note${bad?'':' ok'}"><b>Notas / muestras</b>${esc(c.nota)}</div>`:''}
+    ${ords.length?`<div class="dtr-sum">${Object.values(byLoc).map(x=>`<div class="${x.l.ext?'ex':'in'}"><b>${esc(x.l.txt)}</b><span>${x.n} ${x.n>1?'órdenes':'orden'} · ${fmtN(x.pz)} pzs</span></div>`).join('')}</div>
+      <div class="dtr-wrap"><table class="dtr-tab"><thead><tr><th>Orden</th><th>Talla</th><th>Piezas</th><th>Imagen</th><th>Ubicación</th></tr></thead><tbody>${ords.map(o=>`<tr><td>${esc(o.o)}${o.pri?' <span class="pri">· Prioridad</span>':''}</td><td>${esc(o.t||'—')}</td><td class="n">${fmtN(+o.pz||0)}</td><td>${esc(o.img||'')}</td><td>${esc(dtrLocOf(o.com).txt)}</td></tr>`).join('')}<tr><td colspan="2"><b>Total</b>${pri?' <span class="pri">· tiene prioridad CEDIS</span>':''}</td><td class="n"><b>${fmtN(pz)}</b></td><td colspan="2"></td></tr></tbody></table></div>`:'<p class="note">No hay órdenes de este estilo en el archivo importado.</p>'}
+    ${D.emp&&D.emp.length?`<p class="dtr-emp"><b>Empaque:</b> ${D.emp.map(esc).join(' · ')}</p>`:''}
+    <div class="dtr-set">${man?`<span class="by">Ubicación marcada por ${esc(man.by||'—')} · ${whenTxt(man.ts)}${man.n?' · '+esc(man.n):''}</span>`:''}
+      ${ed?(u?`<span class="k">¿Dónde está la producción?</span><div class="row"><button class="btn${u.u==='planta'?' primary':''}" data-act="dtrU" data-m="${esc(c.mod)}" data-u="planta">En planta</button><button class="btn${u.u==='externa'?' primary':''}" data-act="dtrU" data-m="${esc(c.mod)}" data-u="externa">Planta externa</button></div>
+        <form class="row" id="dtrLocForm" data-m="${esc(c.mod)}"><input id="dtrP" list="dtrPl" placeholder="Planta externa (ej. Zinapécuaro)" value="${esc(u.p||'')}" autocomplete="off" aria-label="Planta externa"><input id="dtrN" placeholder="Nota (opcional)" value="${esc(u.n||'')}" autocomplete="off" aria-label="Nota"><button class="btn primary" type="submit" style="grid-column:1/-1">Guardar ubicación</button></form>
+        <datalist id="dtrPl"><option value="Zinapécuaro"><option value="Timilpan"><option value="Campeche"></datalist>${man?`<button class="ghost" data-act="dtrUX" data-m="${esc(c.mod)}">Volver a la ubicación del Excel</button>`:''}`
+        :`<button class="btn small" data-act="dtrEd" data-m="${esc(c.mod)}">Actualizar ubicación</button>`):''}</div>
+  </article>`;
+}
+function dtrResHTML(){
+  const D=DTR();
+  if(!D)return SHD.admin||!SHD.on?'<p class="note">Todavía no se ha importado el Excel de códigos DTR Soriana.</p>':'<p class="note">El administrador todavía no ha cargado la información de DTR Soriana.</p>';
+  const q=dtr.q.trim();
+  if(!q){const L=D.cat.slice().sort((a,b)=>a.mod<b.mod?-1:1);return `<p class="note">${D.cat.length} estilos · ${fmtN(D.ord.length)} órdenes. Escriba el estilo o toque uno:</p><div class="dtr-chips">${L.map(c=>{const s=dtrStatus(nrm(c.mod),D.ord.filter(o=>dmod(o.e)===nrm(c.mod)));return`<button data-act="dtrPick" data-m="${esc(c.mod)}" class="${s.cls==='ex'?'ext':''}">${esc(c.mod)}</button>`}).join('')}</div>`}
+  const R=dtrFind(q);
+  if(!R.length)return `<p class="note">No encontré el estilo «${esc(q)}» en DTR Soriana. Escriba solo el modelo, por ejemplo 851ZK.</p>`;
+  return R.slice(0,12).map(dtrCard).join('');
+}
+function dtrUpd(){const r=document.getElementById('dtrRes');if(r)r.innerHTML=dtrResHTML()}
+function renderDtr(){
+  const el=document.getElementById('dtrBody');if(!el)return;
+  const D=DTR();
+  el.innerHTML=`<section class="card dtr-s"><div><h3>Buscar por estilo</h3><p>Código de barras, etiqueta, notas, órdenes y si está en planta o en planta externa.</p></div>
+    <input id="dtrQ" type="search" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="Ej. 851ZK" value="${esc(dtr.q)}" aria-label="Estilo"></section>
+    <div class="dtr-res" id="dtrRes">${dtrResHTML()}</div>
+    ${SHD.admin||!SHD.on?`<div class="card dtr-adm"><div class="av-pick"><label class="btn${D?'':' primary'}" for="dtrFile">${D?'Actualizar con un Excel nuevo':'Importar Excel DTR Soriana'}</label><input type="file" id="dtrFile" accept=".xlsx,.xls" class="vh"></div><p class="note">${D?`Importado ${whenTxt(D.imp.ts)} por ${esc(D.imp.por||'—')} · ${esc(D.imp.archivo||'')}`:'Elija el archivo ESTILOS DTR SORIANA. Solo administradores.'}</p>${dtr.msg?`<p class="bk-msg" role="status">${esc(dtr.msg)}</p>`:''}</div>`:''}`;
+}
+async function dtrImport(file){
+  dtr.busy=true;dtr.msg='Leyendo '+file.name+'…';renderDtr();
+  try{
+    await loadXLSX();
+    const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});
+    const cat=[],ordM={},emp=[];
+    const sv=v=>v==null?'':typeof v==='number'?String(Math.round(v)):String(v).trim();
+    wb.SheetNames.forEach(nm=>{
+      const aoa=XLSX.utils.sheet_to_json(wb.Sheets[nm],{header:1,raw:true,defval:null,blankrows:false});
+      const hi=aoa.findIndex(r=>r&&r.some(c=>nrm(c)==='MODELO')&&r.some(c=>nrm(c).startsWith('CODIGO DE BARRAS')));
+      if(hi>=0){
+        const H=aoa[hi].map(nrm),pre=k=>H.findIndex(h=>h.startsWith(k));
+        const ix={nota:pre('NOTAS'),cat:pre('CATEGORIA'),mod:pre('MODELO'),cb:pre('CODIGO DE BARRAS'),desc:pre('DESCRIPCION'),fmt:pre('FORMATO'),marca:pre('MARCA'),prov:pre('PROVEEDOR')};
+        const known=new Set(Object.values(ix));
+        for(let i=hi+1;i<aoa.length;i++){const r=aoa[i];if(!r)continue;const g=k=>ix[k]>=0?sv(r[ix[k]]):'';
+          r.forEach((c,j)=>{if(!known.has(j)&&c!=null&&String(c).trim()&&!/^empaque/i.test(String(c).trim()))emp.push(String(c).trim())});
+          if(!g('mod'))continue;cat.push({mod:g('mod').toUpperCase(),cat:g('cat'),cb:g('cb'),desc:g('desc'),fmt:g('fmt').replace(/\s+/g,' '),marca:g('marca'),prov:g('prov'),nota:g('nota')})}
+        return;
+      }
+      const ho=aoa.findIndex(r=>r&&r.some(c=>nrm(c)==='ORDEN')&&r.some(c=>nrm(c)==='ESTILO'));
+      if(ho>=0){
+        const H=aoa[ho].map(nrm),pre=k=>H.findIndex(h=>h.startsWith(k));
+        const ix={o:pre('ORDEN'),e:pre('ESTILO'),cli:pre('CLIENTE'),img:pre('IMAGEN'),pz:pre('PZ'),t:pre('TALLA'),com:pre('COMENTARIO'),cb:pre('CODIGO')};
+        for(let i=ho+1;i<aoa.length;i++){const r=aoa[i];if(!r)continue;const g=k=>ix[k]>=0?sv(r[ix[k]]):'';
+          const e=g('e').toUpperCase(),o=g('o');if(!e||!o)continue;
+          const pri=r.some(c=>/PRIOR/.test(nrm(c).replace(/\s+/g,'')));
+          const x=ordM[o]||{o,e,cli:g('cli'),img:g('img'),pz:+(r[ix.pz])||0,t:g('t'),com:g('com'),cb:g('cb'),pri:false};
+          if(pri)x.pri=true;ordM[o]=x}
+      }
+    });
+    if(!cat.length)throw new Error('cols');
+    const D={imp:{ts:isoNow(),archivo:file.name,por:shAutor()},emp:[...new Set(emp)],cat,ord:Object.values(ordM)};
+    put(KD(),D);dtr.msg=`✓ Listo: ${cat.length} estilos y ${D.ord.length} órdenes.`;
+  }catch(e){dtr.msg=e&&e.message==='cols'?'No encontré las columnas MODELO y CÓDIGO DE BARRAS en ese archivo.':e&&e.message==='net'?'Necesita internet para importar.':'No se pudo leer el archivo.'}
+  dtr.busy=false;renderDtr();
+}
+
 /* ---------- Navegación: inicio, herramientas y barra inferior ---------- */
 const ICO={
   inicio:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
@@ -3416,6 +3608,7 @@ const ICO={
   rech:'<circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/>',
   share:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/>',
   admin:'<path d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  barcode:'<path d="M4 5v14M7 5v14M10 5v10M13 5v14M16 5v10M20 5v14"/><path d="M10 19h0M16 19h0"/>',
   folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
   al:'<path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
   cfg:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'
@@ -3436,6 +3629,7 @@ function tileInfo(){
     rechazos:(()=>{const c2=currentShift(),n2=SHD.team?rjOf(c2.n,c2.t).length:0;return{t:'Rechazos',i:'rech',s:!SHD.team?'Foto y notas por rechazo':n2?`${n2} en el turno`:'Sin rechazos en el turno',w:n2>0}})(),
     cierre:{t:'Cierre de turno',i:'share',s:'PDF y WhatsApp'},
     admin:{t:'Equipo y respaldo',i:'admin',s:'Solo administrador'},
+    dtr:(()=>{const D=DTR();return{t:'DTR Soriana',i:'barcode',s:D?`${D.cat.length} estilos · buscar por estilo`:'Buscar por estilo'}})(),
     carpetas:{t:'Carpetas',i:'folder',s:'Muestrario de telas'+(SHD.carpetas.length?` · ${SHD.carpetas.length} más`:'')},
     calendario:{t:'Turnos',i:'cal',s:`Mañana: ${day(T+1).D.join(', ')||'—'} día · ${day(T+1).N.join(', ')||'—'} noche`},
     rep:{t:'Reporte semanal',i:'rep',s:'Últimos 7 días',act:'goRep'},
@@ -3450,7 +3644,7 @@ function renderHome(){
   const el=document.getElementById('homeTiles');if(!el)return;
   const I=tileInfo();
   const mt=(k,x,cls)=>`<button class="mt${cls?' '+cls:''}${x.w?' warn':''}" ${x.act?`data-act="${x.act}"`:`data-tab="${k}"`}><span class="ti">${ico(x.i)}</span><span class="tt">${x.t}</span><span class="ts">${esc(x.s)}</span></button>`;
-  el.innerHTML=`${avBar()}${pisoHTML()}<div class="mtiles">${mt('midia',I.midia,'main')}${['hornos','rechazos','cierre','aql','marbetes','muestras','calendario','carpetas'].concat(SHD.admin?['lavado','admin']:[]).map(k=>mt(k,I[k])).join('')}</div>`;
+  el.innerHTML=`${avBar()}${pisoHTML()}<div class="mtiles">${mt('midia',I.midia,'main')}${['hornos','rechazos','cierre','dtr','aql','marbetes','muestras','calendario','carpetas'].concat(SHD.admin?['lavado','admin']:[]).map(k=>mt(k,I[k])).join('')}</div>`;
 }
 function renderMas(){
   const el=document.getElementById('masBody');if(!el)return;
@@ -3473,7 +3667,7 @@ function renderItems(){
 }
 function renderStatus(){
   const msg=(S.mode==='db'?'Conectado con Google: tus datos están en la nube y en este teléfono.':'Tus datos se guardan en este dispositivo.')+(S.note?' '+S.note:'');
-  document.getElementById('status').textContent='C. C. AVANTE · '+msg+' Calendario oficial: 22 dic 2025 – 3 ene 2027.';
+  document.getElementById('status').textContent='Control de Calidad AVANTE · '+msg+' Calendario oficial: 22 dic 2025 – 3 ene 2027.';
   const cs=document.getElementById('cfgStatus');if(cs)cs.textContent='Los horarios se pueden ajustar cuando quieras. '+msg;
 }
 
@@ -3484,8 +3678,8 @@ function keepFocus(fn){
   fn();
   if(id){const b=document.getElementById(id);if(b&&b!==a){b.focus();try{if(s!=null)b.setSelectionRange(s,e)}catch(_){}}}
 }
-function render(){keepFocus(()=>{renderHello();renderAlBanner();if(!alSheet.hidden)renderAlList();renderHero();renderSem();renderAud();renderResults();renderSeg();renderDia();{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.hi))renderRec();if(st.tab==='marbetes'&&!(ae&&(ae.id==='mbN'||ae.id==='mbV')))renderMb()}renderLav();if(st.tab==='muestras')renderMue();if(st.tab==='turnos')renderHome();if(st.tab==='mas')renderMas();if(!document.getElementById('mqSheet').hidden)renderMq();if(st.tab==='cierre')renderCierre();avBadges()});syncSubs()}
-const TABS=['turnos','midia','hornos','pendientes','mas','avisos','carpetas','rechazos','cierre','admin','aql','marbetes','muestras','lavado','calendario'];
+function render(){keepFocus(()=>{renderHello();renderAlBanner();if(!alSheet.hidden)renderAlList();renderHero();renderSem();renderAud();renderResults();renderSeg();renderDia();{const ae=document.activeElement;if(!(ae&&ae.dataset&&ae.dataset.hi))renderRec();if(st.tab==='marbetes'&&!(ae&&(ae.id==='mbN'||ae.id==='mbV')))renderMb()}renderLav();if(st.tab==='muestras')renderMue();if(st.tab==='turnos')renderHome();if(st.tab==='mas')renderMas();if(!document.getElementById('mqSheet').hidden)renderMq();if(st.tab==='dtr'){const ae=document.activeElement;if(!(ae&&['dtrQ','dtrP','dtrN'].includes(ae.id)))renderDtr()}if(st.tab==='cierre')renderCierre();avBadges()});syncSubs()}
+const TABS=['turnos','midia','hornos','pendientes','mas','avisos','carpetas','rechazos','cierre','admin','dtr','aql','marbetes','muestras','lavado','calendario'];
 const TOOLS=['aql','marbetes','muestras','lavado','calendario'];
 function setTab(t){
   if(t==='recorridos')t='hornos';
@@ -3505,6 +3699,7 @@ function setTab(t){
   if(t==='rechazos')renderRj();
   if(t==='cierre')renderCierre();
   if(t==='admin')renderAdmin();
+  if(t==='dtr')renderDtr();
   if(t==='aql')renderAql();
   if(t==='marbetes')renderMb();
   if(t==='muestras')renderMue();
@@ -3526,6 +3721,10 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){goTab(b.dataset.tab);return}
   const a=b.dataset.act;
   if(SHD.rol==='consulta'&&RO_ACTS.has(a)){roMsg();return}
+  if(a==='dtrPick'){dtr.q=b.dataset.m;const i=document.getElementById('dtrQ');if(i)i.value=dtr.q;dtrUpd();window.scrollTo({top:0,behavior:'smooth'});return}
+  if(a==='dtrEd'){dtr.edit=b.dataset.m;dtrUpd();return}
+  if(a==='dtrU'){const m=nrm(b.dataset.m),L=DTRL(),cur=L[m]||{};const nx=Object.assign({},L);nx[m]=Object.assign({},cur,{u:b.dataset.u,p:b.dataset.u==='planta'?'':(cur.p||''),ts:isoNow(),by:shAutor()});put(KDL(),nx);dtrUpd();return}
+  if(a==='dtrUX'){const m=nrm(b.dataset.m),nx=Object.assign({},DTRL());delete nx[m];put(KDL(),nx);dtr.edit=null;dtrUpd();return}
   if(a==='backHome'){goTab('turnos');return}
   if(a==='hSaveAll'){const c=C(),n=st.rec,d=dayData(n),ts=isoNow();d.hl=d.hl||[];let k=0;
     const items=[];Object.keys(hv).sort((x,y)=>x-y).forEach(i=>{const x=hv[i],tv=hNum(x.t),pv=hNum(x.p);if(tv==null&&pv==null)return;items.push({id:uid(),ts,s:st.recT,h:+i,t:tv,p:pv});k++});
@@ -3669,11 +3868,13 @@ document.addEventListener('click',e=>{
   if(a==='mqTec'){const m=mqCur,v=b.dataset.v;savePL(P=>{const L=(P.tec[m]||[]).slice(),i=L.indexOf(v);if(i>=0)L.splice(i,1);else L.push(v);if(L.length)P.tec[m]=L;else delete P.tec[m]});mqAfter();return}
   if(a==='rjNew'){rj.form=true;rj.d=rjBlank();rj.err='';renderRj();document.getElementById('rjForm').scrollIntoView({block:'start',behavior:'smooth'});return}
   if(a==='rjCancel'){rj.form=false;rj.d=null;rj.err='';renderRj();return}
-  if(a==='rjMaq'){const m=+b.dataset.v,x=mqInfo(m);rj.d.maq=m;if(!rj.d.cli&&x.cli)rj.d.cli=x.cli;if(!rj.d.tec.length&&x.tec.length)rj.d.tec=x.tec.slice();if(!rj.d.est&&x.est.length)rj.d.est=x.est[0];rj.err='';document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
+  if(a==='rjMaq'){const m=+b.dataset.v,x=mqInfo(m);rj.d.maq=m;if(!rj.d.est&&x.est.length)rj.d.est=x.est[0];rj.err='';document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
   if(a==='rjCli'){rj.d.cli=rj.d.cli===b.dataset.v?'':b.dataset.v;document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
   if(a==='rjTec'){const v=b.dataset.v,L=rj.d.tec,i=L.indexOf(v);if(i>=0)L.splice(i,1);else L.push(v);document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
-  if(a==='rjDef'){rj.d.def=rj.d.def===b.dataset.v?'':b.dataset.v;rj.err='';document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
-  if(a==='rjDefAdd'){const v=(rj.d.defO||'').trim();if(v){rj.d.def=v.charAt(0).toUpperCase()+v.slice(1);rj.d.defO=''}document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
+  if(a==='rjDef'){const v=b.dataset.v,L=rj.d.defs,i=L.indexOf(v);if(i>=0)L.splice(i,1);else L.push(v);rj.err='';document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
+  if(a==='rjG'){rj.d.g=b.dataset.v;document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
+  if(a==='rjCom'){const v=b.dataset.v,t=rj.d.nota.trim();if(!t.includes(v))rj.d.nota=t?t.replace(/[.,;\s]*$/,'')+'. '+v:v;const ta=document.getElementById('rjNota');if(ta){ta.value=rj.d.nota;ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)}return}
+  if(a==='rjDefAdd'){const v=(rj.d.defO||'').trim();if(v){const w=v.charAt(0).toUpperCase()+v.slice(1);if(!rj.d.defs.includes(w))rj.d.defs.push(w);rj.d.defO=''}document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
   if(a==='rjFotoX'){rj.d.foto=null;rj.d.th=null;rj.d.kb=0;document.getElementById('rjFormBox').innerHTML=rjFormHTML();return}
   if(a==='rjSave'){rjSave();return}
   if(a==='rjPh'){rjPhoto(b.dataset.id);return}
@@ -3770,6 +3971,7 @@ document.addEventListener('change',e=>{
   if(el.dataset&&el.dataset.eq){S.db.doc(GP()+'/equipo/'+el.dataset.eq).set({rol:el.value,n:(SHD.equipo.find(x=>x.id===el.dataset.eq)||{}).n||'',ts:isoNow()}).catch(()=>{});return}
   if(el.id==='bkConf'){bk.conf=el.checked;renderAdmin();return}
   if(el.dataset&&el.dataset.per){if(!perEdit())return;const id=el.dataset.per,f=el.dataset.f,v=f==='n'?el.value.trim():el.value;if(f==='n'&&!v)return;savePER(L=>{const x=L.find(q=>q.id===id);if(x)x[f]=v});if(f!=='n')renderAud();renderHero();return}
+  if(el.id==='dtrFile'){const f=el.files[0];el.value='';if(f)dtrImport(f);return}
   if(el.id==='mqMot'){const m=mqCur;savePL(P=>{const p=P.paros.find(q=>q.maq===m&&!q.fin);if(p)p.motivo=el.value});mqAfter();return}
   if(el.id==='cHornos'){const v=Math.max(1,Math.min(20,parseInt(el.value)||8));el.value=v;saveCfg({hornos:v});render()}
   if(el.id==='cPmin'&&el.value){saveCfg({pMin:+el.value});render()}
@@ -3786,9 +3988,10 @@ document.addEventListener('input',e=>{
   if(e.target.id==='mqDesc'){const v=e.target.value,m=mqCur;clearTimeout(mqDT);mqDT=setTimeout(()=>{const mm=M();mm.d=mm.d||{};if(v.trim())mm.d[m]=v.trim();else delete mm.d[m];put(KM(),mm);renderHome()},500)}
   if(e.target.id==='mqDesc'&&SHD.rol==='consulta')return;
   if(rj.d&&e.target.id==='rjEst')rj.d.est=e.target.value;
-  if(rj.d&&e.target.id==='rjPz')rj.d.pz=e.target.value;
+  if(rj.d&&e.target.id==='rjMb'){const v=e.target.value.replace(/\D/g,'');if(v!==e.target.value)e.target.value=v;rj.d.mb=v}
   if(rj.d&&e.target.id==='rjNota')rj.d.nota=e.target.value;
   if(rj.d&&e.target.id==='rjDefO')rj.d.defO=e.target.value;
+  if(e.target.id==='dtrQ'){dtr.q=e.target.value;dtr.edit=null;dtrUpd()}
   if(e.target.id==='tlQ'){cp.q=e.target.value;tlUpd()}
   if(e.target.id==='pvQ'){clearTimeout(PV.qt);const v=e.target.value;PV.qt=setTimeout(()=>pvSearch(v),250)}
   if(e.target.id==='mbN'||e.target.id==='mbV'){const v=e.target.value.replace(/[^\d]/g,'');if(v!==e.target.value)e.target.value=v;if(e.target.id==='mbN')mb.total=v;else mb.val=v;mbUpd()}
@@ -3830,6 +4033,7 @@ document.addEventListener('submit',e=>{
   if(['mqEstForm','mqCliForm','mqTecForm'].includes(fm.id)&&SHD.rol==='consulta'){e.preventDefault();roMsg();return}
   if(fm.id==='mqCliForm'||fm.id==='mqTecForm'){e.preventDefault();const inp=document.getElementById(fm.id==='mqCliForm'?'mqCliN':'mqTecN'),v=inp.value.trim().toUpperCase();if(!v)return;const m=mqCur,cl=fm.id==='mqCliForm';savePL(P=>{const L=cl?P.clientes:P.tecnicas;if(!L.includes(v))L.push(v);if(cl)P.cli[m]=v;else{const T=P.tec[m]||[];if(!T.includes(v))T.push(v);P.tec[m]=T}});mqAfter();return}
   if(fm.id==='eqForm'){e.preventDefault();const mail=document.getElementById('eqMail').value.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail))return;S.db.doc(GP()+'/equipo/'+mail).set({rol:document.getElementById('eqRol').value,n:document.getElementById('eqName').value.trim(),ts:isoNow()}).then(()=>{bk.msg=''}).catch(()=>{});fm.reset();return}
+  if(fm.id==='dtrLocForm'){e.preventDefault();if(!canCap())return;const m=nrm(fm.dataset.m),L=DTRL(),cur=L[m]||{},p=document.getElementById('dtrP').value.trim(),n=document.getElementById('dtrN').value.trim();const nx=Object.assign({},L);nx[m]={u:p?'externa':(cur.u||'planta'),p,n,ts:isoNow(),by:shAutor()};put(KDL(),nx);dtr.edit=null;dtrUpd();return}
   if(fm.id==='perForm'){e.preventDefault();if(!perEdit())return;const n=document.getElementById('perN').value.trim();if(!n)return;const x={id:uid(),n,p:document.getElementById('perP').value,g:document.getElementById('perG').value,l:document.getElementById('perL').value};savePER(L=>L.push(x));renderAud();renderHero();const f=document.getElementById('perN');if(f)f.focus();return}
   if(fm.id==='avForm'){e.preventDefault();avSubmit();return}
   if(fm.id==='cpNew'){e.preventDefault();const n=document.getElementById('cpN').value.trim();if(!n)return;const id=uid();S.db.doc(GP()+'/carpetas/'+id).set({n,ts:isoNow(),autor:shAutor()}).then(()=>{cp.msg='';cp.open=id;renderCarp()}).catch(e=>{cp.msg=e&&e.code==='permission-denied'?'Sin permiso para crear carpetas. Revise las reglas de Firestore.':'No se pudo crear la carpeta.';renderCarp()});return}
@@ -3889,7 +4093,7 @@ document.getElementById('bkImp').addEventListener('change',e=>{
   f.text().then(t=>{const j=JSON.parse(t);if(!j||j.app!=='cc-avante'||!j.data)throw 0;
     Object.entries(j.data).forEach(([k,v])=>{if(k.startsWith('tce:'))localStorage.setItem(k,v)});
     msg.textContent='Respaldo importado. Recargando…';setTimeout(()=>location.reload(),800);
-  }).catch(()=>{msg.textContent='Ese archivo no es un respaldo de C. C. AVANTE.'});
+  }).catch(()=>{msg.textContent='Ese archivo no es un respaldo de Control de Calidad AVANTE.'});
 });
 /* ---------- App instalable: funciona sin internet ---------- */
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{})})}
