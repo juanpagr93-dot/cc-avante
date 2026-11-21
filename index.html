@@ -1354,6 +1354,26 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 .livedot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);animation:pz 1.6s ease-out infinite}
 @media (prefers-reduced-motion:reduce){.livedot{animation:none}}
 .hhero .hello cite.fa{display:block;margin:8px 0 0 17px;font-style:normal;font-size:13.5px;font-weight:600;color:var(--gold-2);text-shadow:0 1px 6px rgba(0,0,0,.6)}
+
+/* ===== v16 · registro de máquina: CEDIS, técnica, base, estado ===== */
+.mq2 .bs{font-size:11px;color:#C9D3E2;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.02em}
+.mq2 .tg i.t-nomot{background:transparent;border-style:dashed;border-color:rgba(239,138,128,.8);color:var(--dev)}
+.mq-leg{margin:10px 2px 0;font-size:11.5px;color:var(--muted);line-height:1.5}
+.mq-leg b{color:#DCE3EF;font-weight:700}
+.mq-in .field>span .op{font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0}
+.mq-hint{font-size:12px;color:var(--muted);margin:-2px 0 6px}
+.mq-ch button .ab{opacity:.7;font-weight:600;margin-left:4px;font-size:11.5px}
+.mq-tg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.mq-tg3 .tgb{height:auto;min-height:52px;padding:6px 4px;font-size:13.5px;line-height:1.15}
+.tgb.pend{border:2px dashed var(--dev);color:var(--dev);background:var(--dev-bg)}
+.mq-mot{margin-top:10px;padding:10px;border-radius:12px;border:1px solid rgba(239,138,128,.55);background:var(--dev-bg)}
+.mq-mot.ok{border-color:var(--line);background:var(--surface-2)}
+.mq-mot>p{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--dev)}
+.mq-mot.ok>p{color:#DCE3EF;font-weight:600}
+.mq-mot .mq-ch button{font-size:14px;padding:9px 14px}
+.mq-mot .mq-ch button[aria-pressed="true"]{background:var(--dev);border-color:var(--dev);color:#2A0B08}
+.mq-err{margin:4px 0 0;color:var(--dev);font-weight:700;font-size:13.5px}
+.mq2 .cl,.mq2 .bs{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
 
 </head>
@@ -1616,7 +1636,8 @@ const dpath=k=>k.startsWith('g_')?GP()+'/docs/'+k:'usuarios/'+S.uid+'/datos/'+k;
 const cpath=()=>'usuarios/'+S.uid+'/datos';
 function watch(k){
   if(S.mode!=='db'||S.subs[k])return;
-  S.subs[k]=S.db.doc(dpath(k)).onSnapshot(snap=>{
+  const h=snap=>{
+    if(k==='g_maquinas'&&SHD.team&&snap.metadata)shLive(!snap.metadata.fromCache);
     if(snap.exists){S.srv=S.srv||{};S.srv[k]=clone(snap.data())}
     if(S.pend[k]||S.busy[k])return;
     if(snap.exists){
@@ -1626,8 +1647,16 @@ function watch(k){
     }else if(!snap.metadata.fromCache){
       const loc=lsGet(k);if(loc)put(k,loc);else if(k==='g_maquinas'&&canCap())put(k,PL());else if(k==='g_personal'&&SHD.admin)put(k,{items:PER()});
     }
-  },()=>{});
+  };
+  const ref=S.db.doc(dpath(k));
+  S.subs[k]=k==='g_maquinas'&&isFB()?ref.onSnapshot({includeMetadataChanges:true},h,()=>{}):ref.onSnapshot(h,()=>{});
 }
+function shLive(v){
+  if(SHD.live===v)return;SHD.live=v;
+  if(st.tab==='turnos')renderHome();
+  if(st.tab==='rechazos')renderRj(true);
+}
+window.addEventListener('offline',()=>shLive(false));
 function syncSubs(){
   if(S.mode!=='db')return;
   const need=new Set(['config',KM(),KP(),KD(),KDL(),...(SHD.team?['g_h'+iso(currentShift().n),'g_h'+iso(st.rec),'g_h'+iso(st.sel)]:[]),'alertas','seguimientos','marbetes','d'+iso(currentShift().n),'d'+iso(todayN()),'d'+iso(st.sel),'d'+iso(st.rec)]);
@@ -1958,8 +1987,22 @@ function renderAud(){
 }
 
 /* ---------- Estado de planta: cambios, dyno gray, muestras y paros ---------- */
-const MOT_PARO=['Falla mecánica','Falta de prenda','Falta de tinta o material','Ajuste de parámetros','Mantenimiento','Otro'];
-const PL=()=>{const m=M();['cambio','dyno','muestras','entregadas','paros','comp','rech'].forEach(k=>{m[k]=m[k]||[]});m.cli=m.cli||{};m.tec=m.tec||{};m.clientes=m.clientes||['GARCÍA','LIC. NACIONAL','ACTION'];m.tecnicas=m.tecnicas||['PLASTISOL','DEGRADÉ','HD','FOIL'];return m};
+const MOT_PARO=['Falta de personal','Mantenimiento'];
+const MOT_AB={'Falta de personal':'Personal','Mantenimiento':'Mant.'};
+const motOk=v=>!!v&&v!=='Otro';
+const CEDIS_DEF=['GARCÍA','ALKA','DTA','C&A','AEROPOSTALE','LIC. NACIONAL','ACTION'];
+const TEC_DEF=['PLASTISOL','HD','FOIL','BASE AGUA','DESCARGA','GLITTER','DEGRADÉ'];
+const BASE_DEF=['Base blanca','Base blanca + refuerzo blanco','Dyno gray + base blanca','Dyno gray + base blanca + refuerzo','Plastisol directo'];
+const okey=v=>norm(v).replace(/[^a-z0-9+]/g,'');
+function optsMerge(def,saved){const out=[],seen=new Set();def.concat(saved||[]).forEach(v=>{const k=okey(v);if(k&&!seen.has(k)){seen.add(k);out.push(v)}});return out}
+const ABR_P={'base blanca':'BB','refuerzo blanco':'RB','refuerzo':'R','dyno gray':'DG','dyno':'DG','plastisol directo':'PLAST DIR','base agua':'B. AGUA'};
+const ABR_T={'plastisol':'PLAST','base agua':'B. AGUA','descarga':'DESC','glitter':'GLIT','degrade':'DEGR','degrade hd':'DEGR HD','foil':'FOIL','hd':'HD'};
+const STOPW=['de','del','con','y','el','la','los','las','a'];
+function abrWord(p,dict){const k=norm(p).trim().replace(/\s+/g,' ');if(!k)return'';if(dict[k])return dict[k];const w=k.split(' ').filter(x=>x&&!STOPW.includes(x));return(w.length>1?w.map(x=>x[0]).join(''):(w[0]||'').slice(0,5)).toUpperCase()}
+const abrBase=b=>String(b||'').split('+').map(p=>abrWord(p,ABR_P)).filter(Boolean).join('+');
+function abrTec(L){const full=L.join(' + ');return full.length<=14?full:L.map(t=>abrWord(t,ABR_T)).join('+')}
+const isDyno=b=>/dyno/i.test(b||'');
+const PL=()=>{const m=M();['cambio','dyno','muestras','entregadas','paros','comp','rech'].forEach(k=>{m[k]=m[k]||[]});m.cli=m.cli||{};m.tec=m.tec||{};m.base=m.base||{};m.bases=m.bases||[];m.clientes=m.clientes||['GARCÍA','LIC. NACIONAL','ACTION'];m.tecnicas=m.tecnicas||['PLASTISOL','DEGRADÉ','HD','FOIL'];return m};
 function savePL(fn){const m=PL();fn(m);put(KM(),m)}
 const parosAct=()=>PL().paros.filter(p=>!p.fin);
 function secCount(k){const m=PL();return k==='est'?styledMachines().length:k==='cam'?m.cambio.length:k==='dyn'?m.dyno.length:k==='mue'?m.muestras.length:m.paros.filter(p=>!p.fin).length}
@@ -2690,19 +2733,23 @@ document.getElementById('askSheet').addEventListener('click',e=>{if(e.target.id=
 
 /* ---------- En piso ahora: mapa de las 18 máquinas ---------- */
 let mqCur=1,mqDT;
-function mqInfo(m){const P=PL(),est=(P.m[m]||[]),desc=(P.d&&P.d[m])||'',paro=P.paros.find(p=>p.maq===m&&!p.fin)||null,mue=P.muestras.filter(x=>x.maq===m);
-  return{est,desc,dyno:P.dyno.includes(m),cambio:P.cambio.includes(m),paro,mue,cli:P.cli[m]||'',tec:P.tec[m]||[],comp:P.comp.includes(m),rech:P.rech.includes(m)}}
+function mqInfo(m){const P=PL(),est=(P.m[m]||[]),desc=(P.d&&P.d[m])||'',paro=P.paros.find(p=>p.maq===m&&!p.fin)||null,mue=P.muestras.filter(x=>x.maq===m),base=P.base[m]||'';
+  return{est,desc,base,dyno:P.dyno.includes(m)||isDyno(base),cambio:P.cambio.includes(m),paro,mue,cli:P.cli[m]||'',tec:P.tec[m]||[],comp:P.comp.includes(m),rech:P.rech.includes(m)}}
+let mqParPend=null,mqErr='';
+function mqPendBlock(){if(mqParPend!==mqCur)return false;mqErr='Falta justificar el paro: elija Falta de personal o Mantenimiento.';renderMq();const e=document.getElementById('mqMotBox');if(e)e.scrollIntoView({block:'center',behavior:'smooth'});return true}
 function pisoHTML(){
   const P=PL(),all=Array.from({length:18},(_,i)=>i+1),I=all.map(mqInfo);
-  const trab=I.filter(x=>x.est.length&&!x.paro&&!x.cambio).length,par=I.filter(x=>x.paro).length,dy=P.dyno.length,ca=P.cambio.length,mu=P.muestras.length,re=P.rech.length;
-  const cell=m=>{const x=I[m-1],vac=!x.est.length&&!x.desc&&!x.dyno&&!x.cambio&&!x.paro&&!x.mue.length&&!x.cli&&!x.tec.length&&!x.comp&&!x.rech;
-    const tg=(x.rech?'<i class="t-rech">Rechazada</i>':'')+(x.paro?'<i class="t-par">Parada</i>':'')+(x.cambio?'<i class="t-cam">Cambio</i>':'')+(x.comp?'<i class="t-comp">Compartida</i>':'')+(x.dyno?'<i class="t-dyn">Dyno</i>':'')+(x.mue.length?`<i>Muestra${x.mue.length>1?' ×'+x.mue.length:''}</i>`:'');
-    const cl=[x.cli,x.tec.join(' + ')].filter(Boolean).join(' · ');
-    return `<button class="mq2${vac?' vacia':''}${x.cambio?' cam':''}${x.paro?' par':''}${x.rech?' rech':''}" data-act="mqOpen" data-m="${m}" aria-label="Máquina ${m}"><span class="n">MÁQ ${m}</span>${x.est.length?`<b>${x.est.map(esc).join(' + ')}</b>`:'<b class="noest">Sin estilo</b>'}${cl?`<span class="cl">${esc(cl)}</span>`:''}${x.desc?`<span class="ds">${esc(x.desc)}</span>`:''}${tg?`<span class="tg">${tg}</span>`:''}</button>`};
+  const trab=I.filter(x=>(x.est.length||x.cli||x.tec.length||x.base)&&!x.paro&&!x.cambio).length,par=I.filter(x=>x.paro).length,dy=I.filter(x=>x.dyno).length,ca=P.cambio.length,mu=P.muestras.length,re=P.rech.length;
+  const cell=m=>{const x=I[m-1],vac=!x.est.length&&!x.desc&&!x.dyno&&!x.cambio&&!x.paro&&!x.mue.length&&!x.cli&&!x.tec.length&&!x.base&&!x.comp&&!x.rech;
+    const mot=x.paro?(motOk(x.paro.motivo)?`<i class="t-par">${esc(MOT_AB[x.paro.motivo]||x.paro.motivo)}</i>`:'<i class="t-nomot">Sin motivo</i>'):'';
+    const tg=(x.rech?'<i class="t-rech">Rechazada</i>':'')+(x.paro?'<i class="t-par">Parada</i>'+mot:'')+(x.cambio?'<i class="t-cam">Cambio</i>':'')+(x.comp?'<i class="t-comp">Compartida</i>':'')+(x.dyno&&!isDyno(x.base)?'<i class="t-dyn">Dyno</i>':'')+(x.mue.length?`<i>Muestra${x.mue.length>1?' ×'+x.mue.length:''}</i>`:'');
+    const main=x.cli||(x.est.length?x.est.join(' + '):''),sub=x.cli&&x.est.length?x.est.join(' + '):(x.desc||'');
+    return `<button class="mq2${vac?' vacia':''}${x.cambio?' cam':''}${x.paro?' par':''}${x.rech?' rech':''}" data-act="mqOpen" data-m="${m}" aria-label="Máquina ${m}"><span class="n">MÁQ ${m}</span>${main?`<b>${esc(main)}</b>`:'<b class="noest">Sin registrar</b>'}${x.tec.length?`<span class="cl">${esc(abrTec(x.tec)).replace(/\+/g,'+<wbr>')}</span>`:''}${x.base?`<span class="bs">${esc(abrBase(x.base)).replace(/\+/g,'+<wbr>')}</span>`:''}${sub?`<span class="ds">${esc(sub)}</span>`:''}${tg?`<span class="tg">${tg}</span>`:''}</button>`};
+  const leg=(()=>{const mp=new Map();I.forEach(x=>{if(x.base)x.base.split('+').forEach(p=>{const a=abrWord(p,ABR_P),f=p.trim();if(a&&f&&a.toLowerCase()!==f.toLowerCase()&&!mp.has(a))mp.set(a,f.toLowerCase())});const T=x.tec;if(T.length&&abrTec(T)!==T.join(' + '))T.forEach(t=>{const a=abrWord(t,ABR_T);if(a!==t.toUpperCase()&&!mp.has(a))mp.set(a,t.toLowerCase())})});return mp.size?`<p class="mq-leg">${[...mp].map(([a,f])=>`<b>${esc(a)}</b> ${esc(f)}`).join(' · ')}</p>`:''})();
   return `<section class="card piso" id="piso"><div class="piso-h"><h2 class="${SHD.team&&SHD.live?'':'off'}">En piso ahora</h2><p>${SHD.team&&!SHD.live?'<span class="live off">Sin conexión · se actualizará al volver</span> · ':''}Toque una máquina para ver o marcar lo que tiene.</p>${!SHD.team?`<p class="piso-warn">${!SHD.on?'Sin sesión: lo que marque aquí solo se guarda en este teléfono. Entre con Google para ver el mapa del equipo.':'Su correo '+esc(myEmail())+' no está en el equipo: lo que marque aquí solo lo ve usted. Pida al administrador que lo agregue en Equipo y respaldo; el mapa compartido se activará solo, sin reiniciar la app.'}</p>`:''}</div>
     <div class="piso-sum"><span class="${trab?'has':''}">${trab} trabajando</span><span class="t-cam ${ca?'has':''}">${ca} en cambio</span><span class="t-par ${par?'has':''}">${par} parada${par===1?'':'s'}</span><span class="t-par ${re?'has':''}">${re} rechazada${re===1?'':'s'}</span><span class="${dy?'has':''}">${dy} con dyno</span><span class="${mu?'has':''}">${mu} muestra${mu===1?'':'s'}</span></div>
     <div class="piso-l"><span>Línea 1 · máquinas 1–9</span><div class="pgrid">${[1,2,3,4,5,6,7,8,9].map(cell).join('')}</div></div>
-    <div class="piso-l"><span>Línea 2 · máquinas 10–18</span><div class="pgrid">${[10,11,12,13,14,15,16,17,18].map(cell).join('')}</div></div></section>`;
+    <div class="piso-l"><span>Línea 2 · máquinas 10–18</span><div class="pgrid">${[10,11,12,13,14,15,16,17,18].map(cell).join('')}</div></div>${leg}</section>`;
 }
 function renderMq(){
   const m=mqCur,x=mqInfo(m),c=C(),P=PL(),body=document.getElementById('mqBody');if(!body)return;
@@ -2710,28 +2757,32 @@ function renderMq(){
   const ae=document.activeElement,keep=ae&&body.contains(ae)&&ae.id?{id:ae.id,v:ae.value,s:ae.selectionStart}:null;
   body.innerHTML=`<div class="mq-hd"><div><span class="k">Línea ${m<=9?1:2}</span><h3 id="mqT">Máquina ${m}</h3></div><div class="mq-nav"><button class="nav" data-act="mqGo" data-d="-1" aria-label="Máquina anterior">‹</button><button class="nav" data-act="mqGo" data-d="1" aria-label="Máquina siguiente">›</button></div></div>
     ${SHD.rol==='consulta'?'<p class="ro-note">Su cuenta es de consulta: puede ver, pero no modificar.</p>':''}
-    <div class="field"><span>Estilo</span>
+    <div class="field"><span>CEDIS</span><div class="mq-ch">${optsMerge(CEDIS_DEF,P.clientes).map(v=>`<button type="button" data-act="mqCli" data-v="${esc(v)}" aria-pressed="${x.cli===v}">${esc(v)}</button>`).join('')}</div>
+      <form class="mq-add" id="mqCliForm"><input id="mqCliN" autocomplete="off" placeholder="Escribir otro CEDIS" aria-label="Agregar CEDIS"><button class="btn" type="submit">Agregar</button></form></div>
+    <div class="field"><span>Técnica</span><p class="mq-hint">Puede elegir varias.</p><div class="mq-ch">${optsMerge(TEC_DEF,P.tecnicas).map(v=>`<button type="button" data-act="mqTec" data-v="${esc(v)}" aria-pressed="${x.tec.includes(v)}">${esc(v)}</button>`).join('')}</div>
+      <form class="mq-add" id="mqTecForm"><input id="mqTecN" autocomplete="off" placeholder="Escribir otra técnica" aria-label="Agregar técnica"><button class="btn" type="submit">Agregar</button></form></div>
+    <div class="field"><span>Base</span><div class="mq-ch">${optsMerge(BASE_DEF,P.bases).map(v=>`<button type="button" data-act="mqBase" data-v="${esc(v)}" aria-pressed="${x.base===v}">${esc(v)}<span class="ab">${esc(abrBase(v))}</span></button>`).join('')}</div>
+      <form class="mq-add" id="mqBaseForm"><input id="mqBaseN" autocomplete="off" placeholder="Escribir otra base" aria-label="Agregar base"><button class="btn" type="submit">Agregar</button></form></div>
+    <div class="field"><span>Estado</span><div class="mq-tg3">${tgb('cambio','t-cam','En cambio',x.cambio)}${mqParPend===m&&!x.paro?'<button class="tgb t-par pend" data-act="mqTg" data-k="parada" aria-pressed="mixed">Máquina parada</button>':tgb('parada','t-par','Máquina parada',!!x.paro)}${tgb('rech','t-rech','Producción rechazada',x.rech)}</div>
+      ${x.paro||mqParPend===m?`<div class="mq-mot${x.paro&&motOk(x.paro.motivo)?' ok':''}" id="mqMotBox"><p>${x.paro&&motOk(x.paro.motivo)?`Motivo del paro · parada desde ${whenTxt(x.paro.ini)} (${durTxt(minsSince(x.paro.ini))})`:x.paro?`Justifique el paro (parada desde ${whenTxt(x.paro.ini)}):`:'Justifique el paro para registrarlo:'}</p><div class="mq-ch">${MOT_PARO.map(o=>`<button type="button" data-act="mqMot" data-v="${esc(o)}" aria-pressed="${!!x.paro&&x.paro.motivo===o}">${esc(o)}</button>`).join('')}</div></div>`:''}</div>
+    <div class="field"><span>También</span><div class="mq-tg">${tgb('comp','t-comp','Compartida',x.comp)}${tgb('muestra','t-mue','Muestra pendiente',x.mue.length>0)}</div></div>
+    <div class="field"><span>Estilo <i class="op">(opcional)</i></span>
       ${x.est.length?`<div class="mq-est">${x.est.map(s=>`<span class="chip">${esc(s)}<button type="button" data-act="mqEstDel" data-s="${esc(s)}" aria-label="Quitar ${esc(s)}">✕</button></span>`).join('')}</div>`:''}
       <form class="add" id="mqEstForm" style="grid-template-columns:1fr auto"><input id="mqEst" list="mqEstList" placeholder="Escriba o elija un estilo" autocomplete="off" aria-label="Estilo de la máquina"><button class="btn" type="submit">Agregar</button></form>
       <datalist id="mqEstList">${c.estilos.map(s=>`<option value="${esc(s)}">`).join('')}</datalist>
       <div class="mq-quick">${c.estilos.filter(s=>!x.est.includes(s)).map(s=>`<button type="button" class="qchip" data-act="mqEstAdd" data-s="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>
-    <div class="field"><span>Cliente</span><div class="mq-ch">${P.clientes.map(v=>`<button type="button" data-act="mqCli" data-v="${esc(v)}" aria-pressed="${x.cli===v}">${esc(v)}</button>`).join('')}</div>
-      <form class="mq-add" id="mqCliForm"><input id="mqCliN" autocomplete="off" placeholder="Agregar otro cliente" aria-label="Agregar cliente"><button class="btn" type="submit">Agregar</button></form></div>
-    <div class="field"><span>Técnica</span><div class="mq-ch">${P.tecnicas.map(v=>`<button type="button" data-act="mqTec" data-v="${esc(v)}" aria-pressed="${x.tec.includes(v)}">${esc(v)}</button>`).join('')}</div>
-      <form class="mq-add" id="mqTecForm"><input id="mqTecN" autocomplete="off" placeholder="Agregar otra técnica" aria-label="Agregar técnica"><button class="btn" type="submit">Agregar</button></form></div>
-    <label class="field"><span>Descripción</span><textarea id="mqDesc" rows="2" placeholder="Ej. Playera marino, 6 colores, base agua">${esc(x.desc)}</textarea></label>
-    <div class="field"><span>Marcar</span><div class="mq-tg">${tgb('cambio','t-cam','En cambio',x.cambio)}${tgb('parada','t-par','Máquina parada',!!x.paro)}${tgb('comp','t-comp','Compartida',x.comp)}${tgb('rech','t-rech','Producción rechazada',x.rech)}${tgb('dyno','t-dyn','Dyno gray',x.dyno)}${tgb('muestra','t-mue','Muestra pendiente',x.mue.length>0)}</div></div>
-    ${x.paro?`<label class="field"><span>Motivo del paro · parada desde ${whenTxt(x.paro.ini)} (${durTxt(minsSince(x.paro.ini))})</span><select id="mqMot">${MOT_PARO.map(o=>`<option${o===x.paro.motivo?' selected':''}>${o}</option>`).join('')}</select></label>`:''}
+    <label class="field"><span>Descripción <i class="op">(opcional)</i></span><textarea id="mqDesc" rows="2" placeholder="Ej. 6 colores, base agua">${esc(x.desc)}</textarea></label>
     ${x.mue.length?`<div class="field"><span>Muestras pendientes</span><ul class="mq-mue">${x.mue.map(u=>`<li><div><b>${esc(u.estilo)}</b><span>desde ${whenTxt(u.creado)}</span></div><button class="btn small" data-act="mqMueOk" data-id="${u.id}">✓ Entregada</button></li>`).join('')}</ul></div>`:''}
+    ${mqErr?`<p class="mq-err" role="alert">${esc(mqErr)}</p>`:''}
     <div class="mq-foot"><button class="ghost" data-act="mqClear">Limpiar máquina</button><button class="btn primary" data-act="mqClose">Listo</button></div>`;
   if(SHD.rol==='consulta')body.querySelectorAll('button:not([data-act=mqGo]):not([data-act=mqClose]),input,textarea,select').forEach(e=>e.disabled=true);
   if(keep){const e=document.getElementById(keep.id);if(e){if('value' in e&&keep.v!=null)e.value=keep.v;e.focus();try{e.setSelectionRange(keep.s,keep.s)}catch(_){}}}
 }
-function openMq(m){mqCur=m;renderMq();const s=document.getElementById('mqSheet');s.hidden=false;s.querySelector('.sheet-in').scrollTop=0}
+function openMq(m){if(mqParPend!=null&&mqParPend!==m&&!document.getElementById('mqSheet').hidden&&mqPendBlock())return;if(mqParPend!==m)mqParPend=null;mqErr='';mqCur=m;renderMq();const s=document.getElementById('mqSheet');s.hidden=false;s.querySelector('.sheet-in').scrollTop=0}
 function mqAfter(){renderMq();renderHome();renderDia();renderSem()}
 function mqAddEst(v){v=(v||'').trim().toUpperCase();if(!v)return;const m=mqCur,mm=M(),cur=mm.m[m]||[];if(!cur.includes(v))mm.m[m]=cur.concat(v);put(KM(),mm);
   const c=C();if(!c.estilos.includes(v))saveCfg({estilos:c.estilos.concat(v)});mqAfter()}
-document.getElementById('mqSheet').addEventListener('click',e=>{if(e.target.id==='mqSheet')e.target.hidden=true});
+document.getElementById('mqSheet').addEventListener('click',e=>{if(e.target.id==='mqSheet'){if(mqPendBlock())return;e.target.hidden=true}});
 
 
 /* ---------- Muestrario técnico de telas: índice para el buscador ---------- */
@@ -2791,7 +2842,7 @@ const tlBox=f=>({x0:f[1]?.5:.09,x1:f[1]?.915:.505,y0:f[2]-.012,y1:f[3]+(f[4]||.0
 
 /* ---------- Área compartida: avisos del administrador y carpetas ---------- */
 const ADMIN_H=['efeed30e8a7d9b0c1a3a617b43a902e82baf0dc4ed4f8deff0a65d86892a1928'];
-const SHD={on:false,admin:false,rol:null,team:false,live:false,avisos:[],carpetas:[],archivos:[],rechazos:[],equipo:[],unsub:[],ready:false};
+const SHD={on:false,admin:false,rol:null,team:false,live:false,seen:{},avisos:[],carpetas:[],archivos:[],rechazos:[],equipo:[],unsub:[],ready:false};
 const isFB=()=>typeof FB!=='undefined'&&!!FB.ok&&typeof firebase!=='undefined';
 const GP=()=>isFB()?'avante/general':'data/general';
 const FILEC={};
@@ -3090,7 +3141,7 @@ function openMue(go,t){
 const KM=()=>SHD.team?'g_maquinas':'maquinas';
 const canCap=()=>!SHD.on||SHD.admin||SHD.rol==='auditor'||SHD.rol==='supervisor';
 const myEmail=()=>(typeof FB!=='undefined'&&FB.user&&FB.user.email||'').trim().toLowerCase();
-const RO_ACTS=new Set(['dtrEd','dtrU','dtrUX','mqTg','mqEstAdd','mqEstDel','mqClear','mqMueOk','mqCli','mqTec','hSaveAll','hDel','rjNew','rjSave','rjDel','tgCam','tgDyn','rmEst','clearYes']);
+const RO_ACTS=new Set(['dtrEd','dtrU','dtrUX','mqTg','mqBase','mqMot','mqEstAdd','mqEstDel','mqClear','mqMueOk','mqCli','mqTec','hSaveAll','hDel','rjNew','rjSave','rjDel','tgCam','tgDyn','rmEst','clearYes']);
 function roMsg(){const n=document.getElementById('roToast');if(n){n.hidden=false;clearTimeout(roMsg.t);roMsg.t=setTimeout(()=>n.hidden=true,2600)}}
 function deepDiff(a,b){
   const o={},D=firebase.firestore.FieldValue.delete();
@@ -3129,10 +3180,11 @@ async function shRole(u){
 }
 function shTeamStart(){
   if(!SHD.team)return;
+  SHD.seen={};
   // Primera vez: el administrador comparte el mapa que ya tenía en su cuenta
   if(SHD.admin&&!lsGet('g_maquinas')){const mine=lsGet('maquinas');if(mine&&mine.m&&Object.keys(mine).length)lsSet('g_maquinas',mine)}
   delete S.cache.g_maquinas;
-  const sub=(k,ref,sort)=>{try{SHD.unsub.push(ref.onSnapshot(qs=>{SHD[k]=qs.docs.map(d=>Object.assign({id:d.id},d.data())).sort(sort);SHD.live=!qs.metadata||!qs.metadata.fromCache;shRender(k)},()=>{}))}catch(e){}};
+  const sub=(k,ref,sort)=>{try{const h=qs=>{const lv=!qs.metadata||!qs.metadata.fromCache;if(SHD.seen[k]&&qs.docChanges&&!qs.docChanges().length){shLive(lv);return}SHD.seen[k]=true;SHD[k]=qs.docs.map(d=>Object.assign({id:d.id},d.data())).sort(sort);SHD.live=lv;shRender(k)};SHD.unsub.push(isFB()?ref.onSnapshot({includeMetadataChanges:true},h,()=>{}):ref.onSnapshot(h,()=>{}))}catch(e){}};
   sub('rechazos',S.db.collection(GP()+'/rechazos').where('n','>=',iso(todayN()-45)),(a,b)=>a.ts<b.ts?1:-1);
   if(SHD.admin)sub('equipo',S.db.collection(GP()+'/equipo'),(a,b)=>a.id<b.id?-1:1);
 }
@@ -3276,16 +3328,16 @@ function ciShift(){if(ci.n==null){const cs=currentShift();ci.n=cs.n;ci.t=cs.t}re
 function cierreData(n,t){
   const c=C(),g=day(n)[t],P=PL(),nextG=t==='D'?day(n).N:day(n+1).D,[w0,w1]=shiftWin(n,t);
   const maq=Array.from({length:18},(_,i)=>{const m=i+1,x=mqInfo(m),e=[];
-    if(x.paro)e.push(`Parada (${x.paro.motivo}, ${durTxt(minsSince(x.paro.ini))})`);else if(x.cambio)e.push('En cambio');else if(x.est.length)e.push('Trabajando');else e.push('Sin producción');
-    if(x.comp)e.push('Compartida');if(x.rech)e.push('Producción rechazada');if(x.dyno)e.push('Dyno gray');if(x.mue.length)e.push('Muestra pendiente');
-    return{m,e,bad:!!(x.paro||x.rech),est:x.est.join(' + '),cli:x.cli||'',tec:x.tec.join(' + '),desc:x.desc}});
+    if(x.paro)e.push(`Parada (${motOk(x.paro.motivo)?x.paro.motivo:'sin motivo'}, ${durTxt(minsSince(x.paro.ini))})`);else if(x.cambio)e.push('En cambio');else if(x.est.length||x.cli||x.tec.length||x.base)e.push('Trabajando');else e.push('Sin producción');
+    if(x.comp)e.push('Compartida');if(x.rech)e.push('Producción rechazada');if(x.dyno&&!isDyno(x.base))e.push('Dyno gray');if(x.mue.length)e.push('Muestra pendiente');
+    return{m,e,bad:!!(x.paro||x.rech),est:x.est.join(' + '),cli:x.cli||'',tec:x.tec.join(' + '),base:x.base||'',desc:x.desc}});
   const R=rjOf(n,t).slice().sort((a,b)=>a.ts<b.ts?-1:1),H=hSum(n,t),bad=H.L.filter(x=>hStat(x,c).cls==='bad').reverse();
   const paros=P.paros.filter(p=>new Date(p.ini).getTime()<=w1&&(!p.fin||new Date(p.fin).getTime()>=w0));
   const mbs=mbStats(MB().items.filter(x=>{const z=new Date(x.ts).getTime();return z>=w0&&z<=w1}));
   const aud=g.flatMap(x=>AUD()[x]||[]).map(y=>y.n+' ('+LINEAS[y.l]+')');
   return{n,t,g,nextG,aud,mresp:(g[0]&&mueResp()[g[0]])||'',autor:shAutor(),maq,R,H,bad,paros,mue:P.muestras,mbs,fin:chkPeek(n,t,'fin'),c};
 }
-const ciCli=m=>[m.cli,m.tec].filter(Boolean).join(' · ');
+const ciCli=m=>[m.cli,m.tec,m.base].filter(Boolean).join(' · ');
 function cierreText(D){
   const L=[],pz=D.R.reduce((a,x)=>a+(+x.pz||0),0);
   L.push('*CIERRE DE TURNO · CONTROL DE CALIDAD AVANTE*');
@@ -3293,12 +3345,12 @@ function cierreText(D){
   if(D.aud.length)L.push('Auditoras: '+D.aud.join(', '));
   if(D.nextG.length)L.push('Recibe: Grupo '+D.nextG.join(', '));
   [[1,'LÍNEA 1'],[2,'LÍNEA 2']].forEach(([ln,tt])=>{L.push('');L.push(`*${tt}*`);
-    D.maq.filter(m=>(m.m<=9?1:2)===ln).forEach(m=>{const det=[m.est,ciCli(m)].filter(Boolean).join(' — ');L.push(`• Máq ${m.m}: ${m.e.join(', ')}${det?' — '+det:''}${m.desc?' ('+m.desc+')':''}`)})});
+    D.maq.filter(m=>(m.m<=9?1:2)===ln).forEach(m=>{const det=[ciCli(m),m.est].filter(Boolean).join(' — ');L.push(`• Máq ${m.m}: ${m.e.join(', ')}${det?' — '+det:''}${m.desc?' ('+m.desc+')':''}`)})});
   L.push('');L.push(`*RECHAZOS (${D.R.length})*${pz?' · '+fmtN(pz)+' piezas':''}`);
   if(!D.R.length)L.push('Sin rechazos en el turno.');
   D.R.forEach(x=>L.push(`• ${x.folio} · ${hhmmOf(x.ts)} · Máq ${x.maq} · ${rjDesc(x)} · ${x.def}${x.pz?' · '+x.pz+' pzs':''}${x.nota?' — '+x.nota:''}`));
   L.push('');L.push(`*HORNOS*: ${D.H.L.length} lecturas · ${D.bad.length?D.bad.length+' fuera de parámetro: '+D.bad.map(x=>`H${x.h} ${x.t!=null?x.t+'°':''}${x.p!=null?' '+x.p+' s':''} (${hhmmOf(x.ts)})`).join(', '):'todas en parámetro'}`);
-  if(D.paros.length)L.push('*PAROS*: '+D.paros.map(p=>`Máq ${p.maq} ${p.motivo}${p.fin?' '+durTxt(Math.round((new Date(p.fin)-new Date(p.ini))/60000)):' (sigue parada)'}`).join(', '));
+  if(D.paros.length)L.push('*PAROS*: '+D.paros.map(p=>`Máq ${p.maq} ${motOk(p.motivo)?p.motivo:'sin motivo'}${p.fin?' '+durTxt(Math.round((new Date(p.fin)-new Date(p.ini))/60000)):' (sigue parada)'}`).join(', '));
   if(D.mue.length)L.push('*MUESTRAS PENDIENTES*: '+D.mue.map(x=>x.estilo+(x.maq?' (máq '+x.maq+')':'')).join(', '));
   if(D.mbs.n)L.push(`*BAJO PORCENTAJE (MARBETES)*: ${D.mbs.n} · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok}/${D.mbs.n} cumplen`);
   L.push('');
@@ -3315,12 +3367,12 @@ function cierrePDF(D){
   const info=[['Auditoras',D.aud.join(', ')||'—'],['Recibe',D.nextG.length?'Grupo '+D.nextG.join(', '):'—'],['Responsable de muestras',D.mresp||'—'],['Elaboró',D.autor]];
   info.forEach(([k,v])=>{const ls=p.wrap(v,9.5,false,W-130);p.need(ls.length*12+2);p.text(M,p.y,k,9,true,MUT);ls.forEach((l,i)=>p.text(M+130,p.y+i*12,l,9.5,false,INK));p.y+=ls.length*12+2});
   const head=(t)=>{p.need(40);p.y+=10;p.text(M,p.y,t,12,true,NAVY);p.y+=16;p.line(M,p.y,M+W,p.y,GOLD);p.y+=6};
-  const cols=[{t:'Máq',w:32},{t:'Estado',w:120},{t:'Estilo',w:105},{t:'Cliente · Técnica',w:120},{t:'Descripción',w:W-377}];
+  const cols=[{t:'Máq',w:32},{t:'Estado',w:120},{t:'CEDIS · Técnica · Base',w:150},{t:'Estilo',w:95},{t:'Descripción',w:W-397}];
   [[1,'Línea 1 · máquinas 1 a 9'],[2,'Línea 2 · máquinas 10 a 18']].forEach(([ln,tt])=>{
     head(tt);
     const th=()=>{let x=M;p.rect(M,p.y,W,15,[236,239,244]);cols.forEach(cl=>{p.text(x+3,p.y+3,cl.t,8,true,MUT);x+=cl.w});p.y+=17};th();
     D.maq.filter(m=>(m.m<=9?1:2)===ln).forEach((m,ri)=>{
-      const cells=[String(m.m),m.e.join(', '),m.est||'—',ciCli(m)||'—',m.desc||''];
+      const cells=[String(m.m),m.e.join(', '),ciCli(m)||'—',m.est||'—',m.desc||''];
       const wr=cells.map((v,j)=>p.wrap(v,8.5,j===0,cols[j].w-6)),h=Math.max(...wr.map(w=>w.length))*10.5+6;
       if(p.need(h))th();
       if(ri%2)p.rect(M,p.y,W,h,[248,249,251]);
@@ -3344,7 +3396,7 @@ function cierrePDF(D){
   const hl=p.wrap(`${D.H.L.length} lecturas en el turno · ${D.bad.length?D.bad.length+' fuera de parámetro: '+D.bad.map(x=>`H${x.h} ${x.t!=null?x.t+'°':''}${x.p!=null?' '+x.p+' s':''} (${hhmmOf(x.ts)})`).join(', '):'todas dentro de parámetro'} · Parámetros ${D.c.tMin}–${D.c.tMax}° y mínimo ${D.c.pMin} s.`,9.5,false,W);
   hl.forEach(l=>{p.need(13);p.text(M,p.y,l,9.5,false,D.bad.length?RED:INK);p.y+=13});
   const extra=[];
-  if(D.paros.length)extra.push(['Paros',D.paros.map(x=>`Máq ${x.maq} ${x.motivo}${x.fin?' '+durTxt(Math.round((new Date(x.fin)-new Date(x.ini))/60000)):' (sigue parada)'}`).join(', ')]);
+  if(D.paros.length)extra.push(['Paros',D.paros.map(x=>`Máq ${x.maq} ${motOk(x.motivo)?x.motivo:'sin motivo'}${x.fin?' '+durTxt(Math.round((new Date(x.fin)-new Date(x.ini))/60000)):' (sigue parada)'}`).join(', ')]);
   extra.push(['Muestras pendientes',D.mue.length?D.mue.map(x=>x.estilo+(x.maq?' (máq '+x.maq+')':'')).join(', '):'Ninguna']);
   if(D.mbs.n)extra.push(['Bajo porcentaje',`${D.mbs.n} marbetes · ${pct1(D.mbs.pct)} % de primeras · ${D.mbs.ok} de ${D.mbs.n} cumplen el mínimo`]);
   head('Otros datos del turno');
@@ -3352,8 +3404,8 @@ function cierrePDF(D){
   return p.out(`Control de Calidad AVANTE · Cierre de turno ${iso(D.n)} ${SH[D.t]} · Generado ${new Date().toLocaleString('es-MX')}`);
 }
 function ciHTML(D){
-  const row=m=>`<tr><td>${m.m}</td><td class="${m.bad?'bad':''}">${esc(m.e.join(', '))}</td><td>${esc(m.est||'—')}</td><td>${esc(ciCli(m)||'—')}${m.desc?`<br><span class="note">${esc(m.desc)}</span>`:''}</td></tr>`;
-  const tab=ln=>`<table class="ci-tab"><thead><tr><th>Máq</th><th>Estado</th><th>Estilo</th><th>Cliente · Técnica</th></tr></thead><tbody>${D.maq.filter(m=>(m.m<=9?1:2)===ln).map(row).join('')}</tbody></table>`;
+  const row=m=>`<tr><td>${m.m}</td><td class="${m.bad?'bad':''}">${esc(m.e.join(', '))}</td><td>${esc(ciCli(m)||'—')}${m.desc?`<br><span class="note">${esc(m.desc)}</span>`:''}</td><td>${esc(m.est||'—')}</td></tr>`;
+  const tab=ln=>`<table class="ci-tab"><thead><tr><th>Máq</th><th>Estado</th><th>CEDIS · Técnica · Base</th><th>Estilo</th></tr></thead><tbody>${D.maq.filter(m=>(m.m<=9?1:2)===ln).map(row).join('')}</tbody></table>`;
   return `<div class="card ci-prev"><div><h3>Cierre de turno</h3><p class="meta">${fLong(D.n)} · Turno de ${SH[D.t]} · Grupo ${D.g.join(', ')||'—'}${D.nextG.length?' · Recibe grupo '+D.nextG.join(', '):''}${D.aud.length?'<br>Auditoras: '+esc(D.aud.join(', ')):''}</p></div>
     <h4>Línea 1</h4>${tab(1)}<h4>Línea 2</h4>${tab(2)}
     <h4>Rechazos (${D.R.length})</h4>${D.R.length?D.R.map(x=>`<div class="ci-rj">${x.th?`<img src="${x.th}" alt="">`:'<span class="ph0"></span>'}<div><b>${esc(x.folio)}</b> · Máq ${x.maq} · ${esc(rjDesc(x))}<br><span class="badc">${esc(x.def)}</span>${x.pz?' · '+x.pz+' pzs':''}${x.nota?`<br><span class="note">${esc(x.nota)}</span>`:''}</div></div>`).join(''):'<p class="note">Sin rechazos en el turno.</p>'}
@@ -3730,19 +3782,22 @@ document.addEventListener('click',e=>{
     const items=[];Object.keys(hv).sort((x,y)=>x-y).forEach(i=>{const x=hv[i],tv=hNum(x.t),pv=hNum(x.p);if(tv==null&&pv==null)return;items.push({id:uid(),ts,s:st.recT,h:+i,t:tv,p:pv});k++});
     if(!k)return;if(SHD.team)hlAdd(n,items);else{d.hl=d.hl.concat(items);saveDay(n,d)}Object.keys(hv).forEach(i=>delete hv[i]);hMsg=`✓ Se guardaron ${k} lectura${k>1?'s':''} a las ${hhmmOf(ts)}`;renderRec();renderSem();setTimeout(()=>{hMsg='';const m=document.querySelector('.hmsg');if(m)m.remove()},4000);return}
   if(a==='mqOpen'){openMq(+b.dataset.m);return}
-  if(a==='mqClose'){document.getElementById('mqSheet').hidden=true;return}
-  if(a==='mqGo'){openMq(((mqCur-1+(+b.dataset.d)+18)%18)+1);return}
+  if(a==='mqClose'){if(mqPendBlock())return;mqErr='';document.getElementById('mqSheet').hidden=true;return}
+  if(a==='mqGo'){if(mqPendBlock())return;openMq(((mqCur-1+(+b.dataset.d)+18)%18)+1);return}
   if(a==='mqEstAdd'){mqAddEst(b.dataset.s);return}
   if(a==='mqEstDel'){const m=mqCur,mm=M(),v=(mm.m[m]||[]).filter(s=>s!==b.dataset.s);if(v.length)mm.m[m]=v;else delete mm.m[m];put(KM(),mm);mqAfter();return}
+  if(a==='mqTg'&&b.dataset.k==='parada'){const on=b.getAttribute('aria-pressed')==='false';mqErr='';if(on){mqParPend=mqCur;renderMq();const e=document.getElementById('mqMotBox');if(e)e.scrollIntoView({block:'center',behavior:'smooth'});return}if(mqParPend===mqCur&&b.getAttribute('aria-pressed')==='mixed'){mqParPend=null;renderMq();return}}
+  if(a==='mqMot'){const m=mqCur,v=b.dataset.v;savePL(P=>{const p=P.paros.find(q=>q.maq===m&&!q.fin);if(p)p.motivo=v;else P.paros.unshift({id:uid(),maq:m,motivo:v,nota:'',ini:isoNow(),fin:null})});mqParPend=null;mqErr='';mqAfter();return}
+  if(a==='mqBase'){const m=mqCur,v=b.dataset.v;savePL(P=>{if(P.base[m]===v)delete P.base[m];else P.base[m]=v;const d=isDyno(P.base[m]),i=P.dyno.indexOf(m);if(d&&i<0)P.dyno.push(m);if(!d&&i>=0)P.dyno.splice(i,1)});mqAfter();return}
   if(a==='mqTg'){const m=mqCur,k=b.dataset.k,on=b.getAttribute('aria-pressed')!=='true';
     savePL(P=>{
       if(k==='dyno'||k==='cambio'||k==='comp'||k==='rech'){const L=P[k],i=L.indexOf(m);if(on&&i<0)L.push(m);if(!on&&i>=0)L.splice(i,1)}
-      if(k==='parada'){if(on)P.paros.unshift({id:uid(),maq:m,motivo:'Otro',nota:'',ini:isoNow(),fin:null});else P.paros.forEach(p=>{if(p.maq===m&&!p.fin)p.fin=isoNow()})}
+      if(k==='parada'&&!on)P.paros.forEach(p=>{if(p.maq===m&&!p.fin)p.fin=isoNow()})
       if(k==='muestra'){if(on){const e=(P.m[m]||[])[0]||'Sin estilo';P.muestras.unshift({id:uid(),estilo:e,maq:m,creado:isoNow(),nota:''})}
         else{const keep=[];P.muestras.forEach(x=>{if(x.maq===m){x.entregada=isoNow();P.entregadas.unshift(x)}else keep.push(x)});P.muestras=keep;P.entregadas=P.entregadas.slice(0,40)}}
     });mqAfter();return}
   if(a==='mqMueOk'){savePL(P=>{const i=P.muestras.findIndex(x=>x.id===b.dataset.id);if(i>=0){const[x]=P.muestras.splice(i,1);x.entregada=isoNow();P.entregadas.unshift(x);P.entregadas=P.entregadas.slice(0,40)}});mqAfter();return}
-  if(a==='mqClear'){const m=mqCur;savePL(P=>{delete P.m[m];if(P.d)delete P.d[m];P.dyno=P.dyno.filter(x=>x!==m);P.cambio=P.cambio.filter(x=>x!==m);P.comp=P.comp.filter(x=>x!==m);P.rech=P.rech.filter(x=>x!==m);delete P.cli[m];delete P.tec[m];P.paros.forEach(p=>{if(p.maq===m&&!p.fin)p.fin=isoNow()});
+  if(a==='mqClear'){const m=mqCur;savePL(P=>{delete P.m[m];if(P.d)delete P.d[m];P.dyno=P.dyno.filter(x=>x!==m);P.cambio=P.cambio.filter(x=>x!==m);P.comp=P.comp.filter(x=>x!==m);P.rech=P.rech.filter(x=>x!==m);delete P.cli[m];delete P.tec[m];delete P.base[m];mqParPend=null;mqErr='';P.paros.forEach(p=>{if(p.maq===m&&!p.fin)p.fin=isoNow()});
     const keep=[];P.muestras.forEach(x=>{if(x.maq===m){x.entregada=isoNow();P.entregadas.unshift(x)}else keep.push(x)});P.muestras=keep});mqAfter();return}
   if(a==='hDel'){const n=st.rec,d=dayData(n);if(!(SHD.team&&hlDel(n,b.dataset.id))){d.hl=(d.hl||[]).filter(x=>x.id!==b.dataset.id);saveDay(n,d)}renderRec();renderSem();return}
   if(a==='hPrev'||a==='hNext'){let n=st.rec,t=st.recT;if(a==='hPrev'){if(t==='N')t='D';else{t='N';n--}}else{if(t==='D')t='N';else{t='D';n++}}
@@ -4030,8 +4085,9 @@ document.addEventListener('submit',e=>{
     if(act==='nota'&&!txt){fm.elements.t.focus();return}
     sgEdit(id,x=>{x.notas=x.notas||[];if(txt)x.notas.push({ts:isoNow(),t:txt});if(act==='cerrar'){x.estado='cerrado';x.cerrado=isoNow()}else if(x.estado==='abierto')x.estado='proceso'});
     if(act==='cerrar')sg.open=null;renderSeg();renderDia();renderSem();return}
-  if(['mqEstForm','mqCliForm','mqTecForm'].includes(fm.id)&&SHD.rol==='consulta'){e.preventDefault();roMsg();return}
-  if(fm.id==='mqCliForm'||fm.id==='mqTecForm'){e.preventDefault();const inp=document.getElementById(fm.id==='mqCliForm'?'mqCliN':'mqTecN'),v=inp.value.trim().toUpperCase();if(!v)return;const m=mqCur,cl=fm.id==='mqCliForm';savePL(P=>{const L=cl?P.clientes:P.tecnicas;if(!L.includes(v))L.push(v);if(cl)P.cli[m]=v;else{const T=P.tec[m]||[];if(!T.includes(v))T.push(v);P.tec[m]=T}});mqAfter();return}
+  if(['mqEstForm','mqCliForm','mqTecForm','mqBaseForm'].includes(fm.id)&&SHD.rol==='consulta'){e.preventDefault();roMsg();return}
+  if(fm.id==='mqBaseForm'){e.preventDefault();let v=document.getElementById('mqBaseN').value.trim().replace(/\s*\+\s*/g,' + ').replace(/\s+/g,' ');if(!v)return;v=v.charAt(0).toUpperCase()+v.slice(1);const m=mqCur;savePL(P=>{const ex=optsMerge(BASE_DEF,P.bases).find(o=>okey(o)===okey(v));if(ex)v=ex;else P.bases.push(v);P.base[m]=v;const d=isDyno(v),i=P.dyno.indexOf(m);if(d&&i<0)P.dyno.push(m);if(!d&&i>=0)P.dyno.splice(i,1)});mqAfter();return}
+  if(fm.id==='mqCliForm'||fm.id==='mqTecForm'){e.preventDefault();const inp=document.getElementById(fm.id==='mqCliForm'?'mqCliN':'mqTecN');let v=inp.value.trim().toUpperCase();if(!v)return;const m=mqCur,cl=fm.id==='mqCliForm';savePL(P=>{const ex=optsMerge(cl?CEDIS_DEF:TEC_DEF,cl?P.clientes:P.tecnicas).find(o=>okey(o)===okey(v));if(ex)v=ex;const L=cl?P.clientes:P.tecnicas;if(!ex)L.push(v);if(cl)P.cli[m]=v;else{const T=P.tec[m]||[];if(!T.includes(v))T.push(v);P.tec[m]=T}});mqAfter();return}
   if(fm.id==='eqForm'){e.preventDefault();const mail=document.getElementById('eqMail').value.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail))return;S.db.doc(GP()+'/equipo/'+mail).set({rol:document.getElementById('eqRol').value,n:document.getElementById('eqName').value.trim(),ts:isoNow()}).then(()=>{bk.msg=''}).catch(()=>{});fm.reset();return}
   if(fm.id==='dtrLocForm'){e.preventDefault();if(!canCap())return;const m=nrm(fm.dataset.m),L=DTRL(),cur=L[m]||{},p=document.getElementById('dtrP').value.trim(),n=document.getElementById('dtrN').value.trim();const nx=Object.assign({},L);nx[m]={u:p?'externa':(cur.u||'planta'),p,n,ts:isoNow(),by:shAutor()};put(KDL(),nx);dtr.edit=null;dtrUpd();return}
   if(fm.id==='perForm'){e.preventDefault();if(!perEdit())return;const n=document.getElementById('perN').value.trim();if(!n)return;const x={id:uid(),n,p:document.getElementById('perP').value,g:document.getElementById('perG').value,l:document.getElementById('perL').value};savePER(L=>L.push(x));renderAud();renderHero();const f=document.getElementById('perN');if(f)f.focus();return}
