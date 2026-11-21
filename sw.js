@@ -1,5 +1,5 @@
 // C. C. AVANTE · funciona sin internet. Cambia la versión cuando subas una actualización.
-const CACHE = 'cc-avante-fb-v14';
+const CACHE = 'cc-avante-fb-v16';
 const SHELL = ['./', './index.html', './firebase-config.js', './manifest.webmanifest', './logo-avante.svg', './icon-v3-192.png', './icon-v3-512.png', './icon-v3-1024.png', './maskable-v3-512.png', './maskable-v3-1024.png', './apple-touch-icon-v3.png', './favicon-v3-64.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
@@ -19,7 +19,9 @@ self.addEventListener('fetch', e => {
   const own = url.origin === location.origin;
   const lib = url.host === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/');
   const font = url.host.endsWith('fonts.googleapis.com') || url.host.endsWith('fonts.gstatic.com');
-  if (own || lib || font) {
+  // Visor de PDF (pdf.js): se guarda la primera vez para poder abrir los documentos sin internet
+  const pdfjs = (url.host === 'cdnjs.cloudflare.com' && (url.pathname.includes('/pdf.js/') || url.pathname.includes('/jszip/'))) || (url.host === 'cdn.jsdelivr.net' && url.pathname.includes('/pdfjs-dist@'));
+  if (own || lib || font || pdfjs) {
     e.respondWith(caches.match(req).then(hit => {
       const net = fetch(req).then(r => { if (r && (r.ok || r.type === 'opaque')) { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); } return r; }).catch(() => hit);
       return hit || net;
