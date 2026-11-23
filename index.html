@@ -1374,6 +1374,41 @@ body.ro .hrows input,body.ro #hSaveAll,body.ro .rj-add,body.ro .ed-only{display:
 .mq-mot .mq-ch button[aria-pressed="true"]{background:var(--dev);border-color:var(--dev);color:#2A0B08}
 .mq-err{margin:4px 0 0;color:var(--dev);font-weight:700;font-size:13.5px}
 .mq2 .cl,.mq2 .bs{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ===== v17 · DTR Soriana: ACTION GEAR ===== */
+.dtr-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}
+.dtr-tabs button{height:44px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-weight:700;font-size:14.5px;letter-spacing:.02em}
+.dtr-tabs button[aria-pressed="true"]{background:var(--gold);color:#0A1A36}
+.act-badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--gold);color:#0A1A36;white-space:nowrap}
+.act-badge.off{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.act-gen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.act-gen>div{background:#fff;border-radius:10px;padding:8px 8px 4px;display:grid;justify-items:center;gap:2px;color:#0A1A36}
+.act-gen>div b{font-size:13px;letter-spacing:.06em}
+.act-gen>div svg{width:100%;max-width:170px;height:auto}
+.act-gen>div.hit{outline:3px solid var(--gold);outline-offset:2px}
+.act-gl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13.5px;margin:0}
+.act-gl dt{color:#fff;font-weight:700}.act-gl dd{margin:0;font-family:var(--f-mono);color:#DCE3EF}
+.act-col{border:1px solid var(--line);border-radius:12px;background:var(--surface-2);overflow:hidden}
+.act-col>summary{list-style:none;cursor:pointer;padding:11px 12px;display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:14px}
+.act-col>summary::-webkit-details-marker{display:none}
+.act-col>summary b{color:#fff;font-size:15px}
+.act-col>summary span{color:var(--muted);font-size:12.5px;text-align:right}
+.act-col>summary::after{content:'›';color:var(--gold);font-size:20px;transition:transform .2s}
+.act-col[open]>summary::after{transform:rotate(90deg)}
+.act-o{padding:10px 12px;border-top:1px solid var(--glass-line);display:grid;gap:6px}
+.act-o .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.act-o .h b{font-family:var(--f-mono);color:#fff;font-size:14.5px}
+.act-o .h span{font-family:var(--f-mono);color:var(--gold);font-weight:700;white-space:nowrap}
+.act-o dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:3px 10px;font-size:12.5px;margin:0}
+.act-o dt{color:var(--muted)}.act-o dd{margin:0;color:#DCE3EF;overflow-wrap:anywhere}
+.act-o.hit{box-shadow:inset 3px 0 0 var(--gold)}
+.act-more{border:1px solid var(--line);border-radius:12px;padding:0 12px}
+.act-more>summary{cursor:pointer;padding:11px 0;font-weight:700;color:var(--gold);font-size:14px}
+.act-more[open]{padding-bottom:12px}
+.act-gen.one{grid-template-columns:1fr}
+.act-gen.one>div{padding:10px 12px 6px}.act-gen.one>div svg{max-width:260px}
+.act-gc{display:grid;gap:8px}
+.act-gc .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
 </style>
 
 </head>
@@ -3533,8 +3568,8 @@ async function bkFree(){
 
 /* ---------- DTR Soriana: catálogo y órdenes por estilo ---------- */
 const KD=()=>SHD.team?'g_dtr':'dtr',KDL=()=>SHD.team?'g_dtrloc':'dtrloc';
-const DTR=()=>get(KD())||null,DTRL=()=>get(KDL())||{};
-const dtr={q:'',msg:'',busy:false,edit:null};
+const DTR=()=>{const d=get(KD());return d&&d.cat?d:null},DTRL=()=>get(KDL())||{};
+const dtr={q:'',aq:'',v:'dtr',msg:'',busy:false,edit:null};
 const dmod=s=>nrm(s).replace(/\s+/g,'').split('--')[0];
 function dtrLocOf(com){const c=nrm(com),ced=c.includes('CEDIS');let pl,ext;
   if(c.includes('ZINAPECUARO')){pl='Zinapécuaro';ext=true}else if(c.includes('TIMILPAN')){pl='Timilpan';ext=true}else if(c.includes('CAMPECHE')){pl='Campeche';ext=true}
@@ -3598,10 +3633,112 @@ function dtrResHTML(){
   return R.slice(0,12).map(dtrCard).join('');
 }
 function dtrUpd(){const r=document.getElementById('dtrRes');if(r)r.innerHTML=dtrResHTML()}
+
+/* ---------- DTR Soriana · ACTION GEAR (se carga desde el PDF, no queda en el código público) ---------- */
+const ACT=()=>{const d=get(KD());return d&&d.act||null};
+const ACT_RULE_MON='El código Monarch y el código del Hang Tag deben coincidir en todas las variantes de color.';
+const ACT_RULE_GEN='Cada género tiene un único código de barras, igual para todas las tallas del mismo agrupador.';
+const ACT_COLS=[['numero','o'],['estilo','e'],['producto','prod'],['descripcion','desc'],['color','color'],['cant','pz'],['oper','oper'],['serie','serie'],['recurso','rec'],['run','rt'],['cuarentena','cuar'],['semana','sem'],['aplicacion','apl'],['agrupador','agr'],['whlo','whlo'],['destino','dest'],['notas','notas'],['antiguedad','ant']];
+function actParse(P){
+  const ord={},used=new Set(),gen=[],mon=[];
+  const L=s=>nrm(s).toLowerCase();
+  P.forEach((items,pi)=>{
+    items.forEach((it,i)=>it.k=pi+':'+i);
+    // tabla de códigos por género: 13 dígitos + género en la misma línea
+    items.forEach(it=>{if(/^75\d{11}$/.test(it.s)){const g=items.find(o=>o!==it&&Math.abs(o.y-it.y)<2&&o.x>it.x&&/^[A-ZÑÁÉÍÓÚ ]{3,}$/.test(o.s));if(g&&!gen.some(x=>x.cb===it.s)){gen.push({cb:it.s,g:g.s.trim()});used.add(it.k);used.add(g.k)}}});
+    // encabezado de la tabla de órdenes
+    const hr=items.find(it=>L(it.s)==='recurso');
+    if(hr){
+      const H=items.filter(it=>Math.abs(it.y-hr.y)<=7).sort((a,b)=>a.x-b.x),G=[];
+      H.forEach(it=>{const g=G.find(g=>it.x<g.r&&it.x+it.w>g.l);if(g){g.l=Math.min(g.l,it.x);g.r=Math.max(g.r,it.x+it.w);g.t.push(it)}else G.push({l:it.x,r:it.x+it.w,t:[it]})});
+      G.forEach(g=>{g.t.sort((a,b)=>b.y-a.y);const lb=L(g.t.map(t=>t.s).join(' '));const m=ACT_COLS.find(([p])=>lb.startsWith(p));g.key=m?m[1]:null;g.t.forEach(t=>used.add(t.k))});
+      const cols=G.filter(g=>g.key),c0=cols.find(g=>g.key==='o');
+      if(c0){
+        const top=Math.min(...H.map(h=>h.y))-1;
+        const rows=items.filter(it=>/^\d{10}$/.test(it.s)&&it.y<top&&it.x<c0.r&&it.x+it.w>c0.l).sort((a,b)=>b.y-a.y);
+        const gaps=rows.slice(1).map((r,i)=>rows[i].y-r.y),half=(gaps.length?gaps.sort((a,b)=>a-b)[gaps.length>>1]:47)/2;
+        const tots=items.filter(it=>L(it.s)==='total');
+        rows.forEach((r,i)=>{
+          const hi=i?(rows[i-1].y+r.y)/2:Math.min(top,r.y+half),lo=i<rows.length-1?(r.y+rows[i+1].y)/2:r.y-half;
+          const x={};
+          items.filter(it=>it.y<=hi&&it.y>lo&&!tots.some(t=>Math.abs(t.y-it.y)<=12)).sort((a,b)=>b.y-a.y||a.x-b.x).forEach(it=>{
+            let best=null,ov=0;cols.forEach(g=>{const o=Math.min(g.r,it.x+it.w)-Math.max(g.l,it.x);if(o>ov){ov=o;best=g}});
+            if(!best)return;used.add(it.k);const k=best.key,v=x[k]||'';x[k]=v?(v.endsWith('-')?v+it.s:v+' '+it.s):it.s});
+          if(x.o&&x.e){const e=x.e.toUpperCase().replace(/\s+/g,'');ord[x.o]=Object.assign(x,{e,pz:+String(x.pz||'').replace(/[^\d.]/g,'')||0,prod:(x.prod||'').replace(/\s+/g,'')})}
+        });
+      }
+    }
+    items.forEach(it=>{if(!used.has(it.k)&&/^\d{3}[A-Z]{2}$/.test(it.s)&&!mon.includes(it.s))mon.push(it.s)});
+  });
+  return{mon,gen,ord:Object.values(ord)};
+}
+async function actImport(file){
+  dtr.busy=true;dtr.msg='Leyendo '+file.name+'…';renderDtr();
+  try{
+    const lib=await pdfLib().catch(()=>{throw new Error('net')});
+    const doc=await lib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise,P=[];
+    for(let i=1;i<=doc.numPages;i++){const pg=await doc.getPage(i),tc=await pg.getTextContent();P.push(tc.items.filter(t=>t.str&&t.str.trim()).map(t=>({s:t.str.trim(),x:t.transform[4],y:t.transform[5],w:t.width})))}
+    const A=actParse(P);
+    if(!A.ord.length&&!A.gen.length)throw new Error('cols');
+    A.imp={ts:isoNow(),archivo:file.name,por:shAutor()};
+    const D=Object.assign({},get(KD())||{});D.act=A;put(KD(),D);
+    dtr.msg=`✓ Listo: ${A.ord.length} órdenes, ${A.gen.length} códigos por género y ${A.mon.length} estilos con Monarch = Hang Tag.`;
+  }catch(e){dtr.msg=e&&e.message==='cols'?'No encontré la tabla de órdenes ni los códigos por género en ese PDF.':e&&e.message==='net'?'Necesita internet para leer el PDF.':'No se pudo leer el PDF.'}
+  dtr.busy=false;renderDtr();
+}
+const ACT_GMAP={TNA:'NIÑA',TNO:'NIÑO'},ACT_GW={CABALLERO:'CABALLERO',DAMA:'DAMA',BEBO:'BEBO',BEBA:'BEBA',NINO:'NIÑO',NINA:'NIÑA'};
+function actGenOf(desc){for(const t of nrm(desc).split(/\s+/)){if(ACT_GMAP[t])return ACT_GMAP[t];if(ACT_GW[t])return ACT_GW[t]}return''}
+const actCbOf=(A,g)=>{const x=g&&A.gen.find(y=>nrm(y.g)===nrm(g));return x?x.cb:''};
+const actStyles=A=>[...new Set(A.mon.concat(A.ord.map(o=>o.e)))].sort();
+const actDescT=d=>String(d||'').replace(/^\S+\s+/,'');
+function actGenHTML(A,hit){
+  return `<div class="act-gen${A.gen.length===1?' one':''}">${A.gen.map(g=>{const b=ean13(g.cb);return`<div class="${hit&&g.cb.includes(hit)?'hit':''}"><b>${esc(g.g)}</b>${b.svg||`<span style="font-family:monospace">${esc(g.cb)}</span>`}</div>`}).join('')}</div>`;
+}
+function actOrdHTML(o,hit,A){
+  const g=actGenOf(o.desc),cb=A?actCbOf(A,g):'';
+  const f=[['Género',g?g+(cb?' · '+cb:''):''],['Producto',o.prod],['Descripción',o.desc],['Oper. rep.',o.oper],['Serie',o.serie],['Recurso',o.rec],['Run time',o.rt],['Cuarentena',o.cuar],['Semana',o.sem],['Aplicación',o.apl],['Agrupador',o.agr],['WHLO',o.whlo],['Destino',o.dest],['Notas',o.notas],['Antigüedad',o.ant?o.ant+' días':'']];
+  return `<div class="act-o${hit?' hit':''}"><div class="h"><b>${esc(o.o)}</b><span>${fmtN(o.pz)} pzs</span></div><dl>${f.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v||'—')}</dd>`).join('')}</dl></div>`;
+}
+function actCard(A,st,q){
+  const O=A.ord.filter(o=>o.e===st),mon=A.mon.includes(st),pz=O.reduce((a,o)=>a+o.pz,0);
+  const byC={};O.forEach(o=>{const c=o.color||'Sin color';(byC[c]=byC[c]||[]).push(o)});
+  const C=Object.entries(byC).sort((a,b)=>b[1].length-a[1].length);
+  const desc=[...new Set(O.map(o=>actDescT(o.desc)))].filter(Boolean);
+  const gs=[...new Set(O.map(o=>actGenOf(o.desc)).filter(Boolean))],gc=A.gen.filter(g=>gs.some(x=>nrm(x)===nrm(g.g)));
+  const hitO=o=>q&&(o.o.includes(q)||nrm(o.prod).replace(/\s+/g,'').includes(q)||nrm(o.color).replace(/\s+/g,'').includes(q)||String(o.agr||'').includes(q));
+  return `<article class="card dtr"><div class="dtr-hd"><div><b>${esc(st)}</b><span>ACTION GEAR · Soriana${desc.length?' · '+esc(desc.join(' / ')):''}</span></div><span class="act-badge${mon?'':' off'}">${mon?'Monarch = Hang Tag':'Sin regla especial'}</span></div>
+    ${mon?`<div class="dtr-note"><b>Validar antes de surtir a empaque</b>${ACT_RULE_MON} ${ACT_RULE_GEN}</div>`:''}
+    ${gc.length?`<div class="act-gc"><span class="k">Código de barras · ${gc.map(g=>esc(g.g)).join(' y ')}</span>${actGenHTML({gen:gc})}</div>`:''}
+    ${O.length?`<div class="dtr-sum"><div class="in"><b>${O.length} ${O.length>1?'órdenes':'orden'} · ${C.length} ${C.length>1?'colores':'color'}</b><span>${fmtN(pz)} pzs</span></div></div>
+      ${C.map(([c,L],i)=>{const h=L.some(hitO);return`<details class="act-col"${i===0&&!q||h?' open':''}><summary><b>${esc(c)}</b><span>${L.length} ${L.length>1?'órdenes':'orden'} · ${fmtN(L.reduce((a,o)=>a+o.pz,0))} pzs</span></summary>${L.map(o=>actOrdHTML(o,hitO(o),A)).join('')}</details>`}).join('')}`
+      :'<p class="note">Este estilo no tiene órdenes en la relación de etiquetas recibidas.</p>'}
+    ${A.gen.length?`<details class="act-more"><summary>${gc.length?'Ver los códigos de los demás géneros':'Códigos de barras por género'}</summary><dl class="act-gl">${A.gen.map(g=>`<dt>${esc(g.g)}</dt><dd>${esc(g.cb)}</dd>`).join('')}</dl><div style="height:10px"></div>${actGenHTML(A)}</details>`:''}
+  </article>`;
+}
+function actResHTML(){
+  const A=ACT();
+  if(!A)return SHD.admin||!SHD.on?'<p class="note">Todavía no se ha cargado el PDF «Producciones ACTION exclusivas para Soriana».</p>':'<p class="note">El administrador todavía no ha cargado la información de ACTION GEAR.</p>';
+  const S=actStyles(A),q=nrm(dtr.aq).replace(/\s+/g,'');
+  if(!q)return `<div class="card dtr"><div class="dtr-note"><b>Regla de etiquetado ACTION</b>${ACT_RULE_MON} Aplica a: ${A.mon.map(esc).join(', ')||'—'}. ${ACT_RULE_GEN}</div>
+      <p class="note">${S.length} estilos · ${A.ord.length} órdenes. Escriba el estilo, la orden, el color o toque un estilo:</p>
+      <div class="dtr-chips">${S.map(s=>`<button data-act="actPick" data-m="${esc(s)}" class="${A.mon.includes(s)?'ext':''}">${esc(s)}</button>`).join('')}</div></div>
+    ${A.gen.length?`<div class="card dtr"><div class="dtr-hd"><div><b style="font-size:20px;font-family:var(--f-display);letter-spacing:0">Códigos por género</b><span>Un solo código por género para todas las tallas del agrupador</span></div></div>${actGenHTML(A)}</div>`:''}`;
+  const sts=S.filter(s=>s.includes(q.split('-')[0]));
+  const oh=q.length>=3?[...new Set(A.ord.filter(o=>o.o.includes(q)||nrm(o.prod).replace(/\s+/g,'').includes(q)||nrm(o.color).replace(/\s+/g,'').includes(q)||(q.length>=6&&String(o.agr||'').includes(q))).map(o=>o.e))]:[];
+  const R=[...new Set(sts.concat(oh))],gh=q.length>=4&&/^\d+$/.test(q)?A.gen.filter(g=>g.cb.includes(q)):[];
+  if(!R.length&&!gh.length)return `<p class="note">No encontré «${esc(dtr.aq)}» en ACTION GEAR. Escriba el estilo, por ejemplo 886HP.</p>`;
+  return (gh.length?`<div class="card dtr"><div class="dtr-hd"><div><b style="font-size:20px;font-family:var(--f-display);letter-spacing:0">${gh.map(g=>esc(g.g)).join(' · ')}</b><span>Código de barras por género</span></div></div>${actGenHTML({gen:gh},q)}</div>`:'')+R.slice(0,8).map(s=>actCard(A,s,sts.includes(s)&&!oh.includes(s)?'':q)).join('');
+}
+function actUpd(){const r=document.getElementById('actRes');if(r)r.innerHTML=actResHTML()}
 function renderDtr(){
   const el=document.getElementById('dtrBody');if(!el)return;
-  const D=DTR();
-  el.innerHTML=`<section class="card dtr-s"><div><h3>Buscar por estilo</h3><p>Código de barras, etiqueta, notas, órdenes y si está en planta o en planta externa.</p></div>
+  const D=DTR(),A=ACT(),adm=SHD.admin||!SHD.on;
+  const tabs=`<div class="dtr-tabs" role="group" aria-label="Catálogo"><button data-act="dtrV" data-v="dtr" aria-pressed="${dtr.v==='dtr'}">Catálogo DTR</button><button data-act="dtrV" data-v="act" aria-pressed="${dtr.v==='act'}">ACTION GEAR</button></div>`;
+  if(dtr.v==='act'){el.innerHTML=tabs+`<section class="card dtr-s"><div><h3>ACTION GEAR · Soriana</h3><p>Estilos, órdenes, colores, agrupador y códigos de barras por género.</p></div>
+    <input id="actQ" type="search" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="Ej. 886HP" value="${esc(dtr.aq)}" aria-label="Estilo ACTION"></section>
+    <div class="dtr-res" id="actRes">${actResHTML()}</div>
+    ${adm?`<div class="card dtr-adm"><div class="av-pick"><label class="btn${A?'':' primary'}" for="actFile">${A?'Actualizar con un PDF nuevo':'Cargar PDF de ACTION'}</label><input type="file" id="actFile" accept=".pdf,application/pdf" class="vh"></div><p class="note">${A?`Cargado ${whenTxt(A.imp.ts)} por ${esc(A.imp.por||'—')} · ${esc(A.imp.archivo||'')}`:'Elija el PDF «Producciones ACTION exclusivas para Soriana». Solo administradores.'}</p>${dtr.msg?`<p class="bk-msg" role="status">${esc(dtr.msg)}</p>`:''}</div>`:''}`;return}
+  el.innerHTML=tabs+`<section class="card dtr-s"><div><h3>Buscar por estilo</h3><p>Código de barras, etiqueta, notas, órdenes y si está en planta o en planta externa.</p></div>
     <input id="dtrQ" type="search" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="Ej. 851ZK" value="${esc(dtr.q)}" aria-label="Estilo"></section>
     <div class="dtr-res" id="dtrRes">${dtrResHTML()}</div>
     ${SHD.admin||!SHD.on?`<div class="card dtr-adm"><div class="av-pick"><label class="btn${D?'':' primary'}" for="dtrFile">${D?'Actualizar con un Excel nuevo':'Importar Excel DTR Soriana'}</label><input type="file" id="dtrFile" accept=".xlsx,.xls" class="vh"></div><p class="note">${D?`Importado ${whenTxt(D.imp.ts)} por ${esc(D.imp.por||'—')} · ${esc(D.imp.archivo||'')}`:'Elija el archivo ESTILOS DTR SORIANA. Solo administradores.'}</p>${dtr.msg?`<p class="bk-msg" role="status">${esc(dtr.msg)}</p>`:''}</div>`:''}`;
@@ -3637,7 +3774,7 @@ async function dtrImport(file){
       }
     });
     if(!cat.length)throw new Error('cols');
-    const D={imp:{ts:isoNow(),archivo:file.name,por:shAutor()},emp:[...new Set(emp)],cat,ord:Object.values(ordM)};
+    const D={imp:{ts:isoNow(),archivo:file.name,por:shAutor()},emp:[...new Set(emp)],cat,ord:Object.values(ordM)};const old=get(KD());if(old&&old.act)D.act=old.act;
     put(KD(),D);dtr.msg=`✓ Listo: ${cat.length} estilos y ${D.ord.length} órdenes.`;
   }catch(e){dtr.msg=e&&e.message==='cols'?'No encontré las columnas MODELO y CÓDIGO DE BARRAS en ese archivo.':e&&e.message==='net'?'Necesita internet para importar.':'No se pudo leer el archivo.'}
   dtr.busy=false;renderDtr();
@@ -3681,7 +3818,7 @@ function tileInfo(){
     rechazos:(()=>{const c2=currentShift(),n2=SHD.team?rjOf(c2.n,c2.t).length:0;return{t:'Rechazos',i:'rech',s:!SHD.team?'Foto y notas por rechazo':n2?`${n2} en el turno`:'Sin rechazos en el turno',w:n2>0}})(),
     cierre:{t:'Cierre de turno',i:'share',s:'PDF y WhatsApp'},
     admin:{t:'Equipo y respaldo',i:'admin',s:'Solo administrador'},
-    dtr:(()=>{const D=DTR();return{t:'DTR Soriana',i:'barcode',s:D?`${D.cat.length} estilos · buscar por estilo`:'Buscar por estilo'}})(),
+    dtr:(()=>{const D=DTR(),A=ACT();return{t:'DTR Soriana',i:'barcode',s:D?`${D.cat.length} estilos${A?' · ACTION GEAR':' · buscar por estilo'}`:A?'ACTION GEAR · buscar por estilo':'Buscar por estilo'}})(),
     carpetas:{t:'Carpetas',i:'folder',s:'Muestrario de telas'+(SHD.carpetas.length?` · ${SHD.carpetas.length} más`:'')},
     calendario:{t:'Turnos',i:'cal',s:`Mañana: ${day(T+1).D.join(', ')||'—'} día · ${day(T+1).N.join(', ')||'—'} noche`},
     rep:{t:'Reporte semanal',i:'rep',s:'Últimos 7 días',act:'goRep'},
@@ -3773,6 +3910,8 @@ document.addEventListener('click',e=>{
   if(b.dataset.tab){goTab(b.dataset.tab);return}
   const a=b.dataset.act;
   if(SHD.rol==='consulta'&&RO_ACTS.has(a)){roMsg();return}
+  if(a==='dtrV'){dtr.v=b.dataset.v;dtr.msg='';renderDtr();return}
+  if(a==='actPick'){dtr.aq=b.dataset.m;const i=document.getElementById('actQ');if(i)i.value=dtr.aq;actUpd();window.scrollTo({top:0,behavior:'smooth'});return}
   if(a==='dtrPick'){dtr.q=b.dataset.m;const i=document.getElementById('dtrQ');if(i)i.value=dtr.q;dtrUpd();window.scrollTo({top:0,behavior:'smooth'});return}
   if(a==='dtrEd'){dtr.edit=b.dataset.m;dtrUpd();return}
   if(a==='dtrU'){const m=nrm(b.dataset.m),L=DTRL(),cur=L[m]||{};const nx=Object.assign({},L);nx[m]=Object.assign({},cur,{u:b.dataset.u,p:b.dataset.u==='planta'?'':(cur.p||''),ts:isoNow(),by:shAutor()});put(KDL(),nx);dtrUpd();return}
@@ -4027,6 +4166,7 @@ document.addEventListener('change',e=>{
   if(el.id==='bkConf'){bk.conf=el.checked;renderAdmin();return}
   if(el.dataset&&el.dataset.per){if(!perEdit())return;const id=el.dataset.per,f=el.dataset.f,v=f==='n'?el.value.trim():el.value;if(f==='n'&&!v)return;savePER(L=>{const x=L.find(q=>q.id===id);if(x)x[f]=v});if(f!=='n')renderAud();renderHero();return}
   if(el.id==='dtrFile'){const f=el.files[0];el.value='';if(f)dtrImport(f);return}
+  if(el.id==='actFile'){const f=el.files[0];el.value='';if(f)actImport(f);return}
   if(el.id==='mqMot'){const m=mqCur;savePL(P=>{const p=P.paros.find(q=>q.maq===m&&!q.fin);if(p)p.motivo=el.value});mqAfter();return}
   if(el.id==='cHornos'){const v=Math.max(1,Math.min(20,parseInt(el.value)||8));el.value=v;saveCfg({hornos:v});render()}
   if(el.id==='cPmin'&&el.value){saveCfg({pMin:+el.value});render()}
@@ -4047,6 +4187,7 @@ document.addEventListener('input',e=>{
   if(rj.d&&e.target.id==='rjNota')rj.d.nota=e.target.value;
   if(rj.d&&e.target.id==='rjDefO')rj.d.defO=e.target.value;
   if(e.target.id==='dtrQ'){dtr.q=e.target.value;dtr.edit=null;dtrUpd()}
+  if(e.target.id==='actQ'){dtr.aq=e.target.value;actUpd()}
   if(e.target.id==='tlQ'){cp.q=e.target.value;tlUpd()}
   if(e.target.id==='pvQ'){clearTimeout(PV.qt);const v=e.target.value;PV.qt=setTimeout(()=>pvSearch(v),250)}
   if(e.target.id==='mbN'||e.target.id==='mbV'){const v=e.target.value.replace(/[^\d]/g,'');if(v!==e.target.value)e.target.value=v;if(e.target.id==='mbN')mb.total=v;else mb.val=v;mbUpd()}
